@@ -1,0 +1,7 @@
+.env
+.env.yaml
+poc_stage3.py
+__pycache__/
+.venv312/
+*.pyc
+practice.txt

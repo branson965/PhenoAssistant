@@ -1,4 +1,5 @@
 import autogen
+from mcp_bridge import perform_anova_via_mcp
 from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent
 from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent
 from autogen.agentchat.contrib.retrieve_assistant_agent import RetrieveAssistantAgent
@@ -377,7 +378,16 @@ register_function(
 )
 
 register_function(
+    perform_anova_via_mcp,
+    caller=manager,
+    executor=user_proxy,
+    name="perform_anova_via_mcp",
+    description="Perform Mixed-design Repeated Measures ANOVA (via MCP server) on given data (Greenhouse-Geisser correction will be automatically applied if needed)",
+)
+
+register_function(
     perform_tukey_test,
+    
     caller=manager,
     executor=user_proxy,
     name="perform_tukey_test",
