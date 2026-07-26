@@ -86,3 +86,23 @@ before it is invoked through MCP.
 
 **Reason:** This separates framework/provider failures from MCP
 transport and schema failures.
+
+---
+
+## D007 — Align MAF core and OpenAI provider versions
+
+**Status:** Accepted  
+**Date:** 2026-07-26
+
+The initial proof of concept uses:
+
+- `agent-framework-core==1.11.0`
+- `agent-framework-openai==1.11.0`
+
+Although `agent-framework-core==1.12.1` was available, the matching
+OpenAI provider release was not available from the configured package
+index. Both packages are therefore pinned to the latest mutually
+available version.
+
+**Reason:** Matching framework and provider versions reduces the risk of
+internal API incompatibility and improves reproducibility.
