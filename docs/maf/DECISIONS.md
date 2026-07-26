@@ -91,7 +91,7 @@ transport and schema failures.
 
 ## D007 — Align MAF core and OpenAI provider versions
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-26
 
 The initial proof of concept uses:
