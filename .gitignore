@@ -1,3 +1,8 @@
 
 # Local Microsoft Agent Framework environment
 .venv-maf/
+
+# Python generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
