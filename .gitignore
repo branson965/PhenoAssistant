@@ -1,0 +1,19 @@
+
+# Local environments
+.venv-maf/
+.venv/
+venv/
+
+# Python generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# macOS
+.DS_Store
+
+# Local credentials
+.env
+.env.*
+!.env.example
+.env.yaml
