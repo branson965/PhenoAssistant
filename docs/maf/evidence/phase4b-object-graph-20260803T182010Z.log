@@ -1,0 +1,105 @@
+/workspaces/PhenoAssistant/agents.py:577: RuntimeWarning: [PhenoAssistant] User tools auto-registered from ./functions
+  warnings.warn("[PhenoAssistant] User tools auto-registered from ./functions", RuntimeWarning)
+PhenoAssistant's available tools:
+Tool 1: Name: perform_anova, Description: Perform Mixed-design Repeated Measures ANOVA on given data (Greenhouse-Geisser correction will be automatically applied if needed)
+Tool 2: Name: perform_tukey_test, Description: Perform Post-hoc Tukey-Kramer test on given data
+Tool 3: Name: extract_pipeline, Description: Extract and save a reproducible pipeline from chat history. Ask user to provide a name for the pipeline.
+Tool 4: Name: get_pipeline_zoo, Description: Get the information of all registered pipelines. It is useful when a user wants to know what pipelines are available before executing any.
+Tool 5: Name: get_pipeline_info, Description: Get the information of a specific pipeline. This is useful for you to know how to use a pipeline selected by the user, including the description, arguments, and output type.
+Tool 6: Name: execute_pipeline, Description: Execute a saved pipeline from the pipeline zoo. Before executing a pipeline, you must call 'get_pipeline_zoo' to know what pipelines are available, and call 'get_pipeline_info' to understand how to use the selected pipeline.
+Tool 7: Name: calculator, Description: Perform basic arithmetic operations between two integers.
+Tool 8: Name: google_search, Description: Search and scrape content from the web. Results are returned in a dictionary. Useful when you need to find information on a specific topic.
+Tool 9: Name: get_model_zoo, Description: Check available computer vision checkpoints. Must be called before using computer vision models.
+Tool 10: Name: infer_instance_segmentation, Description: Perform instance segmentation on plant images
+Tool 11: Name: infer_image_classification, Description: Perform image classification on plant images
+Tool 12: Name: infer_image_regression, Description: Perform image regression on plant images
+Tool 13: Name: compute_phenotypes_from_ins_seg, Description: Compute phenotypes from an instance segmentation result file
+Tool 14: Name: coding, Description: Write and execute code to solve tasks. Please provide a complete task description rather than concrete code as the input to this function.
+Tool 15: Name: analyse_plot, Description: Analyse a plot using GPT-4o.
+Tool 16: Name: compute_from_csv, Description: Compute statistics or new values from a CSV file. Optionally, it saves the results to a new file.
+Tool 17: Name: query_csv, Description: Ask a question to a CSV file such as which image has the most leaf count. It does not generate a new file.
+Tool 18: Name: plot_from_csv, Description: Plot data from a CSV file. Be sure to provide details of requirements and the path to save the plot.
+Tool 19: Name: RAG, Description: Retrieve knowledge from the Phenotiki paper. Use this only to retrieve information (e.g. asking questions starting with what/how/...). You need to reason the retrieved information to solve the task.
+Tool 20: Name: get_dataset_format, Description: Instruct the user to prepare a dataset in the required format to train a model.
+Tool 21: Name: prepare_dataset, Description: When the user upload a dataset for model training, use this function to process the dataset into the required format.
+Tool 22: Name: finetune_image_classification, Description: Train an image classification model on a user uploaded dataset.
+Tool 23: Name: finetune_image_regression, Description: Train an image regression model on a user uploaded dataset.
+Tool 24: Name: finetune_instance_segmentation, Description: Train an instance segmentation model on a user uploaded dataset.
+Tool 25: Name: make_dir, Description: Check if a directory exists, and create it if it does not. Call it whenever you need to save files to a directory.
+BOOTSTRAP_IMPORT_PASS
+
+===== AGENT OBJECTS =====
+user_proxy: type=autogen.agentchat.conversable_agent.ConversableAgent, name='Admin'
+manager: type=autogen.agentchat.assistant_agent.AssistantAgent, name='manager'
+code_executor: type=autogen.agentchat.user_proxy_agent.UserProxyAgent, name='code_executor'
+code_writer: type=autogen.agentchat.assistant_agent.AssistantAgent, name='code_writer'
+data_visualiser: type=autogen.agentchat.assistant_agent.AssistantAgent, name='data_visualiser'
+rag_proxy: type=autogen.agentchat.contrib.retrieve_user_proxy_agent.RetrieveUserProxyAgent, name='rag_proxy'
+
+===== MANAGER TOOL SCHEMAS =====
+manager_tool_schema_count=25
+perform_anova
+perform_tukey_test
+extract_pipeline
+get_pipeline_zoo
+get_pipeline_info
+execute_pipeline
+calculator
+google_search
+get_model_zoo
+infer_instance_segmentation
+infer_image_classification
+infer_image_regression
+compute_phenotypes_from_ins_seg
+coding
+analyse_plot
+compute_from_csv
+query_csv
+plot_from_csv
+RAG
+get_dataset_format
+prepare_dataset
+finetune_image_classification
+finetune_image_regression
+finetune_instance_segmentation
+make_dir
+
+===== REGISTERED FUNCTION MAPS =====
+manager_function_count=0
+user_proxy_function_count=25
+user_proxy: RAG
+user_proxy: analyse_plot
+user_proxy: calculator
+user_proxy: coding
+user_proxy: compute_from_csv
+user_proxy: compute_phenotypes_from_ins_seg
+user_proxy: execute_pipeline
+user_proxy: extract_pipeline
+user_proxy: finetune_image_classification
+user_proxy: finetune_image_regression
+user_proxy: finetune_instance_segmentation
+user_proxy: get_dataset_format
+user_proxy: get_model_zoo
+user_proxy: get_pipeline_info
+user_proxy: get_pipeline_zoo
+user_proxy: google_search
+user_proxy: infer_image_classification
+user_proxy: infer_image_regression
+user_proxy: infer_instance_segmentation
+user_proxy: make_dir
+user_proxy: perform_anova
+user_proxy: perform_tukey_test
+user_proxy: plot_from_csv
+user_proxy: prepare_dataset
+user_proxy: query_csv
+
+===== SELECTED FUNCTION SIGNATURES =====
+calculator(a: int, b: int, operator: typing.Annotated[str, 'operator']) -> int
+perform_anova(data_path: typing.Annotated[str, 'Path to the input CSV file'], descriptor: typing.Annotated[str, 'The name of the descriptor column to analyse'], within_subject_factor: typing.Annotated[str, 'The name of the within-subjects factor'], between_subject_factor: typing.Annotated[str, 'The name of the between-subjects factor'], subject_id: typing.Annotated[str, 'The name of the subject identifier'], save_path: Annotated[Optional[str], 'Path to save the ANOVA results CSV'] = None) -> str
+perform_tukey_test(data_path: typing.Annotated[str, 'Path to the input CSV file'], descriptor: typing.Annotated[str, 'The name of the descriptor column to analyse'], between_subject_factor: typing.Annotated[str, 'The name of the between-subjects factor'], subject_id: typing.Annotated[str, 'The name of the subject identifier'], save_path: Annotated[Optional[str], 'Path to save the Tukey-Kramer results CSV'] = None) -> str
+get_model_zoo() -> Dict[str, List[str]]
+compute_phenotypes_from_ins_seg(ins_seg_result_path: typing.Annotated[str, 'Path to a COCO format JSON file containing instance segmentation results.'], save_path: typing.Annotated[str, 'Path to save the computed phenotypes.'], pixel_to_cm: typing.Annotated[float, 'The scale to map pixel values to cm. i.e. number of pixels * pixel_to_cm = cm.'] = 1.0) -> str
+
+===== IMPORT SIDE EFFECT =====
+chroma_database_created=True
+OBJECT_GRAPH_PASS

@@ -1,0 +1,91 @@
+===== PHASE =====
+Phase 4A — Segment Anything dependency correction
+
+===== RECORDED =====
+2026-08-03T17:53:29+00:00
+
+===== SOURCE =====
+Branch: feature/maf-linux-migration
+Commit: 9438c97bc6ba3e56322362c9de5ba9fe3c46d2d0
+
+===== ENVIRONMENT =====
+Prefix: /tmp/conda-envs/phenoassistant-original
+Python 3.11.10
+
+===== HOST LIBGL =====
+	libGL.so.1 (libc6,x86-64) => /lib/x86_64-linux-gnu/libGL.so.1
+libgl1=1.7.0-1build1
+
+===== REPOSITORY DECLARATIONS =====
+323:    # - segment-anything==1.0
+
+===== REPOSITORY REFERENCES =====
+./docs/maf/evidence/phase4a-libgl-retest-20260803T174425Z.log:30:    from segment_anything import sam_model_registry, SamAutomaticMaskGenerator, SamPredictor
+./README.md:63:   - `pip install git+https://github.com/facebookresearch/segment-anything.git`
+./functions/leaf_only_sam.py:11:from segment_anything import sam_model_registry, SamAutomaticMaskGenerator, SamPredictor
+
+===== PACKAGE BEFORE CORRECTION =====
+Segment Anything is not installed.
+
+===== OFFICIAL SOURCE COMMIT =====
+Segment Anything commit: dca509fe793f601edb92606367a655c15ac00fdf
+
+===== INSTALLATION =====
+Collecting git+https://github.com/facebookresearch/segment-anything.git@dca509fe793f601edb92606367a655c15ac00fdf
+  Cloning https://github.com/facebookresearch/segment-anything.git (to revision dca509fe793f601edb92606367a655c15ac00fdf) to /tmp/pip-req-build-9ghfcxe7
+  Running command git clone --filter=blob:none --quiet https://github.com/facebookresearch/segment-anything.git /tmp/pip-req-build-9ghfcxe7
+  Running command git rev-parse -q --verify 'sha^dca509fe793f601edb92606367a655c15ac00fdf'
+  Running command git fetch -q https://github.com/facebookresearch/segment-anything.git dca509fe793f601edb92606367a655c15ac00fdf
+  Resolved https://github.com/facebookresearch/segment-anything.git to commit dca509fe793f601edb92606367a655c15ac00fdf
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Building wheels for collected packages: segment_anything
+  Building wheel for segment_anything (setup.py): started
+  Building wheel for segment_anything (setup.py): finished with status 'done'
+  Created wheel for segment_anything: filename=segment_anything-1.0-py3-none-any.whl size=36592 sha256=dcb21b24da262436b260725645ca2b0f6fddf63fb5f3658ba05af230f645c83d
+  Stored in directory: /home/codespace/.cache/pip/wheels/3b/9d/fa/a59f0257aad937bdb1d4320b9a85aa47e0d56d5c2b1aa0ad76
+Successfully built segment_anything
+Installing collected packages: segment_anything
+Successfully installed segment_anything-1.0
+
+Installation exit code: 0
+
+===== PACKAGE AFTER CORRECTION =====
+Name: segment_anything
+Version: 1.0
+Summary: 
+Home-page: 
+Author: 
+Author-email: 
+License: 
+Location: /tmp/conda-envs/phenoassistant-original/lib/python3.11/site-packages
+Requires: 
+Required-by: 
+---
+Name: segment_anything
+Version: 1.0
+Summary: 
+Home-page: 
+Author: 
+Author-email: 
+License: 
+Location: /tmp/conda-envs/phenoassistant-original/lib/python3.11/site-packages
+Requires: 
+Required-by: 
+segment_anything @ git+https://github.com/facebookresearch/segment-anything.git@dca509fe793f601edb92606367a655c15ac00fdf
+
+===== DEPENDENCY HEALTH =====
+No broken requirements found.
+pip check exit code: 0
+
+===== CONTROLLED IMPORT RETEST =====
+PASS | segment_anything
+PASS | functions.leaf_only_sam
+PASS | functions.instance_segmentation
+
+===== ENVIRONMENT SIZE =====
+12G	/tmp/conda-envs/phenoassistant-original
+
+===== REPOSITORY STATUS =====
+?? docs/maf/evidence/phase4a-import-preflight-20260803T172346Z.log
+?? docs/maf/evidence/phase4a-libgl-retest-20260803T174425Z.log

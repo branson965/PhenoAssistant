@@ -156,3 +156,53 @@ Passed.
 ### Overall completion
 
 40%
+
+## 2026-08-03 — Original AutoGen Linux runtime baseline
+
+### Phase
+
+Phase 4 — original AutoGen import and deterministic execution baseline
+
+### Result
+
+Passed with documented runtime and configuration boundaries.
+
+### Runtime corrections
+
+- Installed Ubuntu `libgl1=1.7.0-1build1`.
+- Installed `segment_anything==1.0` from official commit
+  `dca509fe793f601edb92606367a655c15ac00fdf`.
+
+### Findings
+
+- All selected repository function modules import successfully.
+- The unmodified `agents.py` import reaches unconditional Hugging Face
+  authentication and fails with HTTP 401 because `HF_TOKEN` is empty.
+- With Hugging Face login replaced in memory for boundary discovery,
+  the complete AutoGen object graph constructs successfully.
+- The Manager has 25 tool schemas.
+- The User Proxy has 25 executable functions.
+- Schema and function names match exactly.
+- Registered calculator execution preserves the semantic result.
+- AutoGen serializes the mapped integer result to a string.
+- Importing `agents.py` creates `tmp/db/chroma.sqlite3`.
+- No deliberate live Azure/OpenAI request was made.
+
+### Architectural implications
+
+The MAF implementation should separate configuration, authentication,
+provider construction, agent construction, retrieval persistence, and
+workflow execution. Optional Hugging Face functionality must not block
+module import or unrelated CPU workflows.
+
+### Next
+
+- Commit the original AutoGen Linux baseline evidence.
+- Produce the detailed AutoGen-to-MAF component migration map.
+- Confirm provider scope with the research team before live execution.
+- Implement the first MAF vertical slice without modifying scientific
+  tool behavior.
+
+### Overall completion
+
+50%
