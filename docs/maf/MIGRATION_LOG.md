@@ -115,3 +115,44 @@ Python 3.11.
 ### Overall completion
 
 35%
+
+## 2026-08-03 — Original environment recreation
+
+### Phase
+
+Phase 3B — unchanged original Linux environment attempt
+
+### Result
+
+Passed.
+
+### Evidence
+
+- Source commit: `0de2dc429a2103615d60ccacce326a11bfb8f837`
+- Environment SHA-256: `d91e714151187ce697914dbd1ad9f8d8759940d1070f39d866f29a62153bbdc1`
+- Python: 3.11.10
+- AutoGen: 0.2.39
+- OpenAI SDK: 1.62.0
+- Exit code: 0
+- Duration: 458 seconds
+- Environment size: approximately 12 GB
+- Dependency result: no broken requirements
+
+### Findings
+
+- The unchanged Conda specification resolves and installs on Ubuntu.
+- Environment compatibility is not the current blocker.
+- The next boundary is the original AutoGen application's import and runtime behaviour.
+- A CPU-only environment is now an optimisation rather than a prerequisite.
+
+### Next
+
+- Commit the Phase 3B evidence.
+- Use the exact original environment for controlled module-import tests.
+- Inspect configuration requirements without exposing values.
+- Attempt `agents.py` in an isolated subprocess.
+- Classify the first runtime, credential, provider or hardware boundary.
+
+### Overall completion
+
+40%
