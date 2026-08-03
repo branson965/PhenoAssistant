@@ -10,6 +10,9 @@ from pandasai.skills import skill
 from pandasai.llm import AzureOpenAI
 
 from huggingface_hub import login
+from autogen import register_function
+from tool_registry import TOOL_REGISTRY
+from bridge_factory import make_mcp_bridge
 
 import os
 import glob
@@ -386,13 +389,7 @@ def extract_pipeline(
     save_pipeline(pipeline_name, pipeline_code)
     return f"Pipeline {pipeline_name} extracted successfully."
 
-register_function(
-    perform_anova,
-    caller=manager,
-    executor=user_proxy,
-    name="perform_anova",
-    description="Perform Mixed-design Repeated Measures ANOVA on given data (Greenhouse-Geisser correction will be automatically applied if needed)",
-)
+
 
 register_function(
     perform_anova_via_mcp,
@@ -402,14 +399,7 @@ register_function(
     description="Perform Mixed-design Repeated Measures ANOVA (via MCP server) on given data (Greenhouse-Geisser correction will be automatically applied if needed)",
 )
 
-register_function(
-    perform_tukey_test,
-    
-    caller=manager,
-    executor=user_proxy,
-    name="perform_tukey_test",
-    description="Perform Post-hoc Tukey-Kramer test on given data",
-)
+
 
 register_function(
     extract_pipeline,
@@ -595,6 +585,15 @@ register_function(
     description="Check if a directory exists, and create it if it does not. Call it whenever you need to save files to a directory.",
 )
 
+# Generic MCP registration: every tool in TOOL_REGISTRY, bridged through MCP.
+for _func, _name, _description in TOOL_REGISTRY:
+    register_function(
+        make_mcp_bridge(_func, _name),
+        caller=manager,
+        executor=user_proxy,
+        name=_name,
+        description=_description,
+    )
 ## adding new tools starts
 try:
     import warnings
