@@ -433,13 +433,13 @@ register_function(
     description="Execute a saved pipeline from the pipeline zoo. Before executing a pipeline, you must call 'get_pipeline_zoo' to know what pipelines are available, and call 'get_pipeline_info' to understand how to use the selected pipeline.",
 )
 
-register_function(
-    calculator,
-    caller=manager,
-    executor=user_proxy,
-    name="calculator",
-    description="Perform basic arithmetic operations between two integers.",
-)
+# register_function(
+#     calculator,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="calculator",
+#     description="Perform basic arithmetic operations between two integers.",
+# )
 
 register_function(
     search_and_scrape,
@@ -577,13 +577,13 @@ register_function(
     description="Train an instance segmentation model on a user uploaded dataset.",
 )
 
-register_function(
-    make_dir,
-    caller=manager,
-    executor=user_proxy,
-    name="make_dir",
-    description="Check if a directory exists, and create it if it does not. Call it whenever you need to save files to a directory.",
-)
+# register_function(
+#     make_dir,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="make_dir",
+#     description="Check if a directory exists, and create it if it does not. Call it whenever you need to save files to a directory.",
+# )
 
 # Generic MCP registration: every tool in TOOL_REGISTRY, bridged through MCP.
 for _func, _name, _description in TOOL_REGISTRY:
