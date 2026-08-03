@@ -47,20 +47,33 @@ WORK_DIR = "./"
 MODEL_ZOO_PATH = "./model_zoo.json"
 
 # LLM configs
-config_list = [
-  {
-    "model": os.environ['MODEL_NAME'],
-    # "model": "gpt-4o",
-    "base_url": os.environ['AZURE_API_URL'],
-    "api_version": os.environ['AZURE_API_VERSION'],
-    "temperature": 0.1,
-    "cache_seed": 42,
-    "timeout": 540000,
-    "api_type": "azure",
-    "api_key": os.environ['OPENAI_API_KEY'],
-  }
-]
+API_SUPPLIER = os.environ.get('API_SUPPLIER', 'azure')
 
+if API_SUPPLIER == 'openrouter':
+    config_list = [
+        {
+            "model": os.environ['MODEL_NAME'],
+            "base_url": "https://openrouter.ai/api/v1",
+            "api_key": os.environ['OPENAI_API_KEY'],
+            "api_type": "openai",
+            "temperature": 0.1,
+            "cache_seed": 42,
+            "timeout": 540000,
+        }
+    ]
+else:
+    config_list = [
+        {
+            "model": os.environ['MODEL_NAME'],
+            "base_url": os.environ['AZURE_API_URL'],
+            "api_version": os.environ['AZURE_API_VERSION'],
+            "temperature": 0.1,
+            "cache_seed": 42,
+            "timeout": 540000,
+            "api_type": "azure",
+            "api_key": os.environ['OPENAI_API_KEY'],
+        }
+    ]
 gpt_config = {
     "config_list": config_list,
 }
@@ -235,12 +248,16 @@ def analyse_plot(message: Annotated[str, "The request of analysing a plot. e.g. 
     return res.chat_history[-1]['content']
 
 # table analyser
-pdsllm = AzureOpenAI(
-    api_token=os.environ['OPENAI_API_KEY'],
-    azure_endpoint=os.environ['AZURE_API_URL'],
-    api_version=os.environ['AZURE_API_VERSION'],
-    deployment_name=os.environ['MODEL_NAME'],
-)
+try:
+    pdsllm = AzureOpenAI(
+        api_token=os.environ['OPENAI_API_KEY'],
+        azure_endpoint=os.environ['AZURE_API_URL'],
+        api_version=os.environ['AZURE_API_VERSION'],
+        deployment_name=os.environ['MODEL_NAME'],
+    )
+except Exception as e:
+    print(f"Warning: table-analyser LLM (pdsllm) not configured: {e}")
+    pdsllm = None
 
 @skill
 def save_csv(df: pd.DataFrame,
