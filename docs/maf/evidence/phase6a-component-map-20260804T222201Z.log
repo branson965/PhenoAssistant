@@ -1,0 +1,31 @@
+
+===== PHASE =====
+Phase 6A — AutoGen-to-MAF production component map
+
+===== SOURCE =====
+Branch: feature/maf-linux-migration
+Commit: 27ac1f74484ecba37e253778f4e3fe95c0c83c58
+Recorded: 2026-08-04T22:22:01+00:00
+FOUND | agents.py
+FOUND | maf_poc/agent.py
+FOUND | maf_poc/config.py
+FOUND | maf_poc/provider.py
+FOUND | maf_poc/tool_adapter.py
+
+===== GENERATE COMPONENT MAP =====
+Generated: docs/maf/AUTOGEN_TO_MAF_COMPONENT_MAP.md
+Registration calls: 25
+Global constructors: 10
+Top-level calls: 28
+
+===== REPORT SUMMARY =====
+222 docs/maf/AUTOGEN_TO_MAF_COMPONENT_MAP.md
+- Branch: `feature/maf-linux-migration`
+- Source commit: `27ac1f74484ecba37e253778f4e3fe95c0c83c58`
+Registration calls discovered: **25**.
+
+===== VERIFY EXISTING POC =====
+..........................................                               [100%]
+42 passed in 2.78s
+
+PHASE6A_COMPONENT_MAP_PASS
