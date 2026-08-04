@@ -1,0 +1,1562 @@
+===== PHASE =====
+Phase 5B — persistent MAF environment and restored POC validation
+
+===== SOURCE =====
+Branch: feature/maf-linux-migration
+Commit: 61d1819ba7f66b5b9ec6e5f62f21a3d9c3f8ae59
+
+===== REQUIRED RESTORED FILES =====
+FOUND | requirements-maf-poc.txt
+FOUND | maf_poc/__init__.py
+FOUND | maf_poc/agent.py
+FOUND | maf_poc/config.py
+FOUND | maf_poc/provider.py
+FOUND | maf_poc/tool_adapter.py
+FOUND | tests/maf_poc/fakes.py
+FOUND | tests/maf_poc/test_agent.py
+FOUND | tests/maf_poc/test_config.py
+FOUND | tests/maf_poc/test_provider.py
+FOUND | tests/maf_poc/test_tool_adapter.py
+
+===== WORKING TREE SAFETY CHECK =====
+EXPECTED | ?? maf_poc/__init__.py
+EXPECTED | ?? maf_poc/agent.py
+EXPECTED | ?? maf_poc/config.py
+EXPECTED | ?? maf_poc/provider.py
+EXPECTED | ?? maf_poc/tool_adapter.py
+EXPECTED | ?? requirements-maf-poc.txt
+EXPECTED | ?? tests/maf_poc/fakes.py
+EXPECTED | ?? tests/maf_poc/test_agent.py
+EXPECTED | ?? tests/maf_poc/test_config.py
+EXPECTED | ?? tests/maf_poc/test_provider.py
+EXPECTED | ?? tests/maf_poc/test_tool_adapter.py
+
+===== PERSISTENT ENVIRONMENT =====
+Environment: /workspaces/.phenoassistant-runtime/conda-envs/phenoassistant-maf-poc
+Persistent MAF environment does not exist.
+Channels:
+ - conda-forge
+Platform: linux-64
+Collecting package metadata (repodata.json): - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - done
+Solving environment: | / done
+
+## Package Plan ##
+
+  environment location: /workspaces/.phenoassistant-runtime/conda-envs/phenoassistant-maf-poc
+
+  added / updated specs:
+    - pip
+    - python=3.11.15
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    _openmp_mutex-4.5          |           20_gnu          28 KB  conda-forge
+    bzip2-1.0.8                |       hda65f42_9         254 KB  conda-forge
+    ca-certificates-2026.7.22  |       hbd8a1cb_0         129 KB  conda-forge
+    icu-78.3                   |       h54a6638_2        13.8 MB  conda-forge
+    ld_impl_linux-64-2.46.1    |default_hbd61a6d_102         728 KB  conda-forge
+    libexpat-2.8.1             |       hecca717_1          76 KB  conda-forge
+    libffi-3.5.2               |       h3435931_0          57 KB  conda-forge
+    libgcc-16.1.0              |       ha9f2e26_1         1.0 MB  conda-forge
+    libgcc-ng-16.1.0           |       h69a702a_1          28 KB  conda-forge
+    libgomp-16.1.0             |       he0feb66_1         625 KB  conda-forge
+    liblzma-5.8.3              |       hb03c661_0         111 KB  conda-forge
+    libnsl-2.0.1               |       hb9d3cd8_1          33 KB  conda-forge
+    libsqlite-3.53.4           |       hf4e2dac_0         942 KB  conda-forge
+    libstdcxx-16.1.0           |       h934c35e_1         6.3 MB  conda-forge
+    libuuid-2.42.2             |       h5347b49_0          39 KB  conda-forge
+    libxcrypt-4.4.36           |       hd590300_1          98 KB  conda-forge
+    libzlib-1.3.2              |       h25fd6f3_3          62 KB  conda-forge
+    ncurses-6.6                |       hdb14827_0         897 KB  conda-forge
+    openssl-3.6.3              |       h35e630c_0         3.0 MB  conda-forge
+    packaging-26.2             |     pyhc364b38_0          89 KB  conda-forge
+    pip-26.2                   |     pyh8b19718_0         1.1 MB  conda-forge
+    python-3.11.15             |h7508c33_1_cpython        29.5 MB  conda-forge
+    readline-8.3               |       h853b02a_0         337 KB  conda-forge
+    setuptools-83.0.0          |     pyh332efcf_0         627 KB  conda-forge
+    tk-8.6.13                  | noxft_hd70dff1_3         3.4 MB  conda-forge
+    tzdata-2026c               |       h151e31d_0         116 KB  conda-forge
+    wheel-0.47.0               |     pyhd8ed1ab_0          33 KB  conda-forge
+    zstd-1.5.7                 |       hb78ec9c_6         587 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:        63.9 MB
+
+The following NEW packages will be INSTALLED:
+
+  _openmp_mutex      conda-forge/linux-64::_openmp_mutex-4.5-20_gnu
+  bzip2              conda-forge/linux-64::bzip2-1.0.8-hda65f42_9
+  ca-certificates    conda-forge/noarch::ca-certificates-2026.7.22-hbd8a1cb_0
+  icu                conda-forge/linux-64::icu-78.3-h54a6638_2
+  ld_impl_linux-64   conda-forge/linux-64::ld_impl_linux-64-2.46.1-default_hbd61a6d_102
+  libexpat           conda-forge/linux-64::libexpat-2.8.1-hecca717_1
+  libffi             conda-forge/linux-64::libffi-3.5.2-h3435931_0
+  libgcc             conda-forge/linux-64::libgcc-16.1.0-ha9f2e26_1
+  libgcc-ng          conda-forge/linux-64::libgcc-ng-16.1.0-h69a702a_1
+  libgomp            conda-forge/linux-64::libgomp-16.1.0-he0feb66_1
+  liblzma            conda-forge/linux-64::liblzma-5.8.3-hb03c661_0
+  libnsl             conda-forge/linux-64::libnsl-2.0.1-hb9d3cd8_1
+  libsqlite          conda-forge/linux-64::libsqlite-3.53.4-hf4e2dac_0
+  libstdcxx          conda-forge/linux-64::libstdcxx-16.1.0-h934c35e_1
+  libuuid            conda-forge/linux-64::libuuid-2.42.2-h5347b49_0
+  libxcrypt          conda-forge/linux-64::libxcrypt-4.4.36-hd590300_1
+  libzlib            conda-forge/linux-64::libzlib-1.3.2-h25fd6f3_3
+  ncurses            conda-forge/linux-64::ncurses-6.6-hdb14827_0
+  openssl            conda-forge/linux-64::openssl-3.6.3-h35e630c_0
+  packaging          conda-forge/noarch::packaging-26.2-pyhc364b38_0
+  pip                conda-forge/noarch::pip-26.2-pyh8b19718_0
+  python             conda-forge/linux-64::python-3.11.15-h7508c33_1_cpython
+  readline           conda-forge/linux-64::readline-8.3-h853b02a_0
+  setuptools         conda-forge/noarch::setuptools-83.0.0-pyh332efcf_0
+  tk                 conda-forge/linux-64::tk-8.6.13-noxft_hd70dff1_3
+  tzdata             conda-forge/noarch::tzdata-2026c-h151e31d_0
+  wheel              conda-forge/noarch::wheel-0.47.0-pyhd8ed1ab_0
+  zstd               conda-forge/linux-64::zstd-1.5.7-hb78ec9c_6
+
+
+
+Downloading and Extracting Packages: ...working...
+python-3.11.15       | 29.5 MB   |            |   0%
+
+icu-78.3             | 13.8 MB   |            |   0% [A
+
+
+libstdcxx-16.1.0     | 6.3 MB    |            |   0% [A[A
+
+
+
+tk-8.6.13            | 3.4 MB    |            |   0% [A[A[A
+
+
+
+
+openssl-3.6.3        | 3.0 MB    |            |   0% [A[A[A[A
+
+
+
+
+
+pip-26.2             | 1.1 MB    |            |   0% [A[A[A[A[A
+
+
+
+
+
+
+libgcc-16.1.0        | 1.0 MB    |            |   0% [A[A[A[A[A[A
+
+
+
+
+
+
+
+libsqlite-3.53.4     | 942 KB    |            |   0% [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+ncurses-6.6          | 897 KB    |            |   0% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+ld_impl_linux-64-2.4 | 728 KB    |            |   0% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+setuptools-83.0.0    | 627 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libgomp-16.1.0       | 625 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+zstd-1.5.7           | 587 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+readline-8.3         | 337 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bzip2-1.0.8          | 254 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ca-certificates-2026 | 129 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tzdata-2026c         | 116 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+liblzma-5.8.3        | 111 KB    |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+libxcrypt-4.4.36     | 98 KB     |            |   0% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+python-3.11.15       | 29.5 MB   | 2          |   3%
+
+icu-78.3             | 13.8 MB   | #5         |  16% [A
+
+
+libstdcxx-16.1.0     | 6.3 MB    |            |   1% [A[A
+
+
+
+tk-8.6.13            | 3.4 MB    | ###3       |  34% [A[A[A
+
+
+
+
+openssl-3.6.3        | 3.0 MB    | 9          |   9% [A[A[A[A
+python-3.11.15       | 29.5 MB   | #8         |  19%
+
+
+
+tk-8.6.13            | 3.4 MB    | ########## | 100% [A[A[A
+
+icu-78.3             | 13.8 MB   | ####5      |  45% [A
+
+
+libstdcxx-16.1.0     | 6.3 MB    | ######2    |  62% [A[A
+
+
+
+
+openssl-3.6.3        | 3.0 MB    | ########## | 100% [A[A[A[A
+
+
+
+
+
+pip-26.2             | 1.1 MB    | 1          |   1% [A[A[A[A[A
+
+
+
+
+
+
+libgcc-16.1.0        | 1.0 MB    | 1          |   2% [A[A[A[A[A[A
+
+
+
+
+
+pip-26.2             | 1.1 MB    | ########## | 100% [A[A[A[A[A
+
+icu-78.3             | 13.8 MB   | #######1   |  71% [A
+
+
+
+
+
+
+libgcc-16.1.0        | 1.0 MB    | ########## | 100% [A[A[A[A[A[A
+python-3.11.15       | 29.5 MB   | ##9        |  30%
+
+
+
+
+
+
+
+libsqlite-3.53.4     | 942 KB    | 1          |   2% [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+ncurses-6.6          | 897 KB    | 1          |   2% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+libsqlite-3.53.4     | 942 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+ncurses-6.6          | 897 KB    | ########## | 100% [A[A[A[A[A[A[A[A
+
+
+libstdcxx-16.1.0     | 6.3 MB    | ########## | 100% [A[A
+
+
+libstdcxx-16.1.0     | 6.3 MB    | ########## | 100% [A[A
+
+
+
+
+
+
+
+
+
+
+setuptools-83.0.0    | 627 KB    | 2          |   3% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+ld_impl_linux-64-2.4 | 728 KB    | 2          |   2% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+setuptools-83.0.0    | 627 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+python-3.11.15       | 29.5 MB   | ###9       |  40%
+
+
+
+
+
+
+
+
+
+
+
+libgomp-16.1.0       | 625 KB    | 2          |   3% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+ld_impl_linux-64-2.4 | 728 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libgomp-16.1.0       | 625 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+zstd-1.5.7           | 587 KB    | 2          |   3% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+readline-8.3         | 337 KB    | 4          |   5% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+readline-8.3         | 337 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bzip2-1.0.8          | 254 KB    | 6          |   6% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+zstd-1.5.7           | 587 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bzip2-1.0.8          | 254 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ca-certificates-2026 | 129 KB    | #2         |  12% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ca-certificates-2026 | 129 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tzdata-2026c         | 116 KB    | #3         |  14% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tzdata-2026c         | 116 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+liblzma-5.8.3        | 111 KB    | #4         |  14% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+liblzma-5.8.3        | 111 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+python-3.11.15       | 29.5 MB   | #####8     |  58%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+libxcrypt-4.4.36     | 98 KB     | #6         |  16% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+libxcrypt-4.4.36     | 98 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+icu-78.3             | 13.8 MB   | ########## | 100% [A
+
+icu-78.3             | 13.8 MB   | ########## | 100% [A
+python-3.11.15       | 29.5 MB   | #######8   |  79%
+
+
+
+
+openssl-3.6.3        | 3.0 MB    | ########## | 100% [A[A[A[A
+
+
+
+
+openssl-3.6.3        | 3.0 MB    | ########## | 100% [A[A[A[A
+
+
+
+tk-8.6.13            | 3.4 MB    | ########## | 100% [A[A[A
+
+
+
+tk-8.6.13            | 3.4 MB    | ########## | 100% [A[A[A
+python-3.11.15       | 29.5 MB   | ########## | 100%
+python-3.11.15       | 29.5 MB   | ########## | 100%
+
+
+
+
+
+
+libgcc-16.1.0        | 1.0 MB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+
+
+
+libgcc-16.1.0        | 1.0 MB    | ########## | 100% [A[A[A[A[A[A
+
+
+
+
+
+pip-26.2             | 1.1 MB    | ########## | 100% [A[A[A[A[A
+
+
+
+
+
+pip-26.2             | 1.1 MB    | ########## | 100% [A[A[A[A[A
+
+
+
+
+
+
+
+libsqlite-3.53.4     | 942 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+libsqlite-3.53.4     | 942 KB    | ########## | 100% [A[A[A[A[A[A[A
+
+
+libstdcxx-16.1.0     | 6.3 MB    | ########## | 100% [A[A
+
+
+
+
+
+
+
+
+
+
+setuptools-83.0.0    | 627 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+setuptools-83.0.0    | 627 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+ld_impl_linux-64-2.4 | 728 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+ld_impl_linux-64-2.4 | 728 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libgomp-16.1.0       | 625 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+libgomp-16.1.0       | 625 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+readline-8.3         | 337 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+readline-8.3         | 337 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+zstd-1.5.7           | 587 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+zstd-1.5.7           | 587 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bzip2-1.0.8          | 254 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bzip2-1.0.8          | 254 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ca-certificates-2026 | 129 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ca-certificates-2026 | 129 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tzdata-2026c         | 116 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tzdata-2026c         | 116 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+liblzma-5.8.3        | 111 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+liblzma-5.8.3        | 111 KB    | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+libxcrypt-4.4.36     | 98 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+libxcrypt-4.4.36     | 98 KB     | ########## | 100% [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ... (more hidden) ...[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+ncurses-6.6          | 897 KB    | ########## | 100% [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+ncurses-6.6          | 897 KB    | ########## | 100% [A[A[A[A[A[A[A[A
+
+icu-78.3             | 13.8 MB   | ########## | 100% [A
+python-3.11.15       | 29.5 MB   | ########## | 100%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+                                                     [A
+
+
+                                                     [A[A
+
+
+
+                                                     [A[A[A
+
+
+
+
+                                                     [A[A[A[A
+
+
+
+
+
+                                                     [A[A[A[A[A
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     [A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A[A
+
+
+[A
+
+
+[A[A
+
+
+
+[A[A[A
+
+
+
+
+[A[A[A[A
+
+
+
+
+
+[A[A[A[A[A
+
+
+
+
+
+
+[A[A[A[A[A[A
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A
+
+
+
+
+
+
+
+
+[A[A[A[A[A[A[A[A done
+Preparing transaction: \ | done
+Verifying transaction: - \ | / - \ | / - \ | done
+Executing transaction: - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ done
+#
+# To activate this environment, use
+#
+#     $ conda activate /workspaces/.phenoassistant-runtime/conda-envs/phenoassistant-maf-poc
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+
+===== INSTALL COMMITTED REQUIREMENTS =====
+Collecting agent-framework-core==1.11.0 (from -r requirements-maf-poc.txt (line 1))
+  Downloading agent_framework_core-1.11.0-py3-none-any.whl.metadata (10 kB)
+Collecting agent-framework-openai==1.11.0 (from -r requirements-maf-poc.txt (line 2))
+  Downloading agent_framework_openai-1.11.0-py3-none-any.whl.metadata (5.1 kB)
+Collecting pydantic==2.13.4 (from -r requirements-maf-poc.txt (line 3))
+  Downloading pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+Collecting pytest==8.4.2 (from -r requirements-maf-poc.txt (line 4))
+  Downloading pytest-8.4.2-py3-none-any.whl.metadata (7.7 kB)
+Collecting pytest-asyncio==0.26.0 (from -r requirements-maf-poc.txt (line 5))
+  Downloading pytest_asyncio-0.26.0-py3-none-any.whl.metadata (4.0 kB)
+Collecting typing-extensions<5,>=4.15.0 (from agent-framework-core==1.11.0->-r requirements-maf-poc.txt (line 1))
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting python-dotenv<2,>=1 (from agent-framework-core==1.11.0->-r requirements-maf-poc.txt (line 1))
+  Downloading python_dotenv-1.2.2-py3-none-any.whl.metadata (27 kB)
+Collecting opentelemetry-api<2,>=1.39.0 (from agent-framework-core==1.11.0->-r requirements-maf-poc.txt (line 1))
+  Downloading opentelemetry_api-1.44.0-py3-none-any.whl.metadata (1.4 kB)
+Collecting annotated-types>=0.6.0 (from pydantic==2.13.4->-r requirements-maf-poc.txt (line 3))
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.46.4 (from pydantic==2.13.4->-r requirements-maf-poc.txt (line 3))
+  Downloading pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+Collecting typing-inspection>=0.4.2 (from pydantic==2.13.4->-r requirements-maf-poc.txt (line 3))
+  Downloading typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+Collecting openai<3,>=2.25.0 (from agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading openai-2.53.0-py3-none-any.whl.metadata (40 kB)
+Collecting iniconfig>=1 (from pytest==8.4.2->-r requirements-maf-poc.txt (line 4))
+  Downloading iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Requirement already satisfied: packaging>=20 in /workspaces/.phenoassistant-runtime/conda-envs/phenoassistant-maf-poc/lib/python3.11/site-packages (from pytest==8.4.2->-r requirements-maf-poc.txt (line 4)) (26.2)
+Collecting pluggy<2,>=1.5 (from pytest==8.4.2->-r requirements-maf-poc.txt (line 4))
+  Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting pygments>=2.7.2 (from pytest==8.4.2->-r requirements-maf-poc.txt (line 4))
+  Downloading pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting anyio<5,>=3.5.0 (from openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading anyio-4.14.2-py3-none-any.whl.metadata (4.6 kB)
+Collecting distro<2,>=1.7.0 (from openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading distro-1.9.0-py3-none-any.whl.metadata (6.8 kB)
+Collecting httpx<1,>=0.23.0 (from openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting jiter<1,>=0.10.0 (from openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading jiter-0.16.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.2 kB)
+Collecting sniffio (from openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting tqdm>4 (from openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading tqdm-4.70.0-py3-none-any.whl.metadata (57 kB)
+Collecting idna>=2.8 (from anyio<5,>=3.5.0->openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+Collecting certifi (from httpx<1,>=0.23.0->openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx<1,>=0.23.0->openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx<1,>=0.23.0->openai<3,>=2.25.0->agent-framework-openai==1.11.0->-r requirements-maf-poc.txt (line 2))
+  Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Downloading agent_framework_core-1.11.0-py3-none-any.whl (551 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 551.7/551.7 kB 22.8 MB/s  0:00:00
+Downloading pydantic-2.13.4-py3-none-any.whl (472 kB)
+Downloading agent_framework_openai-1.11.0-py3-none-any.whl (61 kB)
+Downloading pytest-8.4.2-py3-none-any.whl (365 kB)
+Downloading pytest_asyncio-0.26.0-py3-none-any.whl (19 kB)
+Downloading pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 53.2 MB/s  0:00:00
+Downloading openai-2.53.0-py3-none-any.whl (1.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 38.6 MB/s  0:00:00
+Downloading anyio-4.14.2-py3-none-any.whl (125 kB)
+Downloading distro-1.9.0-py3-none-any.whl (20 kB)
+Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+Downloading jiter-0.16.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (347 kB)
+Downloading opentelemetry_api-1.44.0-py3-none-any.whl (60 kB)
+Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Downloading python_dotenv-1.2.2-py3-none-any.whl (22 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+Downloading idna-3.18-py3-none-any.whl (65 kB)
+Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Downloading pygments-2.20.0-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 52.1 MB/s  0:00:00
+Downloading tqdm-4.70.0-py3-none-any.whl (80 kB)
+Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Downloading sniffio-1.3.1-py3-none-any.whl (10 kB)
+Installing collected packages: typing-extensions, tqdm, sniffio, python-dotenv, pygments, pluggy, jiter, iniconfig, idna, h11, distro, certifi, annotated-types, typing-inspection, pytest, pydantic-core, opentelemetry-api, httpcore, anyio, pytest-asyncio, pydantic, httpx, openai, agent-framework-core, agent-framework-openai
+
+Successfully installed agent-framework-core-1.11.0 agent-framework-openai-1.11.0 annotated-types-0.8.0 anyio-4.14.2 certifi-2026.7.22 distro-1.9.0 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.18 iniconfig-2.3.0 jiter-0.16.0 openai-2.53.0 opentelemetry-api-1.44.0 pluggy-1.6.0 pydantic-2.13.4 pydantic-core-2.46.4 pygments-2.20.0 pytest-8.4.2 pytest-asyncio-0.26.0 python-dotenv-1.2.2 sniffio-1.3.1 tqdm-4.70.0 typing-extensions-4.16.0 typing-inspection-0.4.2
+
+===== ENVIRONMENT IDENTITY =====
+Python 3.11.15
+agent-framework-core: 1.11.0
+agent-framework-openai: 1.11.0
+openai: 2.53.0
+pydantic: 2.13.4
+pytest: 8.4.2
+pytest-asyncio: 0.26.0
+
+===== DEPENDENCY HEALTH =====
+No broken requirements found.
+
+===== MIGRATION-BRANCH IMPORT CHECK =====
+MIGRATION_BRANCH_MAF_IMPORT_PASS
+
+===== TARGETED TESTS =====
+..........................................                               [100%]
+42 passed in 0.98s
+
+===== TEST COLLECTION =====
+42 tests collected in 0.69s
+
+===== ENVIRONMENT SIZE =====
+307M	/workspaces/.phenoassistant-runtime/conda-envs/phenoassistant-maf-poc
+
+PHASE5B_PERSISTENT_RESTORATION_PASS
