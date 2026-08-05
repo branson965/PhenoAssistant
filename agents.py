@@ -409,29 +409,29 @@ register_function(
     description="Extract and save a reproducible pipeline from chat history. Ask user to provide a name for the pipeline.",
 )
 
-register_function(
-    get_pipeline_zoo,
-    caller=manager,
-    executor=user_proxy,
-    name="get_pipeline_zoo",
-    description="Get the information of all registered pipelines. It is useful when a user wants to know what pipelines are available before executing any.",
-)
+# register_function(
+#     get_pipeline_zoo,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="get_pipeline_zoo",
+#     description="Get the information of all registered pipelines. It is useful when a user wants to know what pipelines are available before executing any.",
+# )
 
-register_function(
-    get_pipeline_info,
-    caller=manager,
-    executor=user_proxy,
-    name="get_pipeline_info",
-    description="Get the information of a specific pipeline. This is useful for you to know how to use a pipeline selected by the user, including the description, arguments, and output type.",
-)
+# register_function(
+#     get_pipeline_info,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="get_pipeline_info",
+#     description="Get the information of a specific pipeline. This is useful for you to know how to use a pipeline selected by the user, including the description, arguments, and output type.",
+# )
 
-register_function(
-    execute_pipeline,
-    caller=manager,
-    executor=user_proxy,
-    name="execute_pipeline",
-    description="Execute a saved pipeline from the pipeline zoo. Before executing a pipeline, you must call 'get_pipeline_zoo' to know what pipelines are available, and call 'get_pipeline_info' to understand how to use the selected pipeline.",
-)
+# register_function(
+#     execute_pipeline,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="execute_pipeline",
+#     description="Execute a saved pipeline from the pipeline zoo. Before executing a pipeline, you must call 'get_pipeline_zoo' to know what pipelines are available, and call 'get_pipeline_info' to understand how to use the selected pipeline.",
+# )
 
 # register_function(
 #     calculator,
@@ -441,21 +441,21 @@ register_function(
 #     description="Perform basic arithmetic operations between two integers.",
 # )
 
-register_function(
-    search_and_scrape,
-    caller=manager,
-    executor=user_proxy,
-    name="google_search",
-    description="Search and scrape content from the web. Results are returned in a dictionary. Useful when you need to find information on a specific topic.",
-)
+# register_function(
+#     search_and_scrape,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="google_search",
+#     description="Search and scrape content from the web. Results are returned in a dictionary. Useful when you need to find information on a specific topic.",
+# )
 
-register_function(
-    get_model_zoo,
-    caller=manager,
-    executor=user_proxy,
-    name="get_model_zoo",
-    description="Check available computer vision checkpoints. Must be called before using computer vision models.",
-)
+# register_function(
+#     get_model_zoo,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="get_model_zoo",
+#     description="Check available computer vision checkpoints. Must be called before using computer vision models.",
+# )
 
 register_function(
     infer_instance_segmentation,
@@ -481,13 +481,13 @@ register_function(
     description="Perform image regression on plant images",
 )
 
-register_function(
-    compute_phenotypes_from_ins_seg,
-    caller=manager,
-    executor=user_proxy,
-    name="compute_phenotypes_from_ins_seg",
-    description="Compute phenotypes from an instance segmentation result file",
-)
+# register_function(
+#     compute_phenotypes_from_ins_seg,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="compute_phenotypes_from_ins_seg",
+#     description="Compute phenotypes from an instance segmentation result file",
+# )
 
 register_function(
     coding,
@@ -537,21 +537,21 @@ register_function(
 )
 
 # Model finetuning function
-register_function(
-    get_dataset_format,
-    caller=manager,
-    executor=user_proxy,
-    name="get_dataset_format",
-    description="Instruct the user to prepare a dataset in the required format to train a model.",
-)
+# register_function(
+#     get_dataset_format,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="get_dataset_format",
+#     description="Instruct the user to prepare a dataset in the required format to train a model.",
+# )
 
-register_function(
-    prepare_dataset,
-    caller=manager,
-    executor=user_proxy,
-    name="prepare_dataset",
-    description="When the user upload a dataset for model training, use this function to process the dataset into the required format.",
-)
+# register_function(
+#     prepare_dataset,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="prepare_dataset",
+#     description="When the user upload a dataset for model training, use this function to process the dataset into the required format.",
+# )
 
 register_function(
     finetune_image_classification,
