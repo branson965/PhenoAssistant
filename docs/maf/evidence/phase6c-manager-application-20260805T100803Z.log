@@ -1,0 +1,74 @@
+===== PHASE =====
+Phase 6C — production MAF Manager and application graph
+
+===== SOURCE =====
+Branch: feature/maf-linux-migration
+Commit: 5e256d11af1cf3b03b3ffae02eee251258b757f0
+Recorded: 2026-08-05T10:08:03+00:00
+
+===== CREATE PRODUCTION MANAGER =====
+
+===== CREATE APPLICATION GRAPH =====
+
+===== CREATE RUNTIME BOUNDARY =====
+
+===== UPDATE PUBLIC PACKAGE INTERFACE =====
+
+===== CREATE OFFLINE MAF CLIENT =====
+
+===== CREATE MANAGER TESTS =====
+
+===== CREATE APPLICATION TESTS =====
+
+===== CREATE RUNTIME TESTS =====
+
+===== CREATED FILES =====
+CREATED | phenoassistant_maf/manager.py
+CREATED | phenoassistant_maf/application.py
+CREATED | phenoassistant_maf/runtime.py
+CREATED | phenoassistant_maf/__init__.py
+CREATED | tests/phenoassistant_maf/fakes.py
+CREATED | tests/phenoassistant_maf/test_manager.py
+CREATED | tests/phenoassistant_maf/test_application.py
+CREATED | tests/phenoassistant_maf/test_runtime.py
+
+===== PRODUCTION IMPORT SAFETY =====
+PRODUCTION_APPLICATION_IMPORT_PASS
+
+===== DEPENDENCY HEALTH =====
+No broken requirements found.
+
+===== PRODUCTION TESTS =====
+................................                                         [100%]
+32 passed in 3.19s
+
+===== COMBINED REGRESSION TESTS =====
+........................................................................ [ 97%]
+..                                                                       [100%]
+74 passed in 3.32s
+
+===== TEST COLLECTION =====
+74 tests collected in 0.76s
+
+===== ORIGINAL SOURCE PROTECTION =====
+ORIGINAL_SCIENTIFIC_SOURCE_UNCHANGED
+
+===== POC SOURCE PROTECTION =====
+VALIDATED_POC_UNCHANGED
+
+===== DIFF HEALTH =====
+
+===== SECRET SCAN =====
+No token-shaped content detected.
+
+===== REPOSITORY STATUS =====
+ M phenoassistant_maf/__init__.py
+?? phenoassistant_maf/application.py
+?? phenoassistant_maf/manager.py
+?? phenoassistant_maf/runtime.py
+?? tests/phenoassistant_maf/fakes.py
+?? tests/phenoassistant_maf/test_application.py
+?? tests/phenoassistant_maf/test_manager.py
+?? tests/phenoassistant_maf/test_runtime.py
+
+PHASE6C_MANAGER_APPLICATION_PASS
