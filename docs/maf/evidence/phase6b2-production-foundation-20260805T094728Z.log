@@ -1,0 +1,68 @@
+===== PHASE =====
+Phase 6B2 — production MAF package and typed tool registry
+
+===== SOURCE =====
+Branch: feature/maf-linux-migration
+Commit: a8e796fa787cda247a759084fbdda9fcacfd8d5c
+Recorded: 2026-08-05T09:47:28+00:00
+
+===== CREATE PACKAGE STRUCTURE =====
+
+===== CREATE PRODUCTION TESTS =====
+
+===== FILE INVENTORY =====
+phenoassistant_maf/__init__.py
+phenoassistant_maf/config.py
+phenoassistant_maf/provider.py
+phenoassistant_maf/registry.py
+phenoassistant_maf/tools/__init__.py
+phenoassistant_maf/tools/calculator.py
+phenoassistant_maf/tools/statistics.py
+tests/phenoassistant_maf/test_calculator.py
+tests/phenoassistant_maf/test_import_safety.py
+tests/phenoassistant_maf/test_registry.py
+tests/phenoassistant_maf/test_statistics.py
+
+===== PRODUCTION IMPORT CHECK =====
+PRODUCTION_MAF_IMPORT_PASS
+
+===== DEPENDENCY HEALTH =====
+No broken requirements found.
+
+===== PRODUCTION TESTS =====
+.....................                                                    [100%]
+21 passed in 1.54s
+
+===== COMBINED REGRESSION TESTS =====
+...............................................................          [100%]
+63 passed in 1.62s
+
+===== TEST COLLECTION =====
+63 tests collected in 0.73s
+
+===== ORIGINAL SOURCE PROTECTION =====
+ORIGINAL_SCIENTIFIC_SOURCE_UNCHANGED
+
+===== DIFF HEALTH =====
+
+===== SECRET SCAN =====
+No token-shaped content detected.
+
+===== REPOSITORY STATUS =====
+?? phenoassistant_maf/__init__.py
+?? phenoassistant_maf/config.py
+?? phenoassistant_maf/provider.py
+?? phenoassistant_maf/registry.py
+?? phenoassistant_maf/tools/__init__.py
+?? phenoassistant_maf/tools/calculator.py
+?? phenoassistant_maf/tools/statistics.py
+?? requirements-maf-dev.txt
+?? requirements-maf.txt
+?? tests/phenoassistant_maf/test_calculator.py
+?? tests/phenoassistant_maf/test_import_safety.py
+?? tests/phenoassistant_maf/test_registry.py
+?? tests/phenoassistant_maf/test_statistics.py
+
+PHASE6B2_PRODUCTION_FOUNDATION_PASS
+
+PHASE6B2_EVIDENCE_VALIDATION_PASS
