@@ -1,0 +1,39 @@
+         A     B    mean(A)    mean(B)  ...        se          T  p-tukey     hedges
+0  control  high  12.666667  17.663167  ...  0.120746 -41.380153      0.0 -17.726316
+1  control   low  12.666667  15.170167  ...  0.120746 -20.733556      0.0  -9.012583
+2     high   low  17.663167  15.170167  ...  0.120746  20.646597      0.0   8.716233
+
+[3 rows x 9 columns]
+REAL_TUKEY_DIRECT_RECORDS=3
+REAL_TUKEY_GROUPS=control,high,low
+REAL_TUKEY_SIGNIFICANT_PAIRS=3
+REAL_TUKEY_DIRECT_PASS
+REAL_TUKEY_SCIENTIFIC_FIXTURE_PASS
+REAL_TUKEY_CANONICAL_JSON=[{"A": "control", "B": "high", "T": -41.38015321048123, "diff": -4.9964999999999975, "hedges": -17.726315760648017, "mean(A)": 12.666666666666668, "mean(B)": 17.663166666666665, "p-tukey": 0.0, "se": 0.12074629048822437}, {"A": "control", "B": "low", "T": -20.733556201829224, "diff": -2.503499999999997, "hedges": -9.012582893065812, "mean(A)": 12.666666666666668, "mean(B)": 15.170166666666665, "p-tukey": 0.0, "se": 0.12074629048822437}, {"A": "high", "B": "low", "T": 20.646597008652012, "diff": 2.4930000000000003, "hedges": 8.716233202845531, "mean(A)": 17.663166666666665, "mean(B)": 15.170166666666665, "p-tukey": 0.0, "se": 0.12074629048822437}]
+........................................................................ [ 94%]
+....                                                                     [100%]
+76 passed in 8.30s
+ss                                                                       [100%]
+2 skipped in 2.38s
+         A     B    mean(A)    mean(B)  ...        se          T  p-tukey     hedges
+0  control  high  12.666667  17.663167  ...  0.120746 -41.380153      0.0 -17.726316
+1  control   low  12.666667  15.170167  ...  0.120746 -20.733556      0.0  -9.012583
+2     high   low  17.663167  15.170167  ...  0.120746  20.646597      0.0   8.716233
+
+[3 rows x 9 columns]
+LIVE_TUKEY_ATTEMPT=1/5
+         A     B    mean(A)    mean(B)  ...        se          T  p-tukey     hedges
+0  control  high  12.666667  17.663167  ...  0.120746 -41.380153      0.0 -17.726316
+1  control   low  12.666667  15.170167  ...  0.120746 -20.733556      0.0  -9.012583
+2     high   low  17.663167  15.170167  ...  0.120746  20.646597      0.0   8.716233
+
+[3 rows x 9 columns]
+LIVE_TUKEY_SELECTED_MODEL=openrouter/free
+LIVE_TUKEY_RECORDED_CALLS=1
+LIVE_TUKEY_ARGUMENTS_PASS
+LIVE_TUKEY_DIRECT_RESULT_PARITY_PASS
+LIVE_TUKEY_SUMMARY_GROUNDING_PASS
+LIVE_NATURAL_LANGUAGE_TUKEY_SELECTION_PASS
+.
+1 passed in 11.36s
+PHASE6F_CHECKPOINT_GATE_PASS
