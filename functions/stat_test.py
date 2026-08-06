@@ -54,7 +54,7 @@ def perform_tukey_test(
     between_subject_factor: Annotated[str, "The name of the between-subjects factor"],
     subject_id: Annotated[str, "The name of the subject identifier"],
     save_path: Annotated[Optional[str], "Path to save the Tukey-Kramer results CSV"] = None
-) -> str:
+) -> str | list[dict]:
     """
     Perform Post-hoc Tukey-Kramer test on a given descriptor.
 

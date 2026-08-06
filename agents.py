@@ -496,13 +496,13 @@ register_function(
     name="coding",
     description="Write and execute code to solve tasks. Please provide a complete task description rather than concrete code as the input to this function.",)
 
-register_function(
-    analyse_plot,
-    caller=manager,
-    executor=user_proxy,
-    name="analyse_plot",
-    description="Analyse a plot using GPT-4o.",
-)
+# register_function(
+#     analyse_plot,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="analyse_plot",
+#     description="Analyse a plot using GPT-4o.",
+# )
 
 register_function(
     compute_csv,

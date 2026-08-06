@@ -7,6 +7,7 @@ from functions.reproducible_pipeline import get_pipeline_zoo, get_pipeline_info,
 from functions.search import search_and_scrape
 from functions.compute_phenotypes import compute_phenotypes_from_ins_seg
 from functions.create_hf_dataset import get_dataset_format, prepare_dataset
+from functions.plot_analysis import analyse_plot
 from functions.instance_segmentation import infer_instance_segmentation
 from functions.instance_segmentation import finetune_instance_segmentation
 from functions.image_classification import infer_image_classification
@@ -46,4 +47,5 @@ TOOL_REGISTRY = [
     (finetune_image_classification, 'finetune_image_classification', 'Train an image classification model on a user uploaded dataset.'),
     (infer_image_regression, 'infer_image_regression', 'Perform image regression on plant images'),
     (finetune_image_regression, 'finetune_image_regression', 'Train an image regression model on a user uploaded dataset.'),
+    (analyse_plot, 'analyse_plot', 'Analyse a plot using GPT-4o.'),
 ]
