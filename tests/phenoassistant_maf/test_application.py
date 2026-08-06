@@ -84,6 +84,8 @@ def test_application_composes_manager_and_registry() -> None:
         "calculator",
         "perform_anova",
         "perform_tukey_test",
+        "compare_linear_relationships",
+        "query_csv_statistic",
     )
 
     manager_tool_names = tuple(

@@ -1,0 +1,34 @@
+PHASE8B_LIVE_NOTEBOOK_BEGIN
+CODE_CELLS= 7
+DATASET_ROWS= 32
+CODE_CELL_1_PASS
+MODEL= openrouter/free
+TOOLS= ('calculator', 'perform_anova', 'perform_tukey_test', 'compare_linear_relationships', 'query_csv_statistic')
+CODE_CELL_2_PASS
+CODE_CELL_3_PASS
+**Linear regression results**
+
+| Predictor | Equation (y = a x + b) | Pearson r |
+|-----------|------------------------|-----------|
+| manual_leaf_area | y = **0.001982 × manual_leaf_area + 0.04263** | **0.8911** |
+| projected_leaf_area | y = **0.000343 × projected_leaf_area + 0.06350** | **0.7599** |
+
+**Which predictor is stronger?**
+The manual_leaf_area model has a higher Pearson correlation (0.8911 vs. 0.7599), indicating a stronger linear relationship with manual_dried_weight.
+CODE_CELL_4_PASS
+Based on the query results:
+- Maximum manual_leaf_area where Variety equals Desiree: **649.69**
+- Matching row count: **22**
+CODE_CELL_5_PASS
+The query found a **mean manual_leaf_area of 225.656** for rows where Variety equals "Desiree", with **22 matching rows**.
+CODE_CELL_6_PASS
+MAF_DEMO_WORKFLOW_COMPLETE
+OPENROUTER_CLIENT_CLOSED
+CODE_CELL_7_PASS
+ACTUAL_MANUAL_PLOT= /workspaces/PhenoAssistant/results/maf_demo/potato_manual.png
+ACTUAL_ALGORITHM_PLOT= /workspaces/PhenoAssistant/results/maf_demo/potato_algorithm.png
+PHASE8B_LIVE_NOTEBOOK_PASS
+.................................................                        [100%]
+49 passed in 4.85s
+LEGACY_DEMO_UNCHANGED
+PHASE8B_CHECKPOINT_GATE_PASS

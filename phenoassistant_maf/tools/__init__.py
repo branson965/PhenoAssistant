@@ -7,6 +7,19 @@ from phenoassistant_maf.tools.calculator import (
     build_calculator_handler,
     create_calculator_tool,
 )
+from phenoassistant_maf.tools.csv_analysis import (
+    AggregateCallable,
+    CsvAggregateInput,
+    CsvAggregateResult,
+    RegressionCallable,
+    RegressionComparisonInput,
+    RegressionComparisonResult,
+    RegressionLineResult,
+    build_csv_aggregate_handler,
+    build_regression_comparison_handler,
+    create_csv_aggregate_tool,
+    create_regression_comparison_tool,
+)
 from phenoassistant_maf.tools.statistics import (
     AnovaCallable,
     MixedAnovaInput,
@@ -21,7 +34,14 @@ from phenoassistant_maf.tools.statistics import (
 )
 
 __all__ = [
+    "AggregateCallable",
     "AnovaCallable",
+    "CsvAggregateInput",
+    "CsvAggregateResult",
+    "RegressionCallable",
+    "RegressionComparisonInput",
+    "RegressionComparisonResult",
+    "RegressionLineResult",
     "CalculatorCallable",
     "CalculatorInput",
     "CalculatorResult",
@@ -31,9 +51,13 @@ __all__ = [
     "TukeyInput",
     "TukeyResult",
     "build_anova_handler",
+    "build_csv_aggregate_handler",
+    "build_regression_comparison_handler",
     "build_calculator_handler",
     "build_tukey_handler",
     "create_anova_tool",
     "create_calculator_tool",
+    "create_csv_aggregate_tool",
+    "create_regression_comparison_tool",
     "create_tukey_tool",
 ]

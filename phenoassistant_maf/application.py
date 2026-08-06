@@ -12,8 +12,10 @@ from phenoassistant_maf.registry import (
     build_production_tool_registry,
 )
 from phenoassistant_maf.tools import (
+    AggregateCallable,
     AnovaCallable,
     CalculatorCallable,
+    RegressionCallable,
     TukeyCallable,
 )
 
@@ -32,6 +34,10 @@ def build_application(
     calculator_callable: CalculatorCallable | None = None,
     anova_callable: AnovaCallable | None = None,
     tukey_callable: TukeyCallable | None = None,
+    first_plot_path: str = "./results/maf_demo/potato_manual.png",
+    second_plot_path: str = "./results/maf_demo/potato_algorithm.png",
+    regression_callable: RegressionCallable | None = None,
+    aggregate_callable: AggregateCallable | None = None,
 ) -> PhenoAssistantApplication:
     """Build the production registry and Manager without global state."""
     registry = build_production_tool_registry(
@@ -39,6 +45,10 @@ def build_application(
         calculator_callable=calculator_callable,
         anova_callable=anova_callable,
         tukey_callable=tukey_callable,
+        first_plot_path=first_plot_path,
+        second_plot_path=second_plot_path,
+        regression_callable=regression_callable,
+        aggregate_callable=aggregate_callable,
     )
 
     manager = build_manager_agent(

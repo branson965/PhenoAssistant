@@ -56,6 +56,8 @@ def test_registry_has_deterministic_original_tool_names() -> None:
         "calculator",
         "perform_anova",
         "perform_tukey_test",
+        "compare_linear_relationships",
+        "query_csv_statistic",
     )
 
 

@@ -327,3 +327,128 @@ async def test_independent_applications_do_not_share_history() -> None:
         second_client.received_messages[0][-1].text
         == "second run"
     )
+
+
+
+@pytest.mark.asyncio
+async def test_regression_comparison_executes_through_application_graph() -> None:
+    implementation = Mock(
+        side_effect=[
+            {
+                "slope": 0.0019823477915018924,
+                "intercept": 0.04262671903070531,
+                "r_value": 0.8910860678113759,
+            },
+            {
+                "slope": 0.0003433802936082736,
+                "intercept": 0.06349718502926727,
+                "r_value": 0.7598824217936114,
+            },
+        ]
+    )
+
+    client = ScriptedToolClient(
+        "compare_linear_relationships",
+        {
+            "first_x_column": "manual_leaf_area",
+            "second_x_column": "projected_leaf_area",
+            "y_column": "manual_dried_weight",
+        },
+    )
+
+    application = build_application(
+        client=client,
+        data_path="/trusted/potatoes.csv",
+        calculator_callable=unused_calculator,
+        anova_callable=unused_anova,
+        tukey_callable=unused_tukey,
+        first_plot_path="/trusted/manual.png",
+        second_plot_path="/trusted/algorithm.png",
+        regression_callable=implementation,
+    )
+
+    response = await run_application(
+        application,
+        "Compare manual and algorithm-derived leaf area.",
+    )
+
+    assert implementation.call_count == 2
+    assert implementation.call_args_list[0].args == (
+        "/trusted/potatoes.csv",
+        "manual_leaf_area",
+        "manual_dried_weight",
+        "/trusted/manual.png",
+    )
+    assert implementation.call_args_list[1].args == (
+        "/trusted/potatoes.csv",
+        "projected_leaf_area",
+        "manual_dried_weight",
+        "/trusted/algorithm.png",
+    )
+
+    assert client.function_result is not None
+    assert client.function_result.exception is None
+
+    evidence = json.loads(client.function_result.result)
+
+    assert evidence["tool_name"] == "compare_linear_relationships"
+    assert len(evidence["analyses"]) == 2
+    assert evidence["analyses"][0]["r_value"] == 0.8910860678113759
+    assert evidence["analyses"][1]["r_value"] == 0.7598824217936114
+    assert response.messages[-1].text == (
+        "compare_linear_relationships completed from tool evidence."
+    )
+
+
+@pytest.mark.asyncio
+async def test_csv_statistic_executes_through_application_graph() -> None:
+    implementation = Mock(
+        return_value={
+            "matching_rows": 22,
+            "result": 649.69,
+        }
+    )
+
+    client = ScriptedToolClient(
+        "query_csv_statistic",
+        {
+            "operation": "maximum",
+            "value_column": "manual_leaf_area",
+            "filter_column": "Variety",
+            "filter_value": "Desiree",
+        },
+    )
+
+    application = build_application(
+        client=client,
+        data_path="/trusted/potatoes.csv",
+        calculator_callable=unused_calculator,
+        anova_callable=unused_anova,
+        tukey_callable=unused_tukey,
+        aggregate_callable=implementation,
+    )
+
+    response = await run_application(
+        application,
+        "Find the maximum manual leaf area for Desiree.",
+    )
+
+    implementation.assert_called_once_with(
+        "/trusted/potatoes.csv",
+        "maximum",
+        "manual_leaf_area",
+        "Variety",
+        "Desiree",
+    )
+
+    assert client.function_result is not None
+    assert client.function_result.exception is None
+
+    evidence = json.loads(client.function_result.result)
+
+    assert evidence["tool_name"] == "query_csv_statistic"
+    assert evidence["matching_rows"] == 22
+    assert evidence["result"] == 649.69
+    assert response.messages[-1].text == (
+        "query_csv_statistic completed from tool evidence."
+    )

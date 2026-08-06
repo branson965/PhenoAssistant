@@ -6,12 +6,14 @@ from agent_framework import Agent, SupportsChatGetResponse
 
 from phenoassistant_maf.registry import ProductionToolRegistry
 
-MANAGER_INSTRUCTIONS_VERSION = "phenoassistant-manager-v1"
+MANAGER_INSTRUCTIONS_VERSION = "phenoassistant-manager-v2"
 
 INITIAL_MANAGER_TOOLS = (
     "calculator",
     "perform_anova",
     "perform_tukey_test",
+    "compare_linear_relationships",
+    "query_csv_statistic",
 )
 
 MANAGER_INSTRUCTIONS = """\
@@ -26,10 +28,12 @@ For every supported request:
 Available responsibilities:
 - calculator: integer arithmetic;
 - perform_anova: mixed-design repeated-measures ANOVA;
-- perform_tukey_test: Tukey-Kramer post-hoc analysis.
+- perform_tukey_test: Tukey-Kramer post-hoc analysis;
+- compare_linear_relationships: compare two linear fits and correlations;
+- query_csv_statistic: compute a filtered maximum or mean.
 
 Never invent statistical values.
-Never ask the model to provide data_path or save_path.
+Never ask the model to provide data paths or output paths.
 Do not claim that a tool succeeded unless its returned evidence confirms success.
 """
 
