@@ -457,29 +457,29 @@ register_function(
 #     description="Check available computer vision checkpoints. Must be called before using computer vision models.",
 # )
 
-register_function(
-    infer_instance_segmentation,
-    caller=manager,
-    executor=user_proxy,
-    name="infer_instance_segmentation",
-    description="Perform instance segmentation on plant images",
-)
+# register_function(
+#     infer_instance_segmentation,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="infer_instance_segmentation",
+#     description="Perform instance segmentation on plant images",
+# )
 
-register_function(
-    infer_image_classification,
-    caller=manager,
-    executor=user_proxy,
-    name="infer_image_classification",
-    description="Perform image classification on plant images",
-)
+# register_function(
+#     infer_image_classification,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="infer_image_classification",
+#     description="Perform image classification on plant images",
+# )
 
-register_function(
-    infer_image_regression,
-    caller=manager,
-    executor=user_proxy,
-    name="infer_image_regression",
-    description="Perform image regression on plant images",
-)
+# register_function(
+#     infer_image_regression,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="infer_image_regression",
+#     description="Perform image regression on plant images",
+# )
 
 # register_function(
 #     compute_phenotypes_from_ins_seg,
@@ -553,29 +553,29 @@ register_function(
 #     description="When the user upload a dataset for model training, use this function to process the dataset into the required format.",
 # )
 
-register_function(
-    finetune_image_classification,
-    caller=manager,
-    executor=user_proxy,
-    name="finetune_image_classification",
-    description="Train an image classification model on a user uploaded dataset.",
-)
+# register_function(
+#     finetune_image_classification,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="finetune_image_classification",
+#     description="Train an image classification model on a user uploaded dataset.",
+# )
 
-register_function(
-    finetune_image_regression,
-    caller=manager,
-    executor=user_proxy,
-    name="finetune_image_regression",
-    description="Train an image regression model on a user uploaded dataset.",
-)
+# register_function(
+#     finetune_image_regression,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="finetune_image_regression",
+#     description="Train an image regression model on a user uploaded dataset.",
+# )
 
-register_function(
-    finetune_instance_segmentation,
-    caller=manager,
-    executor=user_proxy,
-    name="finetune_instance_segmentation",
-    description="Train an instance segmentation model on a user uploaded dataset.",
-)
+# register_function(
+#     finetune_instance_segmentation,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="finetune_instance_segmentation",
+#     description="Train an instance segmentation model on a user uploaded dataset.",
+# )
 
 # register_function(
 #     make_dir,

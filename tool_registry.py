@@ -7,6 +7,12 @@ from functions.reproducible_pipeline import get_pipeline_zoo, get_pipeline_info,
 from functions.search import search_and_scrape
 from functions.compute_phenotypes import compute_phenotypes_from_ins_seg
 from functions.create_hf_dataset import get_dataset_format, prepare_dataset
+from functions.instance_segmentation import infer_instance_segmentation
+from functions.instance_segmentation import finetune_instance_segmentation
+from functions.image_classification import infer_image_classification
+from functions.image_classification import finetune_image_classification
+from functions.image_regression import infer_image_regression
+from functions.image_regression import finetune_image_regression
 
 TOOL_REGISTRY = [
     (perform_anova, "perform_anova",
@@ -34,4 +40,10 @@ TOOL_REGISTRY = [
      "Instruct the user to prepare a dataset in the required format to train a model."),
     (prepare_dataset, "prepare_dataset",
      "When the user upload a dataset for model training, use this function to process the dataset into the required format."),
+    (infer_instance_segmentation, 'infer_instance_segmentation', 'Perform instance segmentation on plant images'),
+    (finetune_instance_segmentation, 'finetune_instance_segmentation', 'Train an instance segmentation model on a user uploaded dataset.'),
+    (infer_image_classification, 'infer_image_classification', 'Perform image classification on plant images'),
+    (finetune_image_classification, 'finetune_image_classification', 'Train an image classification model on a user uploaded dataset.'),
+    (infer_image_regression, 'infer_image_regression', 'Perform image regression on plant images'),
+    (finetune_image_regression, 'finetune_image_regression', 'Train an image regression model on a user uploaded dataset.'),
 ]
