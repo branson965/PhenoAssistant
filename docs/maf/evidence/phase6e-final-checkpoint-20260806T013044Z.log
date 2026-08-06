@@ -1,0 +1,99 @@
+===== PHASE =====
+Phase 6E final checkpoint — normalise, validate, commit, push
+
+===== PREFLIGHT =====
+Branch: feature/maf-linux-migration
+HEAD: ea54401a6fc0cd97e46e89c67dec4d69cddc8333
+Recorded: 2026-08-06T01:30:44+00:00
+
+===== RECOVERY SCOPE =====
+EXPECTED | ?? docs/maf/REAL_ANOVA_VALIDATION.md
+EXPECTED | ?? docs/maf/evidence/phase6e-real-anova-binding-recovery-20260806T012346Z.log
+EXPECTED | ?? requirements-maf-science.txt
+EXPECTED | ?? scripts/maf/validate_real_anova.py
+EXPECTED | ?? tests/fixtures/maf/mixed_anova_plants.csv
+EXPECTED | ?? tests/science/test_real_anova_runtime.py
+
+===== UNSTAGE INTERRUPTED CHECKPOINT =====
+
+===== REMOVE STALE PHASE 6E EVIDENCE =====
+REMOVED | docs/maf/evidence/phase6e-real-anova-binding-recovery-20260806T012346Z.log
+
+===== REQUIRED ARTIFACTS =====
+FOUND | requirements-maf-science.txt
+FOUND | tests/fixtures/maf/mixed_anova_plants.csv
+FOUND | scripts/maf/validate_real_anova.py
+FOUND | tests/science/test_real_anova_runtime.py
+FOUND | docs/maf/REAL_ANOVA_VALIDATION.md
+
+===== NORMALISE LINE ENDINGS =====
+NORMALISED | requirements-maf-science.txt
+NORMALISED | tests/fixtures/maf/mixed_anova_plants.csv
+NORMALISED | scripts/maf/validate_real_anova.py
+NORMALISED | tests/science/test_real_anova_runtime.py
+NORMALISED | docs/maf/REAL_ANOVA_VALIDATION.md
+PHASE6E_LINE_ENDING_NORMALISATION_PASS
+
+===== FIXTURE VALIDATION =====
+FIXTURE_ROWS=90
+FIXTURE_PLANTS=30
+FIXTURE_TIME_LEVELS=3
+FIXTURE_TREATMENT_GROUPS=3
+FIXTURE_PLANTS_PER_GROUP=10
+PHASE6E_BALANCED_FIXTURE_PASS
+
+===== SCIENTIFIC ENVIRONMENT =====
+No broken requirements found.
+PHASE6E_SCIENTIFIC_ENVIRONMENT_PASS
+
+===== SYNTAX VALIDATION =====
+PHASE6E_SYNTAX_PASS
+
+===== REAL ANOVA DIRECT AND GRAPH EXECUTION =====
+        Source          SS  DF1  ...  sphericity   W-spher       p-spher
+0    treatment  374.475735    2  ...         NaN       NaN           NaN
+1         time  715.507205    2  ...       False  0.062278  1.320443e-17
+2  Interaction   20.045410    4  ...         NaN       NaN           NaN
+
+[3 rows x 13 columns]
+REAL_ANOVA_DIRECT_RECORDS=3
+REAL_ANOVA_DIRECT_PASS
+        Source          SS  DF1  ...  sphericity   W-spher       p-spher
+0    treatment  374.475735    2  ...         NaN       NaN           NaN
+1         time  715.507205    2  ...       False  0.062278  1.320443e-17
+2  Interaction   20.045410    4  ...         NaN       NaN           NaN
+
+[3 rows x 13 columns]
+REAL_ANOVA_GRAPH_RECORDS=3
+REAL_ANOVA_GRAPH_PASS
+REAL_ANOVA_DIRECT_GRAPH_PARITY_PASS
+PHASE6E_REAL_ANOVA_VALIDATION_PASS
+PHASE6E_REAL_ANOVA_EXECUTION_PASS
+
+===== SCIENCE REGRESSION TEST =====
+.                                                                        [100%]
+1 passed in 2.39s
+PHASE6E_SCIENCE_TEST_PASS
+
+===== EXPANDED REGRESSION SUITE =====
+........................................................................ [ 96%]
+...                                                                      [100%]
+75 passed in 5.71s
+PHASE6E_75_TEST_REGRESSION_PASS
+
+===== LIVE TEST REMAINS OPT-IN =====
+s                                                                        [100%]
+1 skipped in 0.70s
+LIVE_OPENROUTER_DEFAULT_SKIP_PASS
+
+===== SOURCE PROTECTION =====
+ORIGINAL_SCIENTIFIC_SOURCE_UNCHANGED
+VALIDATED_POC_UNCHANGED
+
+===== SECRET SCAN =====
+PHASE6E_SECRET_SCAN_PASS
+
+===== FILE FORMATTING VALIDATION =====
+PHASE6E_FORMATTING_PASS
+
+PHASE6E_VALIDATION_PASS
