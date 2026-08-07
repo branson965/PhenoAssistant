@@ -28,6 +28,19 @@ from phenoassistant_maf.tools.case1_analysis import (
     create_longitudinal_plot_tool,
     create_repeated_measures_posthoc_tool,
 )
+from phenoassistant_maf.tools.case3_readiness import (
+    CASE3_DATASET_NAME,
+    CASE3_EXPECTED_CHECKPOINT,
+    Case3ExecutionStatus,
+    Case3Operation,
+    Case3ReadinessInput,
+    Case3ReadinessResult,
+    DatasetStructureEvidence,
+    LegacyTrainingContractEvidence,
+    build_case3_readiness_handler,
+    create_case3_readiness_tool,
+    run_case3_readiness,
+)
 from phenoassistant_maf.tools.csv_analysis import (
     AggregateCallable,
     CsvAggregateInput,
@@ -40,6 +53,17 @@ from phenoassistant_maf.tools.csv_analysis import (
     build_regression_comparison_handler,
     create_csv_aggregate_tool,
     create_regression_comparison_tool,
+)
+from phenoassistant_maf.tools.model_catalogue import (
+    ModelCatalogueInput,
+    ModelCatalogueResult,
+    ModelCheckpointEvidence,
+    ModelTask,
+    ModelTaskEvidence,
+    ModelTaskSelection,
+    build_model_catalogue_handler,
+    create_model_catalogue_tool,
+    run_model_catalogue,
 )
 from phenoassistant_maf.tools.pipeline_catalogue import (
     PipelineArgumentEvidence,
@@ -68,6 +92,20 @@ from phenoassistant_maf.tools.statistics import (
 )
 
 __all__ = [
+    "CASE3_DATASET_NAME",
+    "CASE3_EXPECTED_CHECKPOINT",
+    "Case3ExecutionStatus",
+    "Case3Operation",
+    "Case3ReadinessInput",
+    "Case3ReadinessResult",
+    "DatasetStructureEvidence",
+    "LegacyTrainingContractEvidence",
+    "ModelCatalogueInput",
+    "ModelCatalogueResult",
+    "ModelCheckpointEvidence",
+    "ModelTask",
+    "ModelTaskEvidence",
+    "ModelTaskSelection",
     "EcotypeRankEvidence",
     "EcotypeRankingInput",
     "EcotypeRankingResult",
@@ -105,6 +143,8 @@ __all__ = [
     "TukeyCallable",
     "TukeyInput",
     "TukeyResult",
+    "build_case3_readiness_handler",
+    "build_model_catalogue_handler",
     "build_ecotype_ranking_handler",
     "build_longitudinal_plot_handler",
     "build_repeated_measures_posthoc_handler",
@@ -114,6 +154,8 @@ __all__ = [
     "build_regression_comparison_handler",
     "build_calculator_handler",
     "build_tukey_handler",
+    "create_case3_readiness_tool",
+    "create_model_catalogue_tool",
     "create_ecotype_ranking_tool",
     "create_longitudinal_plot_tool",
     "create_repeated_measures_posthoc_tool",
@@ -124,4 +166,6 @@ __all__ = [
     "create_regression_comparison_tool",
     "create_tukey_tool",
     "run_pipeline_catalogue",
+    "run_case3_readiness",
+    "run_model_catalogue",
 ]

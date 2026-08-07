@@ -1,0 +1,11 @@
+PHASE10D_CASE3_CPU_EVIDENCE
+UTC_TIMESTAMP=20260807T152103Z
+BRANCH=feature/maf-linux-migration
+HEAD=4f0870a77178b59316635ebb348903227cd0fc3d
+
+ss...................................................................... [ 46%]
+........................................................................ [ 92%]
+............                                                             [100%]
+154 passed, 2 skipped in 31.86s
+
+PHASE10D_CASE3_CPU_REGRESSION_PASS

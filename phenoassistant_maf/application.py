@@ -49,6 +49,8 @@ def build_application(
     case1_interaction_alpha: float = 0.01,
     case1_posthoc_alpha: float = 0.05,
     pipeline_zoo_path: str | None = None,
+    model_zoo_path: str | None = None,
+    case3_dataset_path: str | None = None,
 ) -> PhenoAssistantApplication:
     """Build the production registry and Manager without global state."""
     registry = build_production_tool_registry(
@@ -69,6 +71,8 @@ def build_application(
         case1_interaction_alpha=case1_interaction_alpha,
         case1_posthoc_alpha=case1_posthoc_alpha,
         pipeline_zoo_path=pipeline_zoo_path,
+        model_zoo_path=model_zoo_path,
+        case3_dataset_path=case3_dataset_path,
     )
 
     manager = build_manager_agent(

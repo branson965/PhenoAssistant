@@ -6,7 +6,7 @@ from agent_framework import Agent, SupportsChatGetResponse
 
 from phenoassistant_maf.registry import ProductionToolRegistry
 
-MANAGER_INSTRUCTIONS_VERSION = "phenoassistant-manager-v4"
+MANAGER_INSTRUCTIONS_VERSION = "phenoassistant-manager-v5"
 
 INITIAL_MANAGER_TOOLS = (
     "calculator",
@@ -24,6 +24,21 @@ CASE1_MANAGER_TOOLS = INITIAL_MANAGER_TOOLS + (
 
 CASE1_PIPELINE_MANAGER_TOOLS = CASE1_MANAGER_TOOLS + (
     "get_pipeline_catalogue",
+)
+
+CASE3_MANAGER_TOOLS = INITIAL_MANAGER_TOOLS + (
+    "get_model_catalogue",
+    "assess_case3_readiness",
+)
+
+CASE1_CASE3_MANAGER_TOOLS = CASE1_MANAGER_TOOLS + (
+    "get_model_catalogue",
+    "assess_case3_readiness",
+)
+
+FULL_CPU_MANAGER_TOOLS = CASE1_PIPELINE_MANAGER_TOOLS + (
+    "get_model_catalogue",
+    "assess_case3_readiness",
 )
 
 MANAGER_INSTRUCTIONS = """\
@@ -46,7 +61,12 @@ Available responsibilities:
 - analyse_repeated_measures_with_posthoc: run the Case 1 ANOVA and Tukey analysis
   with explicit significance thresholds and evidence-backed grouping;
 - get_pipeline_catalogue: inspect canonical reusable pipeline families and their
-  legacy variants without importing or executing legacy pipeline Python code.
+  legacy variants without importing or executing legacy pipeline Python code;
+- get_model_catalogue: inspect registered vision-model checkpoints by supported
+  computer-vision task without loading or executing a model;
+- assess_case3_readiness: assess the bounded winter-wheat Case 3 inference or
+  training preconditions and report the explicit GPU/dependency boundary without
+  loading models, uploading datasets, training, or inference.
 
 Never invent statistical values.
 Never ask the model to provide data paths or output paths.
@@ -61,8 +81,11 @@ def build_manager_agent(
     """Construct the initial production MAF Manager explicitly."""
     supported_profiles = (
         INITIAL_MANAGER_TOOLS,
+        CASE3_MANAGER_TOOLS,
         CASE1_MANAGER_TOOLS,
         CASE1_PIPELINE_MANAGER_TOOLS,
+        CASE1_CASE3_MANAGER_TOOLS,
+        FULL_CPU_MANAGER_TOOLS,
     )
 
     if registry.names not in supported_profiles:

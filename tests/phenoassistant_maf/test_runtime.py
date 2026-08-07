@@ -782,3 +782,262 @@ async def test_pipeline_catalogue_executes_through_application_graph() -> None:
     assert response.messages[-1].text == (
         "get_pipeline_catalogue completed from tool evidence."
     )
+
+
+@pytest.mark.asyncio
+async def test_case3_model_catalogue_executes_through_application_graph() -> None:
+    """Discover the current Case 3 classifier through production MAF."""
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+
+    client = ScriptedToolClient(
+        "get_model_catalogue",
+        {
+            "task": "image-classification",
+        },
+    )
+
+    application = build_application(
+        client=client,
+        data_path="/trusted/base.csv",
+        calculator_callable=unused_calculator,
+        anova_callable=unused_anova,
+        tukey_callable=unused_tukey,
+        model_zoo_path=str(
+            root / "model_zoo.json"
+        ),
+        case3_dataset_path=str(
+            root
+            / "data"
+            / "winter-wheat_nutri-defi-identify_dndww20"
+        ),
+    )
+
+    response = await run_application(
+        application,
+        "What image-classification models are registered?",
+    )
+
+    assert client.function_result is not None
+    assert client.function_result.exception is None
+
+    evidence = json.loads(
+        client.function_result.result
+    )
+
+    assert evidence["tool_name"] == "get_model_catalogue"
+    assert evidence["arguments"] == {
+        "task": "image-classification",
+    }
+
+    assert evidence["task_count"] == 1
+    assert evidence["total_model_count"] == 1
+
+    task = evidence["tasks"][0]
+
+    assert task["task"] == "image-classification"
+    assert task["model_count"] == 1
+
+    assert task["models"] == [
+        {
+            "checkpoint": (
+                "fengchen025/"
+                "winter-wheat_nutri-defi-identify_"
+                "dndww20_dino2b_lora"
+            )
+        }
+    ]
+
+    first_response = client.received_messages[1][-2]
+
+    assert first_response.contents[1].type == "function_call"
+    assert (
+        first_response.contents[1].name
+        == "get_model_catalogue"
+    )
+
+    assert response.messages[-1].text == (
+        "get_model_catalogue completed from tool evidence."
+    )
+
+
+@pytest.mark.asyncio
+async def test_case3_training_readiness_executes_through_application_graph() -> None:
+    """Expose the real missing-dataset/GPU boundary through production MAF."""
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+
+    client = ScriptedToolClient(
+        "assess_case3_readiness",
+        {
+            "operation": "training",
+        },
+    )
+
+    application = build_application(
+        client=client,
+        data_path="/trusted/base.csv",
+        calculator_callable=unused_calculator,
+        anova_callable=unused_anova,
+        tukey_callable=unused_tukey,
+        model_zoo_path=str(
+            root / "model_zoo.json"
+        ),
+        case3_dataset_path=str(
+            root
+            / "data"
+            / "winter-wheat_nutri-defi-identify_dndww20"
+        ),
+    )
+
+    response = await run_application(
+        application,
+        "Check whether Case 3 training can begin.",
+    )
+
+    assert client.function_result is not None
+    assert client.function_result.exception is None
+
+    evidence = json.loads(
+        client.function_result.result
+    )
+
+    assert evidence["tool_name"] == "assess_case3_readiness"
+    assert evidence["arguments"] == {
+        "operation": "training",
+    }
+
+    assert evidence["checkpoint_registered"] is True
+
+    assert evidence["dataset"]["root_exists"] is False
+    assert (
+        evidence["dataset"]["ready_for_prepare_dataset"]
+        is False
+    )
+
+    assert (
+        evidence["operation_preconditions_satisfied"]
+        is False
+    )
+
+    assert evidence["requires_gpu"] is True
+    assert evidence["execution_status"] == "gpu_deferred"
+    assert (
+        evidence["execution_allowed_in_cpu_phase"]
+        is False
+    )
+
+    assert (
+        "local Case 3 dataset directory is missing"
+        in evidence["blockers"]
+    )
+
+    assert any(
+        "GPU execution is deferred"
+        in blocker
+        for blocker in evidence["blockers"]
+    )
+
+    first_response = client.received_messages[1][-2]
+
+    assert first_response.contents[1].type == "function_call"
+    assert (
+        first_response.contents[1].name
+        == "assess_case3_readiness"
+    )
+
+    assert response.messages[-1].text == (
+        "assess_case3_readiness completed from tool evidence."
+    )
+
+
+@pytest.mark.asyncio
+async def test_case3_inference_readiness_executes_through_application_graph() -> None:
+    """Expose registered-model readiness while preserving the GPU stop."""
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+
+    client = ScriptedToolClient(
+        "assess_case3_readiness",
+        {
+            "operation": "inference",
+        },
+    )
+
+    application = build_application(
+        client=client,
+        data_path="/trusted/base.csv",
+        calculator_callable=unused_calculator,
+        anova_callable=unused_anova,
+        tukey_callable=unused_tukey,
+        model_zoo_path=str(
+            root / "model_zoo.json"
+        ),
+        case3_dataset_path=str(
+            root
+            / "data"
+            / "winter-wheat_nutri-defi-identify_dndww20"
+        ),
+    )
+
+    response = await run_application(
+        application,
+        "Check whether Case 3 inference can proceed.",
+    )
+
+    assert client.function_result is not None
+    assert client.function_result.exception is None
+
+    evidence = json.loads(
+        client.function_result.result
+    )
+
+    assert evidence["tool_name"] == "assess_case3_readiness"
+    assert evidence["arguments"] == {
+        "operation": "inference",
+    }
+
+    assert evidence["checkpoint_registered"] is True
+
+    assert (
+        evidence["expected_checkpoint"]
+        == (
+            "fengchen025/"
+            "winter-wheat_nutri-defi-identify_"
+            "dndww20_dino2b_lora"
+        )
+    )
+
+    assert (
+        evidence["operation_preconditions_satisfied"]
+        is True
+    )
+
+    assert evidence["requires_gpu"] is True
+    assert evidence["execution_status"] == "gpu_deferred"
+    assert (
+        evidence["execution_allowed_in_cpu_phase"]
+        is False
+    )
+
+    assert evidence["blockers"] == [
+        (
+            "GPU execution is deferred until the canonical "
+            "Nottingham GPU environment is available"
+        )
+    ]
+
+    first_response = client.received_messages[1][-2]
+
+    assert first_response.contents[1].type == "function_call"
+    assert (
+        first_response.contents[1].name
+        == "assess_case3_readiness"
+    )
+
+    assert response.messages[-1].text == (
+        "assess_case3_readiness completed from tool evidence."
+    )

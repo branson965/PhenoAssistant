@@ -125,8 +125,8 @@ def test_pipeline_manager_profile_appends_exactly_one_safe_tool() -> None:
     )
 
 
-def test_manager_v4_describes_read_only_pipeline_catalogue() -> None:
-    assert MANAGER_INSTRUCTIONS_VERSION == "phenoassistant-manager-v4"
+def test_manager_v5_preserves_read_only_pipeline_catalogue() -> None:
+    assert MANAGER_INSTRUCTIONS_VERSION == "phenoassistant-manager-v5"
     assert "get_pipeline_catalogue" in MANAGER_INSTRUCTIONS
     assert "without importing or executing" in MANAGER_INSTRUCTIONS
 

@@ -15,10 +15,12 @@ from phenoassistant_maf.tools import (
     RegressionCallable,
     TukeyCallable,
     create_anova_tool,
+    create_case3_readiness_tool,
     create_calculator_tool,
     create_csv_aggregate_tool,
     create_ecotype_ranking_tool,
     create_longitudinal_plot_tool,
+    create_model_catalogue_tool,
     create_pipeline_catalogue_tool,
     create_regression_comparison_tool,
     create_repeated_measures_posthoc_tool,
@@ -68,11 +70,22 @@ def build_production_tool_registry(
     case1_interaction_alpha: float = 0.01,
     case1_posthoc_alpha: float = 0.05,
     pipeline_zoo_path: str | None = None,
+    model_zoo_path: str | None = None,
+    case3_dataset_path: str | None = None,
 ) -> ProductionToolRegistry:
     """Construct base, Case 1, or Case 1 plus catalogue profiles."""
     if pipeline_zoo_path is not None and case1_data_path is None:
         raise ValueError(
             "pipeline catalogue requires the Case 1 tool profile"
+        )
+
+    if (
+        (model_zoo_path is None)
+        != (case3_dataset_path is None)
+    ):
+        raise ValueError(
+            "Case 3 profile requires both model_zoo_path "
+            "and case3_dataset_path"
         )
 
     base_tools = (
@@ -119,6 +132,17 @@ def build_production_tool_registry(
                     pipeline_zoo_path=pipeline_zoo_path,
                 ),
             )
+
+    if model_zoo_path is not None:
+        tools = tools + (
+            create_model_catalogue_tool(
+                model_zoo_path=model_zoo_path,
+            ),
+            create_case3_readiness_tool(
+                model_zoo_path=model_zoo_path,
+                dataset_path=case3_dataset_path,
+            ),
+        )
 
     names = tuple(tool.name for tool in tools)
 
