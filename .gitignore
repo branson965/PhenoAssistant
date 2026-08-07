@@ -5,3 +5,10 @@ __pycache__/
 .venv312/
 *.pyc
 practice.txt
+__pycache__/
+*.pyc
+.cache/
+models/
+tmp/
+tmp_mcp_test/
+err.log
