@@ -252,12 +252,18 @@ def analyse_plot(message: Annotated[str, "The request of analysing a plot. e.g. 
 
 # table analyser
 try:
-    pdsllm = AzureOpenAI(
-        api_token=os.environ['OPENAI_API_KEY'],
-        azure_endpoint=os.environ['AZURE_API_URL'],
-        api_version=os.environ['AZURE_API_VERSION'],
-        deployment_name=os.environ['MODEL_NAME'],
-    )
+    if API_SUPPLIER == 'openrouter':
+        from pandasai.llm import OpenAI as _PdsOpenAI
+        class _ORPdsLLM(_PdsOpenAI):
+            _supported_chat_models = [os.environ['MODEL_NAME']]
+        pdsllm = _ORPdsLLM(api_token=os.environ['OPENAI_API_KEY'], api_base='https://openrouter.ai/api/v1', model=os.environ['MODEL_NAME'])
+    else:
+        pdsllm = AzureOpenAI(
+            api_token=os.environ['OPENAI_API_KEY'],
+            azure_endpoint=os.environ['AZURE_API_URL'],
+            api_version=os.environ['AZURE_API_VERSION'],
+            deployment_name=os.environ['MODEL_NAME'],
+        )
 except Exception as e:
     print(f"Warning: table-analyser LLM (pdsllm) not configured: {e}")
     pdsllm = None
