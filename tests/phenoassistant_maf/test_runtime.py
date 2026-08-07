@@ -678,3 +678,107 @@ async def test_case1_repeated_measures_executes_through_application_graph() -> N
         "analyse_repeated_measures_with_posthoc "
         "completed from tool evidence."
     )
+
+
+@pytest.mark.asyncio
+async def test_pipeline_catalogue_executes_through_application_graph() -> None:
+    """Read pipeline evidence through the full production MAF graph."""
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    pipeline_zoo = root / "pipeline_zoo.json"
+
+    client = ScriptedToolClient(
+        "get_pipeline_catalogue",
+        {
+            "family": "arabidopsis_phenotype_extraction",
+        },
+    )
+
+    application = build_application(
+        client=client,
+        data_path="/trusted/potatoes.csv",
+        calculator_callable=unused_calculator,
+        anova_callable=unused_anova,
+        tukey_callable=unused_tukey,
+        case1_data_path="/trusted/aracrop.csv",
+        case1_anova_callable=unused_anova,
+        case1_tukey_callable=unused_tukey,
+        pipeline_zoo_path=str(pipeline_zoo),
+    )
+
+    response = await run_application(
+        application,
+        (
+            "Inspect the reusable Arabidopsis phenotype-extraction "
+            "pipeline capability."
+        ),
+    )
+
+    assert client.function_result is not None
+    assert client.function_result.exception is None
+
+    evidence = json.loads(
+        client.function_result.result
+    )
+
+    assert evidence["tool_name"] == "get_pipeline_catalogue"
+    assert evidence["schema_version"] == "1"
+
+    assert evidence["arguments"] == {
+        "family": "arabidopsis_phenotype_extraction",
+    }
+
+    assert evidence["capability_count"] == 1
+
+    capability = evidence["capabilities"][0]
+
+    assert (
+        capability["family_id"]
+        == "arabidopsis_phenotype_extraction"
+    )
+    assert capability["variant_count"] == 5
+    assert capability["requires_gpu"] is True
+    assert capability["execution_status"] == "gpu_deferred"
+    assert capability["maf_replacement"] is None
+
+    assert (
+        capability["legacy_dynamic_execution_allowed"]
+        is False
+    )
+
+    assert len(
+        capability["legacy_variants"]
+    ) == 5
+
+    variant_names = {
+        item["registry_key"]
+        for item in capability["legacy_variants"]
+    }
+
+    assert variant_names == {
+        "ara_crop_pipeline",
+        "ara_crop_pipeline_2",
+        "ara_crop_pipeline_3",
+        "ara_crop_pipeline_4",
+        "ara_crop_pipeline_5",
+    }
+
+    assert len(client.received_messages) == 2
+
+    first_response = client.received_messages[1][-2]
+
+    assert first_response.contents[0].type == "text"
+    assert first_response.contents[0].text.startswith(
+        "Plan:"
+    )
+
+    assert first_response.contents[1].type == "function_call"
+    assert (
+        first_response.contents[1].name
+        == "get_pipeline_catalogue"
+    )
+
+    assert response.messages[-1].text == (
+        "get_pipeline_catalogue completed from tool evidence."
+    )

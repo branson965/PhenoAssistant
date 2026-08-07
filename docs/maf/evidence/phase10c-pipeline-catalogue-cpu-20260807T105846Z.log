@@ -1,0 +1,10 @@
+PHASE10C_PIPELINE_CATALOGUE_CPU_EVIDENCE
+UTC_TIMESTAMP=20260807T105846Z
+BRANCH=feature/maf-linux-migration
+HEAD=f17187c43d60ff214668cffdc8ec0e6b68029e6e
+
+ss...................................................................... [ 55%]
+.........................................................                [100%]
+127 passed, 2 skipped in 28.54s
+
+PHASE10C_PIPELINE_CATALOGUE_CPU_REGRESSION_PASS

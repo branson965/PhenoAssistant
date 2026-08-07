@@ -6,7 +6,7 @@ from agent_framework import Agent, SupportsChatGetResponse
 
 from phenoassistant_maf.registry import ProductionToolRegistry
 
-MANAGER_INSTRUCTIONS_VERSION = "phenoassistant-manager-v3"
+MANAGER_INSTRUCTIONS_VERSION = "phenoassistant-manager-v4"
 
 INITIAL_MANAGER_TOOLS = (
     "calculator",
@@ -20,6 +20,10 @@ CASE1_MANAGER_TOOLS = INITIAL_MANAGER_TOOLS + (
     "plot_longitudinal_phenotypes",
     "rank_ecotypes_by_phenotype",
     "analyse_repeated_measures_with_posthoc",
+)
+
+CASE1_PIPELINE_MANAGER_TOOLS = CASE1_MANAGER_TOOLS + (
+    "get_pipeline_catalogue",
 )
 
 MANAGER_INSTRUCTIONS = """\
@@ -40,7 +44,9 @@ Available responsibilities:
 - plot_longitudinal_phenotypes: generate longitudinal ecotype mean/STD plots;
 - rank_ecotypes_by_phenotype: rank ecotypes directly from trusted phenotype data;
 - analyse_repeated_measures_with_posthoc: run the Case 1 ANOVA and Tukey analysis
-  with explicit significance thresholds and evidence-backed grouping.
+  with explicit significance thresholds and evidence-backed grouping;
+- get_pipeline_catalogue: inspect canonical reusable pipeline families and their
+  legacy variants without importing or executing legacy pipeline Python code.
 
 Never invent statistical values.
 Never ask the model to provide data paths or output paths.
@@ -56,6 +62,7 @@ def build_manager_agent(
     supported_profiles = (
         INITIAL_MANAGER_TOOLS,
         CASE1_MANAGER_TOOLS,
+        CASE1_PIPELINE_MANAGER_TOOLS,
     )
 
     if registry.names not in supported_profiles:

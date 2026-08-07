@@ -19,6 +19,7 @@ from phenoassistant_maf.tools import (
     create_csv_aggregate_tool,
     create_ecotype_ranking_tool,
     create_longitudinal_plot_tool,
+    create_pipeline_catalogue_tool,
     create_regression_comparison_tool,
     create_repeated_measures_posthoc_tool,
     create_tukey_tool,
@@ -66,8 +67,14 @@ def build_production_tool_registry(
     case1_tukey_callable: TukeyCallable | None = None,
     case1_interaction_alpha: float = 0.01,
     case1_posthoc_alpha: float = 0.05,
+    pipeline_zoo_path: str | None = None,
 ) -> ProductionToolRegistry:
-    """Construct the base registry with an optional Case 1 profile."""
+    """Construct base, Case 1, or Case 1 plus catalogue profiles."""
+    if pipeline_zoo_path is not None and case1_data_path is None:
+        raise ValueError(
+            "pipeline catalogue requires the Case 1 tool profile"
+        )
+
     base_tools = (
         create_calculator_tool(calculator_callable),
         create_anova_tool(data_path, anova_callable),
@@ -105,6 +112,13 @@ def build_production_tool_registry(
                 posthoc_alpha=case1_posthoc_alpha,
             ),
         )
+
+        if pipeline_zoo_path is not None:
+            tools = tools + (
+                create_pipeline_catalogue_tool(
+                    pipeline_zoo_path=pipeline_zoo_path,
+                ),
+            )
 
     names = tuple(tool.name for tool in tools)
 
