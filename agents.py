@@ -1,5 +1,5 @@
 import autogen
-from mcp_bridge import perform_anova_via_mcp
+# from mcp_bridge import perform_anova_via_mcp
 from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent
 from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent
 from autogen.agentchat.contrib.retrieve_assistant_agent import RetrieveAssistantAgent
