@@ -397,13 +397,13 @@ def extract_pipeline(
 
 
 
-register_function(
-    perform_anova_via_mcp,
-    caller=manager,
-    executor=user_proxy,
-    name="perform_anova_via_mcp",
-    description="Perform Mixed-design Repeated Measures ANOVA (via MCP server) on given data (Greenhouse-Geisser correction will be automatically applied if needed)",
-)
+# register_function(
+#     perform_anova_via_mcp,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="perform_anova_via_mcp",
+#     description="Perform Mixed-design Repeated Measures ANOVA (via MCP server) on given data (Greenhouse-Geisser correction will be automatically applied if needed)",
+# )
 
 
 
