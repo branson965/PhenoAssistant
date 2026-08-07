@@ -452,3 +452,229 @@ async def test_csv_statistic_executes_through_application_graph() -> None:
     assert response.messages[-1].text == (
         "query_csv_statistic completed from tool evidence."
     )
+
+
+
+@pytest.mark.asyncio
+async def test_case1_longitudinal_plot_executes_through_application_graph() -> None:
+    implementation = Mock(
+        return_value={
+            "leaf_count": {
+                "plot_path": "/trusted/case1/leaf_count_plot.png",
+                "stats_path": "/trusted/case1/leaf_count_stats.csv",
+                "ecotype_count": 5,
+                "time_point_count": 52,
+                "grouped_rows": 260,
+            },
+            "projected_leaf_area": {
+                "plot_path": "/trusted/case1/pla_plot.png",
+                "stats_path": "/trusted/case1/pla_stats.csv",
+                "ecotype_count": 5,
+                "time_point_count": 52,
+                "grouped_rows": 260,
+            },
+        }
+    )
+
+    client = ScriptedToolClient(
+        "plot_longitudinal_phenotypes",
+        {
+            "phenotypes": [
+                "leaf_count",
+                "projected_leaf_area",
+            ],
+        },
+    )
+
+    application = build_application(
+        client=client,
+        data_path="/trusted/potatoes.csv",
+        calculator_callable=unused_calculator,
+        anova_callable=unused_anova,
+        tukey_callable=unused_tukey,
+        case1_data_path="/trusted/aracrop.csv",
+        case1_output_dir="/trusted/case1",
+        case1_plot_callable=implementation,
+        case1_anova_callable=unused_anova,
+        case1_tukey_callable=unused_tukey,
+    )
+
+    response = await run_application(
+        application,
+        "Plot Arabidopsis phenotype growth over time.",
+    )
+
+    implementation.assert_called_once_with(
+        "/trusted/aracrop.csv",
+        "/trusted/case1",
+        (
+            "leaf_count",
+            "projected_leaf_area",
+        ),
+    )
+
+    assert client.function_result is not None
+    assert client.function_result.exception is None
+
+    evidence = json.loads(client.function_result.result)
+
+    assert evidence["tool_name"] == "plot_longitudinal_phenotypes"
+    assert len(evidence["plots"]) == 2
+
+    assert response.messages[-1].text == (
+        "plot_longitudinal_phenotypes completed from tool evidence."
+    )
+
+
+@pytest.mark.asyncio
+async def test_case1_ecotype_ranking_executes_through_application_graph() -> None:
+    implementation = Mock(
+        return_value={
+            "rankings": [
+                {
+                    "rank": 1,
+                    "ecotype": "ein2",
+                    "observation_count": 260,
+                    "subject_count": 5,
+                    "observation_mean": 8.94815653846154,
+                    "subject_mean": 8.948156538461538,
+                },
+                {
+                    "rank": 2,
+                    "ecotype": "col0",
+                    "observation_count": 260,
+                    "subject_count": 5,
+                    "observation_mean": 7.563658846153847,
+                    "subject_mean": 7.563658846153847,
+                },
+            ],
+        }
+    )
+
+    client = ScriptedToolClient(
+        "rank_ecotypes_by_phenotype",
+        {
+            "phenotype": "projected_leaf_area",
+        },
+    )
+
+    application = build_application(
+        client=client,
+        data_path="/trusted/potatoes.csv",
+        calculator_callable=unused_calculator,
+        anova_callable=unused_anova,
+        tukey_callable=unused_tukey,
+        case1_data_path="/trusted/aracrop.csv",
+        case1_ranking_callable=implementation,
+        case1_anova_callable=unused_anova,
+        case1_tukey_callable=unused_tukey,
+    )
+
+    response = await run_application(
+        application,
+        "Rank the Arabidopsis ecotypes by PLA.",
+    )
+
+    implementation.assert_called_once_with(
+        "/trusted/aracrop.csv",
+        "projected_leaf_area",
+        "ecotype",
+        "plant_id",
+    )
+
+    assert client.function_result is not None
+    assert client.function_result.exception is None
+
+    evidence = json.loads(client.function_result.result)
+
+    assert evidence["tool_name"] == "rank_ecotypes_by_phenotype"
+    assert evidence["rankings"][0]["ecotype"] == "ein2"
+
+    assert response.messages[-1].text == (
+        "rank_ecotypes_by_phenotype completed from tool evidence."
+    )
+
+
+@pytest.mark.asyncio
+async def test_case1_repeated_measures_executes_through_application_graph() -> None:
+    anova_implementation = Mock(
+        return_value=[
+            {
+                "Source": "Interaction",
+                "DF1": 2,
+                "DF2": 20,
+                "F": 9.5,
+                "p-unc": 0.001,
+            },
+        ]
+    )
+
+    tukey_implementation = Mock(
+        return_value=[
+            {
+                "A": "high",
+                "B": "low",
+                "mean(A)": 8.0,
+                "mean(B)": 2.0,
+                "diff": 6.0,
+                "p-tukey": 0.001,
+            },
+        ]
+    )
+
+    client = ScriptedToolClient(
+        "analyse_repeated_measures_with_posthoc",
+        {
+            "descriptor": "projected_leaf_area",
+        },
+    )
+
+    application = build_application(
+        client=client,
+        data_path="/trusted/potatoes.csv",
+        calculator_callable=unused_calculator,
+        anova_callable=unused_anova,
+        tukey_callable=unused_tukey,
+        case1_data_path="/trusted/aracrop.csv",
+        case1_anova_callable=anova_implementation,
+        case1_tukey_callable=tukey_implementation,
+        case1_interaction_alpha=0.01,
+        case1_posthoc_alpha=0.05,
+    )
+
+    response = await run_application(
+        application,
+        "Analyse repeated measures and post-hoc differences in PLA.",
+    )
+
+    anova_implementation.assert_called_once_with(
+        "/trusted/aracrop.csv",
+        "projected_leaf_area",
+        "days_after_sowing",
+        "ecotype",
+        "plant_id",
+        save_path=None,
+    )
+
+    tukey_implementation.assert_called_once_with(
+        "/trusted/aracrop.csv",
+        "projected_leaf_area",
+        "ecotype",
+        "plant_id",
+        save_path=None,
+    )
+
+    assert client.function_result is not None
+    assert client.function_result.exception is None
+
+    evidence = json.loads(client.function_result.result)
+
+    assert evidence["tool_name"] == "analyse_repeated_measures_with_posthoc"
+    assert evidence["interaction"]["significant"] is True
+    assert evidence["interaction"]["alpha"] == 0.01
+    assert len(evidence["pairwise_comparisons"]) == 1
+
+    assert response.messages[-1].text == (
+        "analyse_repeated_measures_with_posthoc "
+        "completed from tool evidence."
+    )

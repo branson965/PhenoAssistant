@@ -90,3 +90,28 @@ def test_registry_returns_a_new_agent_tool_list() -> None:
 
     assert first == second
     assert first is not second
+
+
+
+def test_case1_profile_extends_base_registry() -> None:
+    registry = build_production_tool_registry(
+        data_path="/trusted/potatoes.csv",
+        calculator_callable=calculator,
+        anova_callable=anova,
+        tukey_callable=tukey,
+        case1_data_path="/trusted/aracrop.csv",
+        case1_output_dir="/trusted/case1",
+        case1_anova_callable=anova,
+        case1_tukey_callable=tukey,
+    )
+
+    assert registry.names == (
+        "calculator",
+        "perform_anova",
+        "perform_tukey_test",
+        "compare_linear_relationships",
+        "query_csv_statistic",
+        "plot_longitudinal_phenotypes",
+        "rank_ecotypes_by_phenotype",
+        "analyse_repeated_measures_with_posthoc",
+    )

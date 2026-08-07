@@ -1,0 +1,51 @@
+PHASE10B_CASE1_CPU_EVIDENCE
+timestamp_utc=20260807T003628Z
+branch=feature/maf-linux-migration
+head=3c71ca1162a56e01bbff8fb0ce38442719f7ad9e
+dataset=results/Case1/aracrop_phenotypes.csv
+
+=== SCIENCE TEST ===
+...                                                                      [100%]
+3 passed in 4.28s
+science_return_code=0
+
+=== FULL REGRESSION ===
+ss...................................................................... [ 64%]
+........................................                                 [100%]
+110 passed, 2 skipped in 10.87s
+full_return_code=0
+
+=== REAL CASE 1 SCIENTIFIC EVIDENCE ===
+plot_count=4
+plot_summary=[('leaf_count', 'leaf_count_plot.png', 95838, 'leaf_count_stats.csv', 8188, 5, 52, 260), ('projected_leaf_area', 'pla_plot.png', 67953, 'pla_stats.csv', 10623, 5, 52, 260), ('diameter', 'plant_diameter_plot.png', 77881, 'plant_diameter_stats.csv', 12304, 5, 52, 260), ('perimeter', 'plant_perimeter_plot.png', 69595, 'plant_perimeter_stats.csv', 9683, 5, 52, 260)]
+ranking_order=['ein2', 'col0', 'adh1', 'pgm', 'ctr']
+ranking_subject_means={'ein2': 8.948156538461538, 'col0': 7.563658846153847, 'adh1': 4.403085576923077, 'pgm': 2.8698542307692305, 'ctr': 0.38613461538461535}
+interaction_f=22.6669360372141
+interaction_p=2.3834021910781097e-262
+interaction_alpha=0.01
+interaction_significant=True
+pairwise_count=10
+posthoc_alpha=0.05
+nonsignificant_pairs=[['adh1', 'pgm'], ['col0', 'ein2']]
+grouping_supported=True
+ordered_groups=[['col0', 'ein2'], ['adh1', 'pgm'], ['ctr']]
+grouping_note=Pairwise non-significance formed disjoint cliques and every cross-group comparison was significant.
+
+=== PRESERVED SCIENCE RUNTIME STDOUT ===
+              Source            SS  DF1  DF2           MS           F          p-unc       np2       eps
+0            ecotype  12523.073369    4   19  3130.768342   44.908296   1.988585e-09  0.904346       NaN
+1  days_after_sowing  23588.800408   51  969   462.525498  221.942711   0.000000e+00  0.921143  0.023693
+2        Interaction   9636.465702  204  969    47.237577   22.666936  2.383402e-262  0.826749       NaN
+      A     B   mean(A)   mean(B)      diff        se          T       p-tukey    hedges
+0  adh1  col0  4.403086  7.563659 -3.160573  0.776724  -4.069107  5.220275e-03 -2.632246
+1  adh1   ctr  4.403086  0.386135  4.016951  0.776724   5.171658  4.644033e-04  8.140057
+2  adh1  ein2  4.403086  8.948157 -4.545071  0.776724  -5.851590  1.080956e-04 -2.530038
+3  adh1   pgm  4.403086  2.869854  1.533231  0.776724   1.973972  3.152301e-01  2.399903
+4  col0   ctr  7.563659  0.386135  7.177524  0.732302   9.801311  6.727681e-08  7.092351
+5  col0  ein2  7.563659  8.948157 -1.384498  0.732302  -1.890609  3.553312e-01 -0.734539
+6  col0   pgm  7.563659  2.869854  4.693805  0.732302   6.409653  3.385964e-05  4.351188
+7   ctr  ein2  0.386135  8.948157 -8.562022  0.732302 -11.691920  3.748997e-09 -5.375180
+8   ctr   pgm  0.386135  2.869854 -2.483720  0.732302  -3.391658  2.257755e-02 -6.449929
+9  ein2   pgm  8.948157  2.869854  6.078302  0.732302   8.300262  8.840395e-07  3.715140
+
+PHASE10B_CASE1_CPU_EVIDENCE_PASS

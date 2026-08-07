@@ -171,3 +171,36 @@ print("APPLICATION_IMPORT_SAFE")
     )
 
     assert "APPLICATION_IMPORT_SAFE" in result.stdout
+
+
+
+def test_application_can_enable_case1_profile() -> None:
+    application = build_application(
+        client=client(),
+        data_path="/trusted/potatoes.csv",
+        calculator_callable=calculator,
+        anova_callable=anova,
+        tukey_callable=tukey,
+        case1_data_path="/trusted/aracrop.csv",
+        case1_output_dir="/trusted/case1",
+        case1_anova_callable=anova,
+        case1_tukey_callable=tukey,
+    )
+
+    assert application.registry.names == (
+        "calculator",
+        "perform_anova",
+        "perform_tukey_test",
+        "compare_linear_relationships",
+        "query_csv_statistic",
+        "plot_longitudinal_phenotypes",
+        "rank_ecotypes_by_phenotype",
+        "analyse_repeated_measures_with_posthoc",
+    )
+
+    manager_tool_names = tuple(
+        tool.name
+        for tool in application.manager.default_options["tools"]
+    )
+
+    assert manager_tool_names == application.registry.names

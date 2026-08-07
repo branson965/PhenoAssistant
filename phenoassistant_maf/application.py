@@ -15,6 +15,8 @@ from phenoassistant_maf.tools import (
     AggregateCallable,
     AnovaCallable,
     CalculatorCallable,
+    LongitudinalPlotCallable,
+    RankingCallable,
     RegressionCallable,
     TukeyCallable,
 )
@@ -38,6 +40,14 @@ def build_application(
     second_plot_path: str = "./results/maf_demo/potato_algorithm.png",
     regression_callable: RegressionCallable | None = None,
     aggregate_callable: AggregateCallable | None = None,
+    case1_data_path: str | None = None,
+    case1_output_dir: str = "./results/maf_case1",
+    case1_plot_callable: LongitudinalPlotCallable | None = None,
+    case1_ranking_callable: RankingCallable | None = None,
+    case1_anova_callable: AnovaCallable | None = None,
+    case1_tukey_callable: TukeyCallable | None = None,
+    case1_interaction_alpha: float = 0.01,
+    case1_posthoc_alpha: float = 0.05,
 ) -> PhenoAssistantApplication:
     """Build the production registry and Manager without global state."""
     registry = build_production_tool_registry(
@@ -49,6 +59,14 @@ def build_application(
         second_plot_path=second_plot_path,
         regression_callable=regression_callable,
         aggregate_callable=aggregate_callable,
+        case1_data_path=case1_data_path,
+        case1_output_dir=case1_output_dir,
+        case1_plot_callable=case1_plot_callable,
+        case1_ranking_callable=case1_ranking_callable,
+        case1_anova_callable=case1_anova_callable,
+        case1_tukey_callable=case1_tukey_callable,
+        case1_interaction_alpha=case1_interaction_alpha,
+        case1_posthoc_alpha=case1_posthoc_alpha,
     )
 
     manager = build_manager_agent(

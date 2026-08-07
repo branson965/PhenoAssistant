@@ -10,12 +10,17 @@ from phenoassistant_maf.tools import (
     AggregateCallable,
     AnovaCallable,
     CalculatorCallable,
+    LongitudinalPlotCallable,
+    RankingCallable,
     RegressionCallable,
     TukeyCallable,
     create_anova_tool,
     create_calculator_tool,
     create_csv_aggregate_tool,
+    create_ecotype_ranking_tool,
+    create_longitudinal_plot_tool,
     create_regression_comparison_tool,
+    create_repeated_measures_posthoc_tool,
     create_tukey_tool,
 )
 
@@ -53,9 +58,17 @@ def build_production_tool_registry(
     second_plot_path: str = "./results/maf_demo/potato_algorithm.png",
     regression_callable: RegressionCallable | None = None,
     aggregate_callable: AggregateCallable | None = None,
+    case1_data_path: str | None = None,
+    case1_output_dir: str = "./results/maf_case1",
+    case1_plot_callable: LongitudinalPlotCallable | None = None,
+    case1_ranking_callable: RankingCallable | None = None,
+    case1_anova_callable: AnovaCallable | None = None,
+    case1_tukey_callable: TukeyCallable | None = None,
+    case1_interaction_alpha: float = 0.01,
+    case1_posthoc_alpha: float = 0.05,
 ) -> ProductionToolRegistry:
-    """Construct the initial calculator, ANOVA, and Tukey registry."""
-    tools = (
+    """Construct the base registry with an optional Case 1 profile."""
+    base_tools = (
         create_calculator_tool(calculator_callable),
         create_anova_tool(data_path, anova_callable),
         create_tukey_tool(data_path, tukey_callable),
@@ -70,6 +83,28 @@ def build_production_tool_registry(
             aggregate_callable=aggregate_callable,
         ),
     )
+
+    if case1_data_path is None:
+        tools = base_tools
+    else:
+        tools = base_tools + (
+            create_longitudinal_plot_tool(
+                data_path=case1_data_path,
+                output_dir=case1_output_dir,
+                plot_callable=case1_plot_callable,
+            ),
+            create_ecotype_ranking_tool(
+                data_path=case1_data_path,
+                ranking_callable=case1_ranking_callable,
+            ),
+            create_repeated_measures_posthoc_tool(
+                data_path=case1_data_path,
+                anova_callable=case1_anova_callable,
+                tukey_callable=case1_tukey_callable,
+                interaction_alpha=case1_interaction_alpha,
+                posthoc_alpha=case1_posthoc_alpha,
+            ),
+        )
 
     names = tuple(tool.name for tool in tools)
 

@@ -6,7 +6,7 @@ from agent_framework import Agent, SupportsChatGetResponse
 
 from phenoassistant_maf.registry import ProductionToolRegistry
 
-MANAGER_INSTRUCTIONS_VERSION = "phenoassistant-manager-v2"
+MANAGER_INSTRUCTIONS_VERSION = "phenoassistant-manager-v3"
 
 INITIAL_MANAGER_TOOLS = (
     "calculator",
@@ -14,6 +14,12 @@ INITIAL_MANAGER_TOOLS = (
     "perform_tukey_test",
     "compare_linear_relationships",
     "query_csv_statistic",
+)
+
+CASE1_MANAGER_TOOLS = INITIAL_MANAGER_TOOLS + (
+    "plot_longitudinal_phenotypes",
+    "rank_ecotypes_by_phenotype",
+    "analyse_repeated_measures_with_posthoc",
 )
 
 MANAGER_INSTRUCTIONS = """\
@@ -30,7 +36,11 @@ Available responsibilities:
 - perform_anova: mixed-design repeated-measures ANOVA;
 - perform_tukey_test: Tukey-Kramer post-hoc analysis;
 - compare_linear_relationships: compare two linear fits and correlations;
-- query_csv_statistic: compute a filtered maximum or mean.
+- query_csv_statistic: compute a filtered maximum or mean;
+- plot_longitudinal_phenotypes: generate longitudinal ecotype mean/STD plots;
+- rank_ecotypes_by_phenotype: rank ecotypes directly from trusted phenotype data;
+- analyse_repeated_measures_with_posthoc: run the Case 1 ANOVA and Tukey analysis
+  with explicit significance thresholds and evidence-backed grouping.
 
 Never invent statistical values.
 Never ask the model to provide data paths or output paths.
@@ -43,10 +53,15 @@ def build_manager_agent(
     registry: ProductionToolRegistry,
 ) -> Agent:
     """Construct the initial production MAF Manager explicitly."""
-    if registry.names != INITIAL_MANAGER_TOOLS:
+    supported_profiles = (
+        INITIAL_MANAGER_TOOLS,
+        CASE1_MANAGER_TOOLS,
+    )
+
+    if registry.names not in supported_profiles:
         raise ValueError(
-            "the initial Manager requires exactly: "
-            + ", ".join(INITIAL_MANAGER_TOOLS)
+            "the initial Manager requires exactly one supported "
+            "deterministic tool profile"
         )
 
     return Agent(
