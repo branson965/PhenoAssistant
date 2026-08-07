@@ -401,13 +401,13 @@ register_function(
 
 
 
-register_function(
-    extract_pipeline,
-    caller=manager,
-    executor=user_proxy,
-    name="extract_pipeline",
-    description="Extract and save a reproducible pipeline from chat history. Ask user to provide a name for the pipeline.",
-)
+# register_function(
+#     extract_pipeline,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="extract_pipeline",
+#     description="Extract and save a reproducible pipeline from chat history. Ask user to provide a name for the pipeline.",
+# )
 
 # register_function(
 #     get_pipeline_zoo,
@@ -489,12 +489,12 @@ register_function(
 #     description="Compute phenotypes from an instance segmentation result file",
 # )
 
-register_function(
-    coding,
-    caller=manager,
-    executor=user_proxy,
-    name="coding",
-    description="Write and execute code to solve tasks. Please provide a complete task description rather than concrete code as the input to this function.",)
+# register_function(
+#     coding,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="coding",
+#     description="Write and execute code to solve tasks. Please provide a complete task description rather than concrete code as the input to this function.",)
 
 # register_function(
 #     analyse_plot,
@@ -520,21 +520,21 @@ register_function(
     description="Ask a question to a CSV file such as which image has the most leaf count. It does not generate a new file.",
 )
 
-register_function(
-    plot_from_csv,
-    caller=manager,
-    executor=user_proxy,
-    name="plot_from_csv",
-    description="Plot data from a CSV file. Be sure to provide details of requirements and the path to save the plot.",
-)
+# register_function(
+#     plot_from_csv,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="plot_from_csv",
+#     description="Plot data from a CSV file. Be sure to provide details of requirements and the path to save the plot.",
+# )
 
-register_function(
-    retrieval_augmented_generation,
-    caller=manager,
-    executor=user_proxy,
-    name="RAG",
-    description="Retrieve knowledge from the Phenotiki paper. Use this only to retrieve information (e.g. asking questions starting with what/how/...). You need to reason the retrieved information to solve the task.",
-)
+# register_function(
+#     retrieval_augmented_generation,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="RAG",
+#     description="Retrieve knowledge from the Phenotiki paper. Use this only to retrieve information (e.g. asking questions starting with what/how/...). You need to reason the retrieved information to solve the task.",
+# )
 
 # Model finetuning function
 # register_function(

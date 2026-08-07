@@ -7,6 +7,10 @@ from functions.reproducible_pipeline import get_pipeline_zoo, get_pipeline_info,
 from functions.search import search_and_scrape
 from functions.compute_phenotypes import compute_phenotypes_from_ins_seg
 from functions.create_hf_dataset import get_dataset_format, prepare_dataset
+from functions.rag_tool import retrieval_augmented_generation
+from functions.coding_tool import coding
+from functions.plot_tool import plot_from_csv
+from functions.pipeline_tool import extract_pipeline
 from functions.plot_analysis import analyse_plot
 from functions.instance_segmentation import infer_instance_segmentation
 from functions.instance_segmentation import finetune_instance_segmentation
@@ -48,4 +52,8 @@ TOOL_REGISTRY = [
     (infer_image_regression, 'infer_image_regression', 'Perform image regression on plant images'),
     (finetune_image_regression, 'finetune_image_regression', 'Train an image regression model on a user uploaded dataset.'),
     (analyse_plot, 'analyse_plot', 'Analyse a plot using GPT-4o.'),
+    (retrieval_augmented_generation, 'RAG', 'Retrieve knowledge from the Phenotiki paper. Use this only to retrieve information (e.g. asking questions starting with what/how/...). You need to reason the retrieved information to solve the task.'),
+    (coding, 'coding', 'Write and execute code to solve tasks. Please provide a complete task description rather than concrete code as the input to this function.'),
+    (plot_from_csv, 'plot_from_csv', 'Plot data from a CSV file. Be sure to provide details of requirements and the path to save the plot.'),
+    (extract_pipeline, 'extract_pipeline', 'Extract and save a reproducible pipeline from chat history. Ask user to provide a name for the pipeline.'),
 ]
