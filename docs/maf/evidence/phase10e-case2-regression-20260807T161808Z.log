@@ -1,0 +1,11 @@
+PHASE10E_CASE2_REGRESSION_EVIDENCE
+UTC_TIMESTAMP=20260807T161808Z
+BRANCH=feature/maf-linux-migration
+HEAD=7800533cb55cf6ec9352ef6512b1799bcc85ae15
+
+ss...................................................................... [ 44%]
+........................................................................ [ 88%]
+...................                                                      [100%]
+161 passed, 2 skipped in 11.88s
+
+PHASE10E_CASE2_FULL_REGRESSION_PASS
