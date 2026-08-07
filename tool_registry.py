@@ -7,6 +7,8 @@ from functions.reproducible_pipeline import get_pipeline_zoo, get_pipeline_info,
 from functions.search import search_and_scrape
 from functions.compute_phenotypes import compute_phenotypes_from_ins_seg
 from functions.create_hf_dataset import get_dataset_format, prepare_dataset
+from functions.csv_tools import compute_csv
+from functions.csv_tools import query_csv
 from functions.rag_tool import retrieval_augmented_generation
 from functions.coding_tool import coding
 from functions.plot_tool import plot_from_csv
@@ -56,4 +58,6 @@ TOOL_REGISTRY = [
     (coding, 'coding', 'Write and execute code to solve tasks. Please provide a complete task description rather than concrete code as the input to this function.'),
     (plot_from_csv, 'plot_from_csv', 'Plot data from a CSV file. Be sure to provide details of requirements and the path to save the plot.'),
     (extract_pipeline, 'extract_pipeline', 'Extract and save a reproducible pipeline from chat history. Ask user to provide a name for the pipeline.'),
+    (compute_csv, 'compute_from_csv', 'Compute statistics or new values from a CSV file. Optionally, it saves the results to a new file.'),
+    (query_csv, 'query_csv', 'Ask a question to a CSV file such as which image has the most leaf count. It does not generate a new file.'),
 ]

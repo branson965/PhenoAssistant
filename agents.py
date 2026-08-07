@@ -510,21 +510,21 @@ register_function(
 #     description="Analyse a plot using GPT-4o.",
 # )
 
-register_function(
-    compute_csv,
-    caller=manager,
-    executor=user_proxy,
-    name="compute_from_csv",
-    description="Compute statistics or new values from a CSV file. Optionally, it saves the results to a new file.",
-)
+# register_function(
+#     compute_csv,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="compute_from_csv",
+#     description="Compute statistics or new values from a CSV file. Optionally, it saves the results to a new file.",
+# )
 
-register_function(
-    query_csv,
-    caller=manager,
-    executor=user_proxy,
-    name="query_csv",
-    description="Ask a question to a CSV file such as which image has the most leaf count. It does not generate a new file.",
-)
+# register_function(
+#     query_csv,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="query_csv",
+#     description="Ask a question to a CSV file such as which image has the most leaf count. It does not generate a new file.",
+# )
 
 # register_function(
 #     plot_from_csv,
