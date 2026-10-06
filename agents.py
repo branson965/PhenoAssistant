@@ -1,4 +1,5 @@
 import autogen
+# from mcp_bridge import perform_anova_via_mcp
 from autogen.agentchat.contrib.multimodal_conversable_agent import MultimodalConversableAgent
 from autogen.agentchat.contrib.retrieve_user_proxy_agent import RetrieveUserProxyAgent
 from autogen.agentchat.contrib.retrieve_assistant_agent import RetrieveAssistantAgent
@@ -9,6 +10,9 @@ from pandasai.skills import skill
 from pandasai.llm import AzureOpenAI
 
 from huggingface_hub import login
+from autogen import register_function
+from tool_registry import TOOL_REGISTRY
+from bridge_factory import make_mcp_bridge
 
 import os
 import glob
@@ -46,20 +50,33 @@ WORK_DIR = "./"
 MODEL_ZOO_PATH = "./model_zoo.json"
 
 # LLM configs
-config_list = [
-  {
-    "model": os.environ['MODEL_NAME'],
-    # "model": "gpt-4o",
-    "base_url": os.environ['AZURE_API_URL'],
-    "api_version": os.environ['AZURE_API_VERSION'],
-    "temperature": 0.1,
-    "cache_seed": 42,
-    "timeout": 540000,
-    "api_type": "azure",
-    "api_key": os.environ['OPENAI_API_KEY'],
-  }
-]
+API_SUPPLIER = os.environ.get('API_SUPPLIER', 'azure')
 
+if API_SUPPLIER == 'openrouter':
+    config_list = [
+        {
+            "model": os.environ['MODEL_NAME'],
+            "base_url": "https://openrouter.ai/api/v1",
+            "api_key": os.environ['OPENAI_API_KEY'],
+            "api_type": "openai",
+            "temperature": 0.1,
+            "cache_seed": 42,
+            "timeout": 540000,
+        }
+    ]
+else:
+    config_list = [
+        {
+            "model": os.environ['MODEL_NAME'],
+            "base_url": os.environ['AZURE_API_URL'],
+            "api_version": os.environ['AZURE_API_VERSION'],
+            "temperature": 0.1,
+            "cache_seed": 42,
+            "timeout": 540000,
+            "api_type": "azure",
+            "api_key": os.environ['OPENAI_API_KEY'],
+        }
+    ]
 gpt_config = {
     "config_list": config_list,
 }
@@ -234,12 +251,22 @@ def analyse_plot(message: Annotated[str, "The request of analysing a plot. e.g. 
     return res.chat_history[-1]['content']
 
 # table analyser
-pdsllm = AzureOpenAI(
-    api_token=os.environ['OPENAI_API_KEY'],
-    azure_endpoint=os.environ['AZURE_API_URL'],
-    api_version=os.environ['AZURE_API_VERSION'],
-    deployment_name=os.environ['MODEL_NAME'],
-)
+try:
+    if API_SUPPLIER == 'openrouter':
+        from pandasai.llm import OpenAI as _PdsOpenAI
+        class _ORPdsLLM(_PdsOpenAI):
+            _supported_chat_models = [os.environ['MODEL_NAME']]
+        pdsllm = _ORPdsLLM(api_token=os.environ['OPENAI_API_KEY'], api_base='https://openrouter.ai/api/v1', model=os.environ['MODEL_NAME'])
+    else:
+        pdsllm = AzureOpenAI(
+            api_token=os.environ['OPENAI_API_KEY'],
+            azure_endpoint=os.environ['AZURE_API_URL'],
+            api_version=os.environ['AZURE_API_VERSION'],
+            deployment_name=os.environ['MODEL_NAME'],
+        )
+except Exception as e:
+    print(f"Warning: table-analyser LLM (pdsllm) not configured: {e}")
+    pdsllm = None
 
 @skill
 def save_csv(df: pd.DataFrame,
@@ -368,206 +395,211 @@ def extract_pipeline(
     save_pipeline(pipeline_name, pipeline_code)
     return f"Pipeline {pipeline_name} extracted successfully."
 
-register_function(
-    perform_anova,
-    caller=manager,
-    executor=user_proxy,
-    name="perform_anova",
-    description="Perform Mixed-design Repeated Measures ANOVA on given data (Greenhouse-Geisser correction will be automatically applied if needed)",
-)
 
-register_function(
-    perform_tukey_test,
-    caller=manager,
-    executor=user_proxy,
-    name="perform_tukey_test",
-    description="Perform Post-hoc Tukey-Kramer test on given data",
-)
 
-register_function(
-    extract_pipeline,
-    caller=manager,
-    executor=user_proxy,
-    name="extract_pipeline",
-    description="Extract and save a reproducible pipeline from chat history. Ask user to provide a name for the pipeline.",
-)
+# register_function(
+#     perform_anova_via_mcp,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="perform_anova_via_mcp",
+#     description="Perform Mixed-design Repeated Measures ANOVA (via MCP server) on given data (Greenhouse-Geisser correction will be automatically applied if needed)",
+# )
 
-register_function(
-    get_pipeline_zoo,
-    caller=manager,
-    executor=user_proxy,
-    name="get_pipeline_zoo",
-    description="Get the information of all registered pipelines. It is useful when a user wants to know what pipelines are available before executing any.",
-)
 
-register_function(
-    get_pipeline_info,
-    caller=manager,
-    executor=user_proxy,
-    name="get_pipeline_info",
-    description="Get the information of a specific pipeline. This is useful for you to know how to use a pipeline selected by the user, including the description, arguments, and output type.",
-)
 
-register_function(
-    execute_pipeline,
-    caller=manager,
-    executor=user_proxy,
-    name="execute_pipeline",
-    description="Execute a saved pipeline from the pipeline zoo. Before executing a pipeline, you must call 'get_pipeline_zoo' to know what pipelines are available, and call 'get_pipeline_info' to understand how to use the selected pipeline.",
-)
+# register_function(
+#     extract_pipeline,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="extract_pipeline",
+#     description="Extract and save a reproducible pipeline from chat history. Ask user to provide a name for the pipeline.",
+# )
 
-register_function(
-    calculator,
-    caller=manager,
-    executor=user_proxy,
-    name="calculator",
-    description="Perform basic arithmetic operations between two integers.",
-)
+# register_function(
+#     get_pipeline_zoo,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="get_pipeline_zoo",
+#     description="Get the information of all registered pipelines. It is useful when a user wants to know what pipelines are available before executing any.",
+# )
 
-register_function(
-    search_and_scrape,
-    caller=manager,
-    executor=user_proxy,
-    name="google_search",
-    description="Search and scrape content from the web. Results are returned in a dictionary. Useful when you need to find information on a specific topic.",
-)
+# register_function(
+#     get_pipeline_info,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="get_pipeline_info",
+#     description="Get the information of a specific pipeline. This is useful for you to know how to use a pipeline selected by the user, including the description, arguments, and output type.",
+# )
 
-register_function(
-    get_model_zoo,
-    caller=manager,
-    executor=user_proxy,
-    name="get_model_zoo",
-    description="Check available computer vision checkpoints. Must be called before using computer vision models.",
-)
+# register_function(
+#     execute_pipeline,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="execute_pipeline",
+#     description="Execute a saved pipeline from the pipeline zoo. Before executing a pipeline, you must call 'get_pipeline_zoo' to know what pipelines are available, and call 'get_pipeline_info' to understand how to use the selected pipeline.",
+# )
 
-register_function(
-    infer_instance_segmentation,
-    caller=manager,
-    executor=user_proxy,
-    name="infer_instance_segmentation",
-    description="Perform instance segmentation on plant images",
-)
+# register_function(
+#     calculator,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="calculator",
+#     description="Perform basic arithmetic operations between two integers.",
+# )
 
-register_function(
-    infer_image_classification,
-    caller=manager,
-    executor=user_proxy,
-    name="infer_image_classification",
-    description="Perform image classification on plant images",
-)
+# register_function(
+#     search_and_scrape,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="google_search",
+#     description="Search and scrape content from the web. Results are returned in a dictionary. Useful when you need to find information on a specific topic.",
+# )
 
-register_function(
-    infer_image_regression,
-    caller=manager,
-    executor=user_proxy,
-    name="infer_image_regression",
-    description="Perform image regression on plant images",
-)
+# register_function(
+#     get_model_zoo,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="get_model_zoo",
+#     description="Check available computer vision checkpoints. Must be called before using computer vision models.",
+# )
 
-register_function(
-    compute_phenotypes_from_ins_seg,
-    caller=manager,
-    executor=user_proxy,
-    name="compute_phenotypes_from_ins_seg",
-    description="Compute phenotypes from an instance segmentation result file",
-)
+# register_function(
+#     infer_instance_segmentation,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="infer_instance_segmentation",
+#     description="Perform instance segmentation on plant images",
+# )
 
-register_function(
-    coding,
-    caller=manager,
-    executor=user_proxy,
-    name="coding",
-    description="Write and execute code to solve tasks. Please provide a complete task description rather than concrete code as the input to this function.",)
+# register_function(
+#     infer_image_classification,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="infer_image_classification",
+#     description="Perform image classification on plant images",
+# )
 
-register_function(
-    analyse_plot,
-    caller=manager,
-    executor=user_proxy,
-    name="analyse_plot",
-    description="Analyse a plot using GPT-4o.",
-)
+# register_function(
+#     infer_image_regression,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="infer_image_regression",
+#     description="Perform image regression on plant images",
+# )
 
-register_function(
-    compute_csv,
-    caller=manager,
-    executor=user_proxy,
-    name="compute_from_csv",
-    description="Compute statistics or new values from a CSV file. Optionally, it saves the results to a new file.",
-)
+# register_function(
+#     compute_phenotypes_from_ins_seg,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="compute_phenotypes_from_ins_seg",
+#     description="Compute phenotypes from an instance segmentation result file",
+# )
 
-register_function(
-    query_csv,
-    caller=manager,
-    executor=user_proxy,
-    name="query_csv",
-    description="Ask a question to a CSV file such as which image has the most leaf count. It does not generate a new file.",
-)
+# register_function(
+#     coding,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="coding",
+#     description="Write and execute code to solve tasks. Please provide a complete task description rather than concrete code as the input to this function.",)
 
-register_function(
-    plot_from_csv,
-    caller=manager,
-    executor=user_proxy,
-    name="plot_from_csv",
-    description="Plot data from a CSV file. Be sure to provide details of requirements and the path to save the plot.",
-)
+# register_function(
+#     analyse_plot,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="analyse_plot",
+#     description="Analyse a plot using GPT-4o.",
+# )
 
-register_function(
-    retrieval_augmented_generation,
-    caller=manager,
-    executor=user_proxy,
-    name="RAG",
-    description="Retrieve knowledge from the Phenotiki paper. Use this only to retrieve information (e.g. asking questions starting with what/how/...). You need to reason the retrieved information to solve the task.",
-)
+# register_function(
+#     compute_csv,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="compute_from_csv",
+#     description="Compute statistics or new values from a CSV file. Optionally, it saves the results to a new file.",
+# )
+
+# register_function(
+#     query_csv,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="query_csv",
+#     description="Ask a question to a CSV file such as which image has the most leaf count. It does not generate a new file.",
+# )
+
+# register_function(
+#     plot_from_csv,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="plot_from_csv",
+#     description="Plot data from a CSV file. Be sure to provide details of requirements and the path to save the plot.",
+# )
+
+# register_function(
+#     retrieval_augmented_generation,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="RAG",
+#     description="Retrieve knowledge from the Phenotiki paper. Use this only to retrieve information (e.g. asking questions starting with what/how/...). You need to reason the retrieved information to solve the task.",
+# )
 
 # Model finetuning function
-register_function(
-    get_dataset_format,
-    caller=manager,
-    executor=user_proxy,
-    name="get_dataset_format",
-    description="Instruct the user to prepare a dataset in the required format to train a model.",
-)
+# register_function(
+#     get_dataset_format,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="get_dataset_format",
+#     description="Instruct the user to prepare a dataset in the required format to train a model.",
+# )
 
-register_function(
-    prepare_dataset,
-    caller=manager,
-    executor=user_proxy,
-    name="prepare_dataset",
-    description="When the user upload a dataset for model training, use this function to process the dataset into the required format.",
-)
+# register_function(
+#     prepare_dataset,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="prepare_dataset",
+#     description="When the user upload a dataset for model training, use this function to process the dataset into the required format.",
+# )
 
-register_function(
-    finetune_image_classification,
-    caller=manager,
-    executor=user_proxy,
-    name="finetune_image_classification",
-    description="Train an image classification model on a user uploaded dataset.",
-)
+# register_function(
+#     finetune_image_classification,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="finetune_image_classification",
+#     description="Train an image classification model on a user uploaded dataset.",
+# )
 
-register_function(
-    finetune_image_regression,
-    caller=manager,
-    executor=user_proxy,
-    name="finetune_image_regression",
-    description="Train an image regression model on a user uploaded dataset.",
-)
+# register_function(
+#     finetune_image_regression,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="finetune_image_regression",
+#     description="Train an image regression model on a user uploaded dataset.",
+# )
 
-register_function(
-    finetune_instance_segmentation,
-    caller=manager,
-    executor=user_proxy,
-    name="finetune_instance_segmentation",
-    description="Train an instance segmentation model on a user uploaded dataset.",
-)
+# register_function(
+#     finetune_instance_segmentation,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="finetune_instance_segmentation",
+#     description="Train an instance segmentation model on a user uploaded dataset.",
+# )
 
-register_function(
-    make_dir,
-    caller=manager,
-    executor=user_proxy,
-    name="make_dir",
-    description="Check if a directory exists, and create it if it does not. Call it whenever you need to save files to a directory.",
-)
+# register_function(
+#     make_dir,
+#     caller=manager,
+#     executor=user_proxy,
+#     name="make_dir",
+#     description="Check if a directory exists, and create it if it does not. Call it whenever you need to save files to a directory.",
+# )
 
+# Generic MCP registration: every tool in TOOL_REGISTRY, bridged through MCP.
+for _func, _name, _description in TOOL_REGISTRY:
+    register_function(
+        make_mcp_bridge(_func, _name),
+        caller=manager,
+        executor=user_proxy,
+        name=_name,
+        description=_description,
+    )
 ## adding new tools starts
 try:
     import warnings

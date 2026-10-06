@@ -9,13 +9,20 @@ def perform_anova(
     between_subject_factor: Annotated[str, "The name of the between-subjects factor"],
     subject_id: Annotated[str, "The name of the subject identifier"],
     save_path: Annotated[Optional[str], "Path to save the ANOVA results CSV"] = None
-) -> str:
+
+    # Union, not str: returns a message when save_path is set, else a list
+    # of result rows. MCP validates the return type, so it must be honest.
+) -> str | list[dict]:
     """
     Perform Mixed-design Repeated Measures ANOVA on a given descriptor.
-
+g
     Returns:
-        pd.DataFrame: ANOVA results as a DataFrame.
+        str | list[dict]: A confirmation message if save_path is given,
+        otherwise the ANOVA results as a list of row dictionaries.
     """
+
+    
+
     # Load data from the given file path
     data = pd.read_csv(data_path)
     
@@ -47,7 +54,7 @@ def perform_tukey_test(
     between_subject_factor: Annotated[str, "The name of the between-subjects factor"],
     subject_id: Annotated[str, "The name of the subject identifier"],
     save_path: Annotated[Optional[str], "Path to save the Tukey-Kramer results CSV"] = None
-) -> str:
+) -> str | list[dict]:
     """
     Perform Post-hoc Tukey-Kramer test on a given descriptor.
 
