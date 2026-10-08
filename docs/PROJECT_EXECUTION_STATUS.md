@@ -30,7 +30,7 @@
   - `baseline/maf-pre-mcp-integration-20261008`
   - `baseline/vincent-mcp-v1-20261008`
 
-## Phase 5 completed preparation
+## Phase 5 completed preparation and pre-GPU evidence
 
 - secret-safe GPU environment probe;
 - lightweight data/repository preflight;
@@ -39,13 +39,20 @@
 - Case 3 bounded inference-only smoke runner;
 - static tests locking the GPU-validation contracts;
 - generated GPU output directories ignored from Git;
-- full Phase 5 validation protocol documented.
+- full Phase 5 validation protocol documented;
+- official Case 1 Zenodo archive downloaded and checksum-verified;
+- all 1,248 Case 1 metadata-referenced images verified locally;
+- isolated Plato Python 3.11.17 GPU environment bootstrapped;
+- heavyweight PhenoAssistant imports passed with PyTorch 2.4.1+cu121;
+- Case 1 model access verified without credentials at HF revision `a75bc3d595148ebc62afad7c9800908279e7aea8`;
+- Case 3 dataset and registered checkpoint access boundary reproduced as HTTP 401 without credentials;
+- `ada24/petra` inspected and found to have all eight GPUs allocated at the checkpoint time.
 
 ## Phase 5 evidence still required
 
 - real Nottingham CUDA environment capture;
-- heavyweight import smoke;
-- verify all 1,248 Case 1 images are present;
+- allocate a free Nottingham GPU outside the saturated `ada24/petra` snapshot;
+- real Nottingham CUDA environment capture inside the allocation;
 - Case 1 one-image GPU inference;
 - Case 1 full 1,248-image inference;
 - phenotype regeneration;
@@ -58,8 +65,8 @@
 
 **Overall completion: 44%**
 
-**Current phase completion: 20%**
+**Current phase completion: 58%**
 
 **Phases completed: 4/9**
 
-The percentage is intentionally conservative. Phase 5 preparation is complete enough to execute, but the scientific GPU evidence itself has not yet been produced.
+The percentage is intentionally conservative. Data, environment, imports, and Case 1 checkpoint access are now verified. The remaining Phase 5 gate is real GPU execution and scientific comparison; Case 3 remains an explicit access-controlled resource boundary.
