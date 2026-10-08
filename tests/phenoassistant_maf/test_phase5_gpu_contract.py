@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 ENV_PROBE = ROOT / "scripts" / "gpu" / "phase5_environment_probe.py"
 PREFLIGHT = ROOT / "scripts" / "gpu" / "phase5_preflight.py"
+HF_PROBE = ROOT / "scripts" / "gpu" / "phase5_hf_access_probe.py"
 CASE1 = ROOT / "scripts" / "gpu" / "phase5_case1_gpu.py"
 CASE3 = ROOT / "scripts" / "gpu" / "phase5_case3_smoke.py"
 COMPARATOR = ROOT / "scripts" / "gpu" / "compare_case1_gpu_to_tracked.py"
@@ -28,6 +29,7 @@ def test_phase5_assets_exist() -> None:
     for path in (
         ENV_PROBE,
         PREFLIGHT,
+        HF_PROBE,
         CASE1,
         CASE3,
         COMPARATOR,
@@ -60,6 +62,15 @@ def test_preflight_does_not_import_heavy_ml_modules() -> None:
 
     assert '"ready_for_gpu_smoke"' in source
     assert '"ready_for_inference_smoke"' in source
+
+
+def test_hf_access_probe_never_prints_token_value() -> None:
+    source = _source(HF_PROBE)
+
+    assert '"hf_token_present": bool(os.environ.get("HF_TOKEN"))' in source
+    assert 'print(os.environ.get("HF_TOKEN"))' not in source
+    assert "model_info" in source
+    assert "dataset_info" in source
 
 
 def test_case1_gpu_runner_preserves_historical_results() -> None:
