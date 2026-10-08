@@ -122,3 +122,21 @@ upgrade pandas from the Phase 5 pin (1.5.3) to 3.0.6 because the direct command
 did not include the existing pandas constraint. The statistical parity result
 passed, but the environment must be restored to the declared Phase 5 pins and
 the CPU-only parity gate rerun before the environment is considered frozen.
+
+
+## Frozen statistical-environment confirmation
+
+The Phase 5 statistical environment was restored after the temporary resolver
+drift. The confirmed versions are pandas 1.5.3, pandas-flavor 0.6.0,
+seaborn 0.12.2, pingouin 0.5.5, scikit-learn 1.5.2,
+statsmodels 0.14.4, and xarray 2024.3.0.
+
+`python -m pip check` reported no broken requirements.
+
+The scientific-conclusion parity gate was rerun under these restored pins and
+passed again: the interaction decision, every Tukey pairwise significance
+decision, the ordered grouping, and the final scientific conclusion all
+matched the tracked reference.
+
+Case 1 GPU scientific reproduction is therefore closed under the declared
+environment rather than only under the temporary resolver state.
