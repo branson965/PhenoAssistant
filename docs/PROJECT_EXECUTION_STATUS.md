@@ -46,14 +46,18 @@
 - heavyweight PhenoAssistant imports passed with PyTorch 2.4.1+cu121;
 - Case 1 model access verified without credentials at HF revision `a75bc3d595148ebc62afad7c9800908279e7aea8`;
 - Case 3 dataset and registered checkpoint access boundary reproduced as HTTP 401 without credentials;
-- `ada24/petra` inspected and found to have all eight GPUs allocated at the checkpoint time.
+- `ada24/petra` inspected and found to have all eight GPUs allocated at the checkpoint time;
+- real Nottingham GPU allocation established on `amp16/tamar` with one NVIDIA RTX A4000;
+- CUDA probe passed (`cuda_available: true`, one visible device);
+- one-image Case 1 GPU smoke completed successfully with 5 segmentation annotations;
+- 16-image bounded Case 1 GPU sample completed successfully in 4.908 s with 106 segmentation annotations.
 
 ## Phase 5 evidence still required
 
 - real Nottingham CUDA environment capture;
 - allocate a free Nottingham GPU outside the saturated `ada24/petra` snapshot;
 - real Nottingham CUDA environment capture inside the allocation;
-- Case 1 one-image GPU inference;
+- Case 1 full 1,248-image inference;
 - Case 1 full 1,248-image inference;
 - phenotype regeneration;
 - regenerated-vs-historical comparison;
@@ -65,8 +69,8 @@
 
 **Overall completion: 44%**
 
-**Current phase completion: 58%**
+**Current phase completion: 68%**
 
 **Phases completed: 4/9**
 
-The percentage is intentionally conservative. Data, environment, imports, and Case 1 checkpoint access are now verified. The remaining Phase 5 gate is real GPU execution and scientific comparison; Case 3 remains an explicit access-controlled resource boundary.
+The percentage is intentionally conservative. Data, environment, checkpoint access, CUDA execution, one-image smoke, and a 16-image Case 1 sample are now verified. The remaining Case 1 gate is the full 1,248-image run, phenotype regeneration, and scientific comparison; Case 3 remains an explicit access-controlled resource boundary.
