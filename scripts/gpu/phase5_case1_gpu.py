@@ -60,10 +60,16 @@ def main() -> Path:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--mode",
-        choices=("smoke", "full"),
+        choices=("smoke", "sample", "full"),
         default="smoke",
     )
     parser.add_argument("--batch-size", type=int, default=1)
+    parser.add_argument(
+        "--sample-size",
+        type=int,
+        default=16,
+        help="Number of images for sample mode; ignored for smoke/full.",
+    )
     args = parser.parse_args()
 
     if not torch.cuda.is_available():
@@ -89,14 +95,20 @@ def main() -> Path:
     if args.batch_size < 1:
         raise ValueError("batch size must be positive")
 
-    output_dir = Path(
-        "results/maf_gpu_case1_smoke"
-        if args.mode == "smoke"
-        else "results/maf_gpu_case1"
-    )
-    output_dir.mkdir(parents=True, exist_ok=True)
+    if args.sample_size < 1:
+        raise ValueError("sample size must be positive")
 
-    selected_images = [images[0]] if args.mode == "smoke" else images
+    if args.mode == "smoke":
+        output_dir = Path("results/maf_gpu_case1_smoke")
+        selected_images = [images[0]]
+    elif args.mode == "sample":
+        output_dir = Path("results/maf_gpu_case1_sample")
+        selected_images = images[: min(args.sample_size, len(images))]
+    else:
+        output_dir = Path("results/maf_gpu_case1")
+        selected_images = images
+
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     started = time.perf_counter()
     result = infer_instance_segmentation(
