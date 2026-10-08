@@ -19,3 +19,6 @@ torchmetrics==1.5.0
 omegaconf==2.3.0
 langchain==0.3.4
 autogen-agentchat==0.2.39
+pingouin==0.5.5
+scikit-learn==1.5.2
+statsmodels==0.14.4
