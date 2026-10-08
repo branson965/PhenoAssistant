@@ -50,27 +50,26 @@
 - real Nottingham GPU allocation established on `amp16/tamar` with one NVIDIA RTX A4000;
 - CUDA probe passed (`cuda_available: true`, one visible device);
 - one-image Case 1 GPU smoke completed successfully with 5 segmentation annotations;
-- 16-image bounded Case 1 GPU sample completed successfully in 4.908 s with 106 segmentation annotations.
+- 16-image bounded Case 1 GPU sample completed successfully in 4.908 s with 106 segmentation annotations;
+- full 1,248-image Case 1 GPU inference completed in 184.858 s with 11,848 segmentation annotations;
+- phenotype regeneration completed from the newly generated segmentation output;
+- regenerated-vs-tracked comparison aligned all 1,248 rows with 100% coverage, zero missing/extra rows, exact leaf-count and PLA ecotype rankings, and near-numerical identity across all seven phenotypes;
+- Case 1 full reproduction evidence preserved in `docs/maf/evidence/PHASE5_CASE1_GPU_REPRODUCTION_20261008.md`.
 
 ## Phase 5 evidence still required
 
-- real Nottingham CUDA environment capture;
-- allocate a free Nottingham GPU outside the saturated `ada24/petra` snapshot;
-- real Nottingham CUDA environment capture inside the allocation;
-- Case 1 full 1,248-image inference;
-- Case 1 full 1,248-image inference;
-- phenotype regeneration;
-- regenerated-vs-historical comparison;
+- Case 1 mixed-ANOVA interaction conclusion parity on regenerated vs tracked phenotypes;
+- Case 1 Tukey-Kramer pairwise/grouping parity on regenerated vs tracked phenotypes;
 - Case 3 approved image discovery;
 - Case 3 registered-checkpoint GPU inference;
-- explicit evidence-backed decision on whether retraining is necessary.
+- explicit evidence-backed decision on whether Case 3 retraining is necessary.
 
 ## Current progress
 
-**Overall completion: 44%**
+**Overall completion: 50%**
 
-**Current phase completion: 68%**
+**Current phase completion: 82%**
 
 **Phases completed: 4/9**
 
-The percentage is intentionally conservative. Data, environment, checkpoint access, CUDA execution, one-image smoke, and a 16-image Case 1 sample are now verified. The remaining Case 1 gate is the full 1,248-image run, phenotype regeneration, and scientific comparison; Case 3 remains an explicit access-controlled resource boundary.
+The percentage is intentionally conservative. Case 1 has now been regenerated end to end from all 1,248 source images through GPU segmentation and phenotype extraction, with 100% row coverage and near-numerical identity to the tracked reference. The remaining Case 1 gate is scientific-conclusion parity; Case 3 remains an explicit access-controlled resource boundary.
