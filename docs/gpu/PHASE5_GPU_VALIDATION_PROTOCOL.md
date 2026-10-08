@@ -4,6 +4,21 @@
 **Date:** 2026-10-08  
 **Branch:** `feature/maf-mcp-v2-integration`
 
+## Fast execution sequence
+
+Run these from the repository root on the Nottingham GPU machine, stopping at the first failing gate:
+
+```bash
+python scripts/gpu/phase5_preflight.py
+python scripts/gpu/phase5_environment_probe.py
+python scripts/gpu/phase5_case1_gpu.py --mode smoke
+python scripts/gpu/phase5_case1_gpu.py --mode full --batch-size 1
+python scripts/gpu/compare_case1_gpu_to_tracked.py
+python scripts/gpu/phase5_case3_smoke.py
+```
+
+Do not run the full Case 1 job until the preflight, environment probe, and one-image smoke have passed.
+
 ## Objective
 
 Cross the GPU boundary that was intentionally deferred during the CPU MAF migration, while preserving scientific provenance and avoiding any claim that an inherited artefact was regenerated unless the GPU path actually produces it.
