@@ -17,3 +17,8 @@ __pycache__/
 .env.*
 !.env.example
 .env.yaml
+
+# Phase 5 GPU generated outputs
+results/maf_gpu_case1/
+results/maf_gpu_case1_smoke/
+results/maf_gpu_case3_smoke/
