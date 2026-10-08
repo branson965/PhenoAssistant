@@ -54,22 +54,22 @@
 - full 1,248-image Case 1 GPU inference completed in 184.858 s with 11,848 segmentation annotations;
 - phenotype regeneration completed from the newly generated segmentation output;
 - regenerated-vs-tracked comparison aligned all 1,248 rows with 100% coverage, zero missing/extra rows, exact leaf-count and PLA ecotype rankings, and near-numerical identity across all seven phenotypes;
-- Case 1 full reproduction evidence preserved in `docs/maf/evidence/PHASE5_CASE1_GPU_REPRODUCTION_20261008.md`.
+- Case 1 full reproduction evidence preserved in `docs/maf/evidence/PHASE5_CASE1_GPU_REPRODUCTION_20261008.md`;
+- Case 1 scientific-conclusion parity passed: interaction decision, all ten Tukey pairwise significance decisions, and the three ordered phenotype groups matched exactly.
 
 ## Phase 5 evidence still required
 
-- Case 1 mixed-ANOVA interaction conclusion parity on regenerated vs tracked phenotypes;
-- Case 1 Tukey-Kramer pairwise/grouping parity on regenerated vs tracked phenotypes;
+- restore the Phase 5 statistical environment after the ad-hoc pip command upgraded pandas, then rerun the CPU-only Case 1 conclusion-parity check under the frozen pins;
 - Case 3 approved image discovery;
 - Case 3 registered-checkpoint GPU inference;
 - explicit evidence-backed decision on whether Case 3 retraining is necessary.
 
 ## Current progress
 
-**Overall completion: 50%**
+**Overall completion: 52%**
 
-**Current phase completion: 82%**
+**Current phase completion: 90%**
 
 **Phases completed: 4/9**
 
-The percentage is intentionally conservative. Case 1 has now been regenerated end to end from all 1,248 source images through GPU segmentation and phenotype extraction, with 100% row coverage and near-numerical identity to the tracked reference. The remaining Case 1 gate is scientific-conclusion parity; Case 3 remains an explicit access-controlled resource boundary.
+The percentage is intentionally conservative. Case 1 has now been regenerated end to end from all 1,248 source images through GPU segmentation and phenotype extraction, with 100% row coverage, near-numerical identity, and matching ANOVA/Tukey scientific conclusions. The only Case 1 cleanup is restoring the declared statistical environment and rerunning that CPU-only parity gate. Case 3 remains an explicit access-controlled resource boundary.
