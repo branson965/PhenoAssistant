@@ -1,0 +1,95 @@
+{
+  "captured_at_utc": "20261008T210353Z",
+  "credential_presence": {
+    "HF_TOKEN": false,
+    "HF_USER": false,
+    "OPENAI_API_KEY": false,
+    "OPENROUTER_API_KEY": false
+  },
+  "git": {
+    "branch": {
+      "ok": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "feature/maf-mcp-v2-integration"
+    },
+    "head": {
+      "ok": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": "625839e6ff60aedf25904c20f2812aa9ee03dc23"
+    },
+    "status": {
+      "ok": true,
+      "returncode": 0,
+      "stderr": "",
+      "stdout": ""
+    }
+  },
+  "nvidia_smi": {
+    "ok": true,
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "NVIDIA RTX A4000, 595.71.05, 16376 MiB, 8.6"
+  },
+  "packages": {
+    "accelerate": "1.0.1",
+    "agent-framework": null,
+    "datasets": "3.0.1",
+    "huggingface-hub": "0.26.0",
+    "mcp": null,
+    "peft": "0.13.2",
+    "pydantic": "2.14.0",
+    "torch": "2.4.1+cu121",
+    "torchvision": "0.19.1+cu121",
+    "transformers": "4.45.2"
+  },
+  "python": {
+    "executable": "/home/psxbk8/.local/envs/phenoassistant-phase5-gpu/bin/python",
+    "platform": "Linux-5.14.0-611.54.1.el9_7.x86_64-x86_64-with-glibc2.34",
+    "version": "3.11.17 (main, Oct  7 2026, 00:02:24) [GCC 15.3.0]"
+  },
+  "schema_version": "1",
+  "torch": {
+    "cuda_available": true,
+    "cuda_runtime": "12.1",
+    "cudnn_version": 90100,
+    "device_count": 1,
+    "devices": [
+      {
+        "index": 0,
+        "major": 8,
+        "minor": 6,
+        "name": "NVIDIA RTX A4000",
+        "total_memory_bytes": 16752181248
+      }
+    ],
+    "version": "2.4.1+cu121"
+  },
+  "trusted_path_presence": {
+    "case1_images": {
+      "exists": true,
+      "is_dir": true,
+      "is_file": false,
+      "path": "data/AraCropData"
+    },
+    "case1_metadata": {
+      "exists": true,
+      "is_dir": false,
+      "is_file": true,
+      "path": "data/aracrop_metadata.json"
+    },
+    "case3_dataset": {
+      "exists": false,
+      "is_dir": false,
+      "is_file": false,
+      "path": "data/winter-wheat_nutri-defi-identify_dndww20"
+    },
+    "model_zoo": {
+      "exists": true,
+      "is_dir": false,
+      "is_file": true,
+      "path": "model_zoo.json"
+    }
+  }
+}
