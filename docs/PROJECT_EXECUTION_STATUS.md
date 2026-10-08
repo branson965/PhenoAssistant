@@ -55,21 +55,23 @@
 - phenotype regeneration completed from the newly generated segmentation output;
 - regenerated-vs-tracked comparison aligned all 1,248 rows with 100% coverage, zero missing/extra rows, exact leaf-count and PLA ecotype rankings, and near-numerical identity across all seven phenotypes;
 - Case 1 full reproduction evidence preserved in `docs/maf/evidence/PHASE5_CASE1_GPU_REPRODUCTION_20261008.md`;
-- Case 1 scientific-conclusion parity passed: interaction decision, all ten Tukey pairwise significance decisions, and the three ordered phenotype groups matched exactly.
+- Case 1 scientific-conclusion parity passed: interaction decision, all ten Tukey pairwise significance decisions, and the three ordered phenotype groups matched exactly;
+- Case 1 statistical environment restored to the declared pins, `pip check` clean, and the scientific-conclusion parity gate passed again under the frozen environment;
+- Case 1 GPU scientific reproduction is closed;
+- Case 3 public-source provenance mapped to DND-Diko-WWWR/WW2020, while the exact historical Hugging Face prepared dataset and registered checkpoint remain access-controlled.
 
 ## Phase 5 evidence still required
 
-- restore the Phase 5 statistical environment after the ad-hoc pip command upgraded pandas, then rerun the CPU-only Case 1 conclusion-parity check under the frozen pins;
 - Case 3 approved image discovery;
 - Case 3 registered-checkpoint GPU inference;
 - explicit evidence-backed decision on whether Case 3 retraining is necessary.
 
 ## Current progress
 
-**Overall completion: 52%**
+**Overall completion: 54%**
 
-**Current phase completion: 90%**
+**Current phase completion: 94%**
 
 **Phases completed: 4/9**
 
-The percentage is intentionally conservative. Case 1 has now been regenerated end to end from all 1,248 source images through GPU segmentation and phenotype extraction, with 100% row coverage, near-numerical identity, and matching ANOVA/Tukey scientific conclusions. The only Case 1 cleanup is restoring the declared statistical environment and rerunning that CPU-only parity gate. Case 3 remains an explicit access-controlled resource boundary.
+The percentage is intentionally conservative. Case 1 GPU scientific reproduction is now fully closed under the restored declared environment. Phase 5 is reduced to Case 3, where the public source provenance is identified but the exact historical Hugging Face dataset and registered checkpoint remain access-controlled.
