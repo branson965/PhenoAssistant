@@ -17,6 +17,7 @@ HF_PROBE = ROOT / "scripts" / "gpu" / "phase5_hf_access_probe.py"
 CASE1 = ROOT / "scripts" / "gpu" / "phase5_case1_gpu.py"
 CASE3 = ROOT / "scripts" / "gpu" / "phase5_case3_smoke.py"
 COMPARATOR = ROOT / "scripts" / "gpu" / "compare_case1_gpu_to_tracked.py"
+SCIENTIFIC_COMPARATOR = ROOT / "scripts" / "gpu" / "compare_case1_scientific_conclusions.py"
 PROTOCOL = ROOT / "docs" / "gpu" / "PHASE5_GPU_VALIDATION_PROTOCOL.md"
 
 
@@ -33,6 +34,7 @@ def test_phase5_assets_exist() -> None:
         CASE1,
         CASE3,
         COMPARATOR,
+        SCIENTIFIC_COMPARATOR,
         PROTOCOL,
     ):
         assert path.is_file(), path
@@ -113,10 +115,21 @@ def test_case1_comparator_uses_deterministic_filename_join() -> None:
     assert "ranking_comparison" in source
 
 
+def test_case1_scientific_comparator_checks_inference_conclusions() -> None:
+    source = _source(SCIENTIFIC_COMPARATOR)
+
+    assert 'DESCRIPTOR = "projected_leaf_area"' in source
+    assert "INTERACTION_ALPHA = 0.01" in source
+    assert "POSTHOC_ALPHA = 0.05" in source
+    assert '"scientific_conclusion_match"' in source
+    assert "perform_anova" in source
+    assert "perform_tukey_test" in source
+
+
 def test_gpu_scripts_never_use_exit_or_systemexit() -> None:
     combined = "\n".join(
         _source(path)
-        for path in (ENV_PROBE, PREFLIGHT, CASE1, CASE3, COMPARATOR)
+        for path in (ENV_PROBE, PREFLIGHT, CASE1, CASE3, COMPARATOR, SCIENTIFIC_COMPARATOR)
     )
 
     assert "sys.exit" not in combined
