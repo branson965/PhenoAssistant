@@ -22,3 +22,6 @@ __pycache__/
 results/maf_gpu_case1/
 results/maf_gpu_case1_smoke/
 results/maf_gpu_case3_smoke/
+data/_downloads/
+data/_staging/
+data/AraCropData/
