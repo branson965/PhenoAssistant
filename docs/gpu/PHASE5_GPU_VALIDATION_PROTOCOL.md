@@ -118,8 +118,8 @@ result = infer_instance_segmentation(
     image_urls=[image],
     checkpoint=(
         "fengchen025/"
-        "arabidopsis_leaf-instance-segmentation_cvppv2017-a1a4_m2fb_fullft"
-    ).replace("cvppv", "cvppp"),
+        "arabidopsis_leaf-instance-segmentation_cvppp2017-a1a4_m2fb_fullft"
+    ),
     batch_size=1,
     device="cuda",
     output_dir="./results/maf_gpu_case1_smoke",
