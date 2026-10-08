@@ -78,7 +78,9 @@ def test_case1_gpu_runner_preserves_historical_results() -> None:
 
     assert "EXPECTED_IMAGES = 1248" in source
     assert "results/maf_gpu_case1_smoke" in source
+    assert "results/maf_gpu_case1_sample" in source
     assert "results/maf_gpu_case1" in source
+    assert "--sample-size" in source
     assert '"results/Case1"' not in source
     assert "pixel_to_cm=0.03" in source
     assert (
