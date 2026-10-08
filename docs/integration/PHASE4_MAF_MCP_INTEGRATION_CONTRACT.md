@@ -350,10 +350,9 @@ Phase 4 is complete when all are true:
 - [x] target MAF↔MCP architecture fixed;
 - [x] backend adapter contract fixed;
 - [x] direct/MCP parity gates fixed;
-- [ ] Phase 5 GPU environment evidence captured;
-- [ ] first GPU smoke test completed and logged.
+Phase 4 is complete at this checkpoint.
 
-The last two items begin the controlled transition into Phase 5; no production integration code should precede the environment capture.
+Phase 5 begins with GPU environment capture and a one-image scientific smoke test. No production MCP integration code should precede those environment/scientific baselines.
 
 ## 10. Research consequence
 
