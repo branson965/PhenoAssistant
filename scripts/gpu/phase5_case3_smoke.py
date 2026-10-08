@@ -11,11 +11,16 @@ import csv
 import hashlib
 import json
 import time
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
 import torch
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from functions.image_classification import infer_image_classification
 
