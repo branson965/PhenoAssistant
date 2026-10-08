@@ -89,3 +89,36 @@ The remaining Gate 5G check is to rerun the historical mixed repeated-measures A
 
 This is implemented by
 `scripts/gpu/compare_case1_scientific_conclusions.py`.
+
+
+## Scientific-conclusion parity
+
+The regenerated and tracked 1,248-row phenotype tables were independently
+reanalysed with the historical mixed repeated-measures ANOVA and Tukey-Kramer
+implementation for projected leaf area.
+
+Results:
+
+- regenerated interaction: F = 22.666978865870615,
+  p = 2.3816775373361665e-262;
+- tracked-reference interaction: F = 22.6669360372141,
+  p = 2.3834021910783026e-262;
+- interaction significance decision matched at alpha = 0.01;
+- all ten Tukey pairwise significance decisions matched at alpha = 0.05;
+- ordered grouping matched exactly:
+  - large: col0, ein2;
+  - medium: adh1, pgm;
+  - small: ctr;
+- final scientific-conclusion parity status: passed.
+
+This closes the Case 1 scientific reproduction gate: the regenerated vision
+pipeline preserves both the numerical phenotype evidence and the inferential
+scientific conclusion.
+
+## Environment note
+
+The ad-hoc installation of the historical statistical packages caused pip to
+upgrade pandas from the Phase 5 pin (1.5.3) to 3.0.6 because the direct command
+did not include the existing pandas constraint. The statistical parity result
+passed, but the environment must be restored to the declared Phase 5 pins and
+the CPU-only parity gate rerun before the environment is considered frozen.
