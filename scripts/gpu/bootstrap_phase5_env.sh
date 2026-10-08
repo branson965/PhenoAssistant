@@ -160,7 +160,11 @@ PY
   "${PYTHON}" --version
   echo
   echo "Activate with:"
-  echo "  source ${ENV_DIR}/bin/activate"
+  echo "  source ${MINIFORGE_DIR}/etc/profile.d/conda.sh"
+  echo "  conda activate ${ENV_DIR}"
+  echo
+  echo "Or run the environment Python directly without activation:"
+  echo "  ${PYTHON} <script.py>"
 
   return 0
 }
