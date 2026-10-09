@@ -2,7 +2,7 @@
 
 **Updated:** 2026-10-08  
 **Active branch:** `feature/maf-mcp-v2-integration`  
-**Current phase:** Phase 5 — GPU scientific baseline
+**Current phase:** Phase 6 — MCP v2 + MAF integration (Phase 5 Case 3 external gate carried forward)
 
 ## Progress model
 
@@ -14,8 +14,8 @@
 | 2 | Build bounded production-shaped MAF CPU architecture | complete |
 | 3 | Migrate and validate CPU case-study behaviour | complete |
 | 4 | Audit Vincent MCP branch and freeze integration contract | complete |
-| 5 | Execute and validate GPU scientific workflows | active |
-| 6 | Migrate MCP to v2, integrate with MAF, prove parity | pending |
+| 5 | Execute and validate GPU scientific workflows | blocked only on external Case 3 private-resource access; Case 1 closed |
+| 6 | Migrate MCP to v2, integrate with MAF, prove parity | active |
 | 7 | Implement/freeze scientific-applicability research method | pending |
 | 8 | Full experiments, ablations, hidden evaluation, failure analysis | pending |
 | 9 | Manuscript, artifact, hostile review, submission | pending |
@@ -68,6 +68,22 @@
 - Case 3 registered-checkpoint GPU inference;
 - explicit evidence-backed decision on whether Case 3 retraining is necessary.
 
+## Phase transition decision
+
+Phase 6 may proceed without waiting for Case 3 private-resource access. The remaining
+Case 3 gate is external to the local migration implementation: authenticated probing
+has established that the exact historical private Hugging Face dataset/checkpoint are
+not accessible to the current account. This blocker is preserved as an open Phase 5
+evidence item and must not be silently counted as reproduced.
+
+Moving into Phase 6 therefore does **not** mean Case 3 has passed. It means the
+transport/orchestration integration work can proceed independently while the exact
+historical Case 3 artefact remains pending collaborator access or an explicitly
+approved alternative provenance route.
+
+No retraining, substitution of a different checkpoint, or claim of Case 3
+reproduction is authorised by this phase transition.
+
 ## Current progress
 
 **Overall completion: 55%**
@@ -76,4 +92,4 @@
 
 **Phases completed: 4/9**
 
-The percentage is intentionally conservative. Case 1 GPU scientific reproduction is now fully closed under the restored declared environment. Phase 5 is reduced to Case 3. The public source provenance and historical privacy policy are now identified, and authenticated probing establishes an external access/availability boundary for the exact historical Hugging Face dataset and checkpoint.
+The percentage is intentionally conservative. Case 1 GPU scientific reproduction is fully closed under the restored declared environment. The remaining Case 3 gate is externally blocked on the exact historical private artefacts, so it is carried forward without being counted as reproduced. Phase 6 can proceed independently.
