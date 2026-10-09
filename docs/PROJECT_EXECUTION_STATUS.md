@@ -58,7 +58,9 @@
 - Case 1 scientific-conclusion parity passed: interaction decision, all ten Tukey pairwise significance decisions, and the three ordered phenotype groups matched exactly;
 - Case 1 statistical environment restored to the declared pins, `pip check` clean, and the scientific-conclusion parity gate passed again under the frozen environment;
 - Case 1 GPU scientific reproduction is closed;
-- Case 3 public-source provenance mapped to DND-Diko-WWWR/WW2020, while the exact historical Hugging Face prepared dataset and registered checkpoint remain access-controlled.
+- Case 3 public-source provenance mapped to DND-Diko-WWWR/WW2020;
+- historical source code confirms the prepared Case 3 dataset and trained checkpoint were intentionally pushed as private Hugging Face resources;
+- authenticated Case 3 probe still returns HTTP 404 for both exact historical resource identifiers, establishing that the current account lacks access or the resources no longer exist at those identifiers.
 
 ## Phase 5 evidence still required
 
@@ -68,10 +70,10 @@
 
 ## Current progress
 
-**Overall completion: 54%**
+**Overall completion: 55%**
 
 **Current phase completion: 94%**
 
 **Phases completed: 4/9**
 
-The percentage is intentionally conservative. Case 1 GPU scientific reproduction is now fully closed under the restored declared environment. Phase 5 is reduced to Case 3, where the public source provenance is identified but the exact historical Hugging Face dataset and registered checkpoint remain access-controlled.
+The percentage is intentionally conservative. Case 1 GPU scientific reproduction is now fully closed under the restored declared environment. Phase 5 is reduced to Case 3. The public source provenance and historical privacy policy are now identified, and authenticated probing establishes an external access/availability boundary for the exact historical Hugging Face dataset and checkpoint.
