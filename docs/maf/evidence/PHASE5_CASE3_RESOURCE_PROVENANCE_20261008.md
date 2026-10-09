@@ -33,10 +33,25 @@ not yet a byte-level identity proof.
 
 ## Current access boundary
 
-From Nottingham Plato without Hugging Face authentication, both the registered
-Case 3 model endpoint and the historical prepared Case 3 dataset endpoint
-return HTTP 401. The public PhenoRoam catalogue record is discoverable, but
-the checked record view does not currently expose a direct DATA download.
+The historical implementation makes the resource policy explicit:
+
+- `prepare_dataset(...)` uploads datasets with `private=True`;
+- image-classification training uses `hub_private_repo=True`;
+- both resources are created under the namespace supplied by `HF_USER`.
+
+This establishes that the historical Case 3 Hugging Face dataset and trained
+checkpoint were intentionally private resources rather than public artefacts.
+
+On Nottingham Plato, an unauthenticated probe returned HTTP 401 for both Case 3
+resources. After successful Hugging Face authentication with the current user
+account, both exact resource identifiers return HTTP 404 / RepositoryNotFound.
+Because private Hub repositories are not visible to accounts without access,
+this means the current authenticated account does not have access to the exact
+historical resources, or the resources no longer exist at those identifiers.
+It is not a local credential-cache failure.
+
+The public PhenoRoam catalogue record remains discoverable, but the checked
+record view does not currently expose a direct DATA download.
 
 ## Validation decision
 
@@ -45,8 +60,9 @@ blocker.
 
 Preferred order:
 
-1. obtain legitimate access to the registered checkpoint and, if available,
-   the historical prepared dataset;
+1. ask the resource owner/collaborator to grant the current Hugging Face
+   account access to the private registered checkpoint and prepared dataset,
+   or provide an approved copy of those exact artefacts;
 2. otherwise recover the exact historical prepared dataset artefact from the
    original collaborators, or reconstruct it from official WW2020 only after
    the preparation mapping is verified;
