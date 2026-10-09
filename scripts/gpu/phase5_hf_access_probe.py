@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import os
 
-from huggingface_hub import dataset_info, model_info
+from huggingface_hub import HfFolder, dataset_info, model_info
 from huggingface_hub.utils import HfHubHTTPError
 
 
@@ -75,6 +75,7 @@ def main() -> None:
     results = {
         "schema_version": "1",
         "hf_token_present": bool(os.environ.get("HF_TOKEN")),
+        "hf_cached_token_present": bool(HfFolder.get_token()),
         "resources": {
             label: _probe(kind, repo_id)
             for label, kind, repo_id in RESOURCES
