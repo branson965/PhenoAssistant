@@ -106,21 +106,33 @@ reproduction is authorised by this phase transition.
 - trusted dataset paths remain application-bound and are not exposed to the Manager;
 - MCP-backed MAF tools preserve the direct MAF names, descriptions, input models,
   and typed result envelopes;
-- deterministic MAF-to-MCP integration tests and a real scientific validation script
-  are committed for the next Plato gate.
+- deterministic MAF-to-MCP integration tests passed 7/7 on Plato;
+- real MAF-to-MCP scientific validation passed for both ANOVA and Tukey typed
+  result-envelope parity;
+- the production-shaped Manager -> FunctionTool -> MCP v2 Client -> MCP Server ->
+  preserved ANOVA implementation path passed on Plato;
+- the Manager-facing MCP path kept the trusted dataset path hidden and returned the
+  expected three ANOVA records;
+- dependency health remained clean after the Phase 6C execution;
+- Phase 6D fail-closed and lifecycle tests are now committed for injected tool
+  exceptions, server return-contract violations, malformed structured payloads,
+  trusted-path rejection, repeated client sessions, and Manager-level failure
+  propagation without false success claims.
 
-The MAF-to-MCP bridge code is committed but is not counted as runtime-verified until
-the Phase 6C tests and real validation script execute successfully on Plato.
+Phase 6C is runtime-verified. The Phase 6D failure/lifecycle suite is committed but is
+not counted as verified evidence until it executes successfully on Plato.
 
 ## Current progress
 
-**Overall completion: 60%**
+**Overall completion: 62%**
 
-**Current phase completion: 40%**
+**Current phase completion: 58%**
 
 **Phases completed: 4/9**
 
 Case 1 GPU scientific reproduction remains fully closed and the remaining Case 3 gate
-is externally blocked. Phase 6 transport and real scientific direct/MCP parity are now
-verified. The next gate is the production-shaped MAF Manager -> FunctionTool -> MCP v2
-Client -> MCP Server -> preserved scientific implementation path.
+is externally blocked. Phase 6 transport parity, real scientific direct/MCP parity,
+and the production-shaped MAF Manager -> MCP v2 -> preserved scientific implementation
+path are now verified. The next gate is fail-closed behaviour and lifecycle stability
+under injected execution, schema, and transport-adjacent faults before broader
+experiment instrumentation is frozen.
