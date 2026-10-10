@@ -65,6 +65,18 @@ __all__ = [
     "validate_identifier_preservation",
     "validate_phenotype_records",
     "validate_statistical_claim",
+    "AgentArchitecture",
+    "ConditionId",
+    "ControlledVariables",
+    "ExperimentCondition",
+    "IJCAIProtocolFreeze",
+    "InterfaceMode",
+    "RequiredMetric",
+    "VerificationMode",
+    "build_frozen_condition_catalogue",
+    "build_protocol_freeze",
+    "build_development_validation_gold",
+    "build_development_validation_manifest",
 ]
 
 from research.phenoguard.trace import (
@@ -95,4 +107,21 @@ from research.phenoguard.post_validation import (
     validate_identifier_preservation,
     validate_phenotype_records,
     validate_statistical_claim,
+)
+
+from research.phenoguard.experiment_protocol import (
+    AgentArchitecture,
+    ConditionId,
+    ControlledVariables,
+    ExperimentCondition,
+    IJCAIProtocolFreeze,
+    InterfaceMode,
+    RequiredMetric,
+    VerificationMode,
+    build_frozen_condition_catalogue,
+    build_protocol_freeze,
+)
+from research.phenoguard.pilot_manifest import (
+    build_development_validation_gold,
+    build_development_validation_manifest,
 )
