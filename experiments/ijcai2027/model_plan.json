@@ -1,6 +1,6 @@
 {
   "schema": "phenoguard-ijcai2027-model-plan-v0.1",
-  "status": "PRE_OUTCOME_FROZEN",
+  "status": "PROVISIONAL_PRE_OUTCOME_PENDING_SUPERVISOR_CONFIRMATION",
   "frozen_utc_date": "2026-10-10",
   "selection_basis": [
     "fixed model slugs rather than the historical dynamic openrouter/free router",
@@ -55,5 +55,11 @@
     "model_id": "openrouter/free",
     "allowed_for_ijcai_main_evaluation": false,
     "reason": "dynamic routing makes the underlying model identity non-controlled"
-  }
+  },
+  "supervisor_confirmation_required": true,
+  "supervisor_confirmation_scope": [
+    "credential ownership / access route",
+    "approved provider / billing route",
+    "whether the provisional Luna primary and Sol breadth models should remain the study models"
+  ]
 }
