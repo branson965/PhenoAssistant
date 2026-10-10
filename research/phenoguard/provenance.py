@@ -66,3 +66,67 @@ def build_case1_arabidopsis_segmentation_envelope(
             f"@{CASE1_ARABIDOPSIS_SEGMENTATION_REVISION}"
         ),
     )
+
+
+CASE2_POTATO_SEGMENTATION_MODEL_ID = (
+    "potato_leaf-instance-segmentation_leaf-only-sam"
+)
+
+
+def build_case2_potato_segmentation_envelope(
+) -> ScientificOperatingEnvelope:
+    """Return the narrow evidence-backed envelope for the Case 2 model."""
+    return ScientificOperatingEnvelope(
+        capability_id=CASE2_POTATO_SEGMENTATION_MODEL_ID,
+        scientific_task="instance segmentation",
+        constraints=(
+            ApplicabilityConstraint(
+                field="species",
+                allowed_values=("potato",),
+                severity=ConstraintSeverity.HARD,
+                rationale=(
+                    "The PhenoAssistant paper describes Leaf-only SAM as "
+                    "the potato leaf segmentation model integrated for "
+                    "Case Study 2."
+                ),
+            ),
+        ),
+        required_context_fields=("species",),
+        output_semantics=(
+            "potato leaf instance-segmentation masks used to derive "
+            "projected leaf area"
+        ),
+        assumptions=(
+            "the input is suitable for the preserved Leaf-only SAM path",
+        ),
+        limitations=(
+            "the paper states that the model and Case 2 dataset originate "
+            "from Williams et al.",
+            "the repository evidence does not currently freeze a model "
+            "checkpoint hash for Leaf-only SAM",
+            "view, modality, illumination, and environment constraints "
+            "remain intentionally unfrozen pending provenance audit",
+        ),
+        known_failure_conditions=(
+            "a non-potato species is outside the explicitly evidenced "
+            "Case 2 model-selection scope",
+        ),
+        provenance=(
+            "PhenoAssistant Nature Communications Case Study 2; "
+            "Leaf-only SAM for potato leaf segmentation; "
+            "model and 32-image dataset attributed to Williams et al."
+        ),
+        version_or_checkpoint=(
+            "model-zoo:"
+            + CASE2_POTATO_SEGMENTATION_MODEL_ID
+        ),
+    )
+
+
+def build_default_provenance_catalogue(
+) -> tuple[ScientificOperatingEnvelope, ...]:
+    """Return the currently evidence-backed instance-segmentation catalogue."""
+    return (
+        build_case1_arabidopsis_segmentation_envelope(),
+        build_case2_potato_segmentation_envelope(),
+    )
