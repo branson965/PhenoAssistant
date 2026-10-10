@@ -9,9 +9,12 @@ from research.phenoguard.contracts import (
     ScientificOperatingEnvelope,
     ScientificRequestContext,
     ScientificApplicabilityAssessment,
+    TrainingReadinessAssessment,
+    TrainingReadinessContext,
 )
 from research.phenoguard.checker import assess_scientific_applicability
 from research.phenoguard.catalogue import resolve_capability_catalogue
+from research.phenoguard.training import assess_training_readiness
 from research.phenoguard.provenance import (
     CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID,
     CASE1_ARABIDOPSIS_SEGMENTATION_REVISION,
@@ -30,8 +33,11 @@ __all__ = [
     "ScientificOperatingEnvelope",
     "ScientificRequestContext",
     "ScientificApplicabilityAssessment",
+    "TrainingReadinessAssessment",
+    "TrainingReadinessContext",
     "assess_scientific_applicability",
     "resolve_capability_catalogue",
+    "assess_training_readiness",
     "CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID",
     "CASE1_ARABIDOPSIS_SEGMENTATION_REVISION",
     "CASE2_POTATO_SEGMENTATION_MODEL_ID",
