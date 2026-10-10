@@ -1,0 +1,63 @@
+{
+  "schema": "phenoguard-ijcai2027-runtime-plan-v0.1",
+  "status": "PRE_OUTCOME_FROZEN",
+  "frozen_utc_date": "2026-10-10",
+  "provider": {
+    "gateway": "OpenRouter",
+    "upstream_provider": "openai",
+    "allow_fallbacks": false,
+    "require_parameters": true
+  },
+  "primary_model": {
+    "model_id": "openai/gpt-5.6-luna",
+    "revision_label": "openrouter-release-2026-07-09-provider-managed"
+  },
+  "breadth_model": {
+    "model_id": "openai/gpt-5.6-sol",
+    "revision_label": "openrouter-release-2026-07-09-provider-managed"
+  },
+  "sampling": {
+    "temperature_schema_value": 0.0,
+    "temperature_parameter_sent": false,
+    "temperature_note": "GPT-5.6 Luna OpenRouter parameter surface does not expose temperature; 0.0 is a schema sentinel only and is never transmitted.",
+    "reasoning": {
+      "effort": "medium"
+    },
+    "seed_schedule": [
+      2026,
+      2027,
+      2028
+    ],
+    "max_output_tokens": 2048
+  },
+  "tool_loop": {
+    "max_iterations": 2,
+    "max_function_calls": 1,
+    "allow_concurrent_invocation": false,
+    "terminate_on_unknown_calls": true
+  },
+  "retry_policy": {
+    "transport_retries": 2,
+    "semantic_retries": 0,
+    "retain_failed_attempts": true,
+    "label": "transport_only_max_2_no_semantic_retry"
+  },
+  "session_reset_policy": "fresh_client_agent_and_session_per_scenario_replicate",
+  "hardware_class": "uon-plato-cpu-orchestration",
+  "package_expectations": {
+    "agent-framework-core": "1.11.0",
+    "agent-framework-openai": "1.11.0",
+    "mcp": "2.3.0",
+    "pydantic": "2.13.4"
+  },
+  "response_identity_policy": {
+    "record_response_model": true,
+    "record_system_fingerprint_when_available": true,
+    "drift_action": "flag before aggregation; do not pool mismatched response identities silently"
+  },
+  "api_key_policy": {
+    "environment_variable": "OPENROUTER_API_KEY",
+    "store_in_repository": false,
+    "print_in_logs": false
+  }
+}
