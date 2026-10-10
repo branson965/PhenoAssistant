@@ -10,6 +10,11 @@ from research.phenoguard.contracts import (
     ScientificApplicabilityAssessment,
 )
 from research.phenoguard.checker import assess_scientific_applicability
+from research.phenoguard.provenance import (
+    CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID,
+    CASE1_ARABIDOPSIS_SEGMENTATION_REVISION,
+    build_case1_arabidopsis_segmentation_envelope,
+)
 
 __all__ = [
     "ApplicabilityConstraint",
@@ -20,4 +25,7 @@ __all__ = [
     "ScientificRequestContext",
     "ScientificApplicabilityAssessment",
     "assess_scientific_applicability",
+    "CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID",
+    "CASE1_ARABIDOPSIS_SEGMENTATION_REVISION",
+    "build_case1_arabidopsis_segmentation_envelope",
 ]
