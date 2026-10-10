@@ -145,9 +145,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 68%**
+**Overall completion: 69%**
 
-**Current phase completion: 8%**
+**Current phase completion: 16%**
 
 **Phases completed: 5/9**
 
@@ -172,5 +172,13 @@ polluting the frozen migration interface.
 - method contract documents the current claim boundary and explicitly states that
   synthetic unit fixtures do not establish scientific validity.
 
-The Phase 7A code is not counted as runtime-verified until the new research tests pass
-on Plato.
+Phase 7A is runtime-verified on Plato: all eight contract tests passed, the valid
+smoke request emitted EXECUTE, the hard-invalid smoke request emitted ABSTAIN, and
+dependency health remained clean.
+
+Phase 7B now adds the first provenance-backed real capability envelope for the
+registered Case Study 1 Arabidopsis instance-segmentation model. Its scope is
+intentionally narrow: species is the only currently frozen hard context rule.
+Unverified view/modality/environment assumptions are not silently encoded as facts.
+The five Phase 7B provenance-envelope tests are committed but are not counted as
+runtime-verified until they execute on Plato.
