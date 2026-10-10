@@ -44,4 +44,17 @@ __all__ = [
     "build_case1_arabidopsis_segmentation_envelope",
     "build_case2_potato_segmentation_envelope",
     "build_default_provenance_catalogue",
+    "ApplicabilityDecisionTrace",
+    "DecisionReason",
+    "canonical_trace_json",
+    "resolve_with_trace",
+    "trace_sha256",
 ]
+
+from research.phenoguard.trace import (
+    ApplicabilityDecisionTrace,
+    DecisionReason,
+    canonical_trace_json,
+    resolve_with_trace,
+    trace_sha256,
+)
