@@ -145,9 +145,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 71%**
+**Overall completion: 72%**
 
-**Current phase completion: 36%**
+**Current phase completion: 45%**
 
 **Phases completed: 5/9**
 
@@ -205,5 +205,18 @@ trigger training: labelled data and supported-format evidence are required, miss
 readiness yields CLARIFY, unsupported training tasks remain ABSTAIN, and an existing
 applicable capability always takes precedence.
 
-The eight Phase 7D training-readiness tests are committed but are not counted as
-runtime-verified until they execute on Plato.
+Phase 7D is runtime-verified on Plato. The complete Phase 7A-D suite passed 31/31.
+The training-policy smoke emitted RECOMMEND_TRAINING for a supported classification
+gap with ready labelled data, CLARIFY when required data evidence was missing,
+ABSTAIN for an unsupported training task, and EXECUTE when an applicable existing
+capability was already available. Dependency health remained clean.
+
+Phase 7E now adds a deterministic, machine-readable pre-execution trace contract.
+Each trace preserves the request, catalogue identifiers, complete structured
+resolution, optional training-readiness evidence, final decision, selected capability,
+and a stable reason code. Canonical JSON and SHA-256 helpers support reproducible
+manifests. Runtime timestamps/cost/latency are intentionally excluded from the
+semantic trace and belong to later experiment-run metadata.
+
+The nine Phase 7E trace tests are committed but are not counted as runtime-verified
+until they execute on Plato.
