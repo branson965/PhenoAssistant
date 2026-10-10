@@ -281,7 +281,7 @@ qualification manifest with five matched valid/shifted pairs, mechanical gold la
 and an explicit pre-outcome claim boundary. The qualification manifest is not the
 final benchmark and contains no hidden cases.
 
-Thirteen Phase 7H protocol-freeze tests are committed but are not counted as runtime-
+Fifteen Phase 7H protocol-freeze tests are committed but are not counted as runtime-
 verified until they execute on Plato. Concrete provider/model/runtime values remain
 intentionally unfilled and must be pinned and hashed before the first outcome-bearing
 Phase 8 pilot; they must not be selected after inspecting favourable outcomes.
