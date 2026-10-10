@@ -160,9 +160,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 77%**
+**Overall completion: 79%**
 
-**Current phase completion: 84%**
+**Current phase completion: 94%**
 
 **Phases completed: 5/9**
 
@@ -281,10 +281,23 @@ qualification manifest with five matched valid/shifted pairs, mechanical gold la
 and an explicit pre-outcome claim boundary. The qualification manifest is not the
 final benchmark and contains no hidden cases.
 
-Fifteen Phase 7H protocol-freeze tests are committed but are not counted as runtime-
-verified until they execute on Plato. Concrete provider/model/runtime values remain
-intentionally unfilled and must be pinned and hashed before the first outcome-bearing
-Phase 8 pilot; they must not be selected after inspecting favourable outcomes.
+Phase 7H is runtime-verified on Plato. The complete Phase 7A-H suite passed 77/77.
+All ten C0-C9 condition identities were present, all 13 required metrics were retained,
+the 12-case qualification manifest scored 12/12 exactly with zero unsafe executions,
+the machine-readable protocol freeze validated, dependency health was clean, the
+bounded secret scan returned no matches, stale 2027-target checks returned no matches,
+and the branch remained clean.
+
+Phase 7I now creates the final immutable method-freeze package. Twenty-two scientific
+method/protocol files are pinned by SHA-256 with aggregate digest
+`337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f`.
+A standalone verifier and five integrity tests are committed. Phase 7 is not counted
+as complete until this final freeze gate executes on Plato and the preservation ref is
+created.
+
+Concrete provider/model/runtime values remain intentionally unfilled and must be pinned
+and hashed before the first outcome-bearing Phase 8 pilot; they must not be selected
+after inspecting favourable outcomes.
 
 
 ## Phase 7H prospective IJCAI freeze
@@ -310,3 +323,22 @@ Phase 8 pilot; they must not be selected after inspecting favourable outcomes.
   or a negative result;
 - hidden labels remain inaccessible, negative results are retained, and post-unblinding
   method changes remain prohibited.
+
+
+## Phase 7I final freeze package
+
+- 22 scientific-method and protocol files content-addressed with SHA-256;
+- frozen source snapshot: `c58741bb9b0bcc8ebef68755e3d8528de9533312`;
+- aggregate digest:
+  `337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f`;
+- standalone verifier committed at
+  `scripts/research/verify_phenoguard_method_freeze.py`;
+- freeze manifest committed at
+  `docs/research/IJCAI_2027_PHASE7_METHOD_FREEZE_MANIFEST.json`;
+- freeze rationale and Phase 8 transition policy committed at
+  `docs/research/IJCAI_2027_PHASE7_METHOD_FREEZE.md`;
+- five freeze-integrity tests committed;
+- scientific-method changes after Phase 8 outcomes require an explicit Phase 7 reopen,
+  a new manifest version, re-verification, and retention of all pre-change results;
+- preservation ref `baseline/phenoguard-method-freeze-20261010` will be created only
+  after the final Plato gate passes.
