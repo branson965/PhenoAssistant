@@ -1,0 +1,3 @@
+# Phase 6 MCP v2 development/test environment
+-r requirements-mcp-v2.txt
+-r requirements-maf-dev.txt
