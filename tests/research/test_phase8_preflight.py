@@ -185,3 +185,29 @@ def test_live_preflight_is_non_scientific_and_does_not_log_api_key() -> None:
             maxsplit=1,
         )[0]
     )
+
+
+
+def test_runtime_capture_bootstraps_repo_root_before_project_import() -> None:
+    source = (
+        ROOT
+        / "scripts"
+        / "research"
+        / "prepare_ijcai_runtime_controls.py"
+    ).read_text(
+        encoding="utf-8",
+    )
+
+    root_index = source.index(
+        "ROOT = Path(__file__).resolve().parents[2]"
+    )
+
+    bootstrap_index = source.index(
+        "sys.path.insert"
+    )
+
+    project_import_index = source.index(
+        "from research.phenoguard import ControlledVariables"
+    )
+
+    assert root_index < bootstrap_index < project_import_index
