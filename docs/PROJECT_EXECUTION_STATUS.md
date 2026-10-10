@@ -162,7 +162,7 @@ Phase 7 scientific-applicability research work.
 
 **Overall completion: 82%**
 
-**Current phase completion: 12%**
+**Current phase completion: 14%**
 
 **Phases completed: 6/9**
 
@@ -441,3 +441,22 @@ benchmark case is executed.
   `pydantic==2.13.4`;
 - non-scientific live provider/tool-call preflight committed;
 - no Phase 8 scientific outcome has been observed.
+
+
+## Phase 8A supervisor credential gate
+
+The user does not yet have an OpenRouter account or API key and will ask Valerio on
+Monday for the approved credential/provider route and next steps.
+
+Because no Phase 8 scientific outcome has been observed, the provisional Luna/Sol
+model plan and runtime plan remain safely changeable before the first live scientific
+run. They are now explicitly marked
+`PROVISIONAL_PRE_OUTCOME_PENDING_SUPERVISOR_CONFIRMATION`.
+
+The offline runtime-capture script previously failed when executed directly because
+Python placed `scripts/research` rather than the repository root on `sys.path`.
+That defect is fixed on the experiment branch by bootstrapping the repository root
+before importing `research.phenoguard`, with a regression guard added.
+
+No OpenRouter account should be created and no personal credential should be purchased
+or committed solely to unblock this gate before supervisor confirmation.
