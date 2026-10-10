@@ -6,7 +6,7 @@
 
 ## Authoritative venue strategy
 
-The current paper plan is **IJCAI 2027**, not AAMAS 2027.
+The current paper plan is **IJCAI 2027**.
 
 - stretch target: IJCAI 2027;
 - internal go/no-go: 2026-11-30;
@@ -246,8 +246,8 @@ The hidden expert test must remain unavailable to method tuning.
 
 ## Phase 7F work committed
 
-- corrected the only active research-document reference that still named the obsolete
-  AAMAS benchmark; the authoritative target is IJCAI 2027;
+- corrected the remaining active research-document reference that still named the obsolete
+  venue-specific benchmark; the authoritative target is IJCAI 2027;
 - project status now explicitly records IJCAI 2027 as the stretch target, the
   2026-11-30 internal go/no-go, ECAI 2027 as primary fallback, and AAMAS 2028 only
   as a later option;
