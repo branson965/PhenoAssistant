@@ -114,25 +114,36 @@ reproduction is authorised by this phase transition.
 - the Manager-facing MCP path kept the trusted dataset path hidden and returned the
   expected three ANOVA records;
 - dependency health remained clean after the Phase 6C execution;
-- Phase 6D fail-closed and lifecycle tests are now committed for injected tool
-  exceptions, server return-contract violations, malformed structured payloads,
-  trusted-path rejection, repeated client sessions, and Manager-level failure
-  propagation without false success claims.
+- Phase 6D fail-closed and lifecycle suite passed 14/14 together with all preceding
+  MCP v2 transport and MAF-bridge tests on Plato;
+- injected tool exceptions, server return-contract violations, malformed structured
+  payloads, trusted-path rejection, repeated one-shot client sessions, and
+  Manager-level failure propagation all fail closed as intended;
+- dependency health remained clean after Phase 6D;
+- tracked Python bytecode was removed from the branch so future scientific imports
+  no longer dirty Git status;
+- explicit reusable MCP v2 client lifecycle and caller-controlled timeout semantics
+  are committed for the next Plato gate;
+- interface documentation now records the bounded tool surface, trust boundary,
+  lifecycle, timeout, failure mapping, and current evidence;
+- a machine-readable direct/one-shot/persistent MCP transport microbenchmark is
+  committed for cold/warm interface-overhead measurement.
 
-Phase 6C is runtime-verified. The Phase 6D failure/lifecycle suite is committed but is
-not counted as verified evidence until it executes successfully on Plato.
+Phase 6D is runtime-verified. The Phase 6E timeout/session implementation and transport
+overhead probe are committed but are not counted as verified evidence until they run
+successfully on Plato.
 
 ## Current progress
 
-**Overall completion: 62%**
+**Overall completion: 64%**
 
-**Current phase completion: 58%**
+**Current phase completion: 68%**
 
 **Phases completed: 4/9**
 
 Case 1 GPU scientific reproduction remains fully closed and the remaining Case 3 gate
 is externally blocked. Phase 6 transport parity, real scientific direct/MCP parity,
-and the production-shaped MAF Manager -> MCP v2 -> preserved scientific implementation
-path are now verified. The next gate is fail-closed behaviour and lifecycle stability
-under injected execution, schema, and transport-adjacent faults before broader
-experiment instrumentation is frozen.
+production-shaped MAF -> MCP execution, and fail-closed error behaviour are now
+verified. The next gate is explicit persistent-session lifecycle, timeout semantics,
+and cold/warm MCP transport-overhead instrumentation before the integration interface
+is frozen for the research-method phase.
