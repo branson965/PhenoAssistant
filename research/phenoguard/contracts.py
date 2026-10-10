@@ -313,6 +313,51 @@ class ScientificApplicabilityAssessment(BaseModel):
     evaluations: tuple[ConstraintEvaluation, ...]
 
 
+class TrainingReadinessContext(BaseModel):
+    """Evidence supplied to the training-recommendation policy."""
+
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+    )
+
+    dataset_available: bool
+    labels_available: bool
+    dataset_format_valid: bool
+
+
+class TrainingReadinessAssessment(BaseModel):
+    """Structured evidence for whether model training may be recommended."""
+
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+    )
+
+    schema_version: Literal["0.1"] = "0.1"
+    task_supported: bool
+    recommend_training: bool
+    missing_requirements: tuple[str, ...]
+    policy_scope: str
+
+    @model_validator(mode="after")
+    def validate_training_assessment(
+        self,
+    ) -> "TrainingReadinessAssessment":
+        if self.recommend_training:
+            if not self.task_supported:
+                raise ValueError(
+                    "training cannot be recommended for an unsupported task"
+                )
+
+            if self.missing_requirements:
+                raise ValueError(
+                    "training recommendation requires no missing requirements"
+                )
+
+        return self
+
+
 class CatalogueApplicabilityResolution(BaseModel):
     """Structured resolution across a catalogue of scientific capabilities."""
 
@@ -327,6 +372,7 @@ class CatalogueApplicabilityResolution(BaseModel):
     selected_capability_id: str | None = None
     executable_capability_ids: tuple[str, ...]
     assessments: tuple[ScientificApplicabilityAssessment, ...]
+    training_readiness: TrainingReadinessAssessment | None = None
 
     @model_validator(mode="after")
     def validate_resolution(
@@ -336,6 +382,15 @@ class CatalogueApplicabilityResolution(BaseModel):
             ApplicabilityDecision.EXECUTE,
             ApplicabilityDecision.RESELECT,
         }
+
+        if self.decision is ApplicabilityDecision.RECOMMEND_TRAINING:
+            if (
+                self.training_readiness is None
+                or not self.training_readiness.recommend_training
+            ):
+                raise ValueError(
+                    "RECOMMEND_TRAINING requires positive training readiness"
+                )
 
         if self.decision in actionable:
             if self.selected_capability_id is None:
