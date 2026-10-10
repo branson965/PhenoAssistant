@@ -1,0 +1,3 @@
+# Phase 6 MCP v2 integration runtime
+-r requirements-maf.txt
+mcp==2.3.0
