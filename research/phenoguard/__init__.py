@@ -49,6 +49,15 @@ __all__ = [
     "canonical_trace_json",
     "resolve_with_trace",
     "trace_sha256",
+    "BenchmarkDecisionScore",
+    "BenchmarkGoldLabel",
+    "BenchmarkScenario",
+    "BenchmarkSplit",
+    "EvidenceSource",
+    "ScenarioCategory",
+    "ShiftDimension",
+    "score_decision_trace",
+    "validate_matched_pair",
 ]
 
 from research.phenoguard.trace import (
@@ -57,4 +66,16 @@ from research.phenoguard.trace import (
     canonical_trace_json,
     resolve_with_trace,
     trace_sha256,
+)
+
+from research.phenoguard.benchmark import (
+    BenchmarkDecisionScore,
+    BenchmarkGoldLabel,
+    BenchmarkScenario,
+    BenchmarkSplit,
+    EvidenceSource,
+    ScenarioCategory,
+    ShiftDimension,
+    score_decision_trace,
+    validate_matched_pair,
 )
