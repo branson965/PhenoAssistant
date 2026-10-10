@@ -4,6 +4,21 @@
 **Active branch:** `research/phenoguard`  
 **Current phase:** Phase 7 — scientific-applicability research method (Phase 5 Case 3 external gate carried forward)
 
+## Authoritative venue strategy
+
+The current paper plan is **IJCAI 2027**, not AAMAS 2027.
+
+- stretch target: IJCAI 2027;
+- internal go/no-go: 2026-11-30;
+- primary fallback: ECAI 2027;
+- AAMAS 2028 is only a later option if the work needs a longer experimental programme;
+- working title: *Beyond Callability: Scientific Applicability Verification for Tool-Using Agents Under Distribution Shift*;
+- MAF/MCP work is infrastructure and a controlled portability/interface variable, not the primary novelty claim.
+
+The authoritative research-plan source is
+`docs/research/SCIENTIFIC_APPLICABILITY_PAPER_PLAN.md`.
+Any older AAMAS-specific plan is historical context only and must not drive current execution.
+
 ## Progress model
 
 100% means a fully integrated, GPU-validated PhenoAssistant implementation using the agreed MAF/MCP architecture, accompanied by rigorous comparative evaluation, a defensible research contribution, reproducible experiments, and a submission-ready paper/artifact.
@@ -145,9 +160,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 72%**
+**Overall completion: 73%**
 
-**Current phase completion: 45%**
+**Current phase completion: 55%**
 
 **Phases completed: 5/9**
 
@@ -218,5 +233,12 @@ and a stable reason code. Canonical JSON and SHA-256 helpers support reproducibl
 manifests. Runtime timestamps/cost/latency are intentionally excluded from the
 semantic trace and belong to later experiment-run metadata.
 
-The nine Phase 7E trace tests are committed but are not counted as runtime-verified
-until they execute on Plato.
+Phase 7E is runtime-verified on Plato. The full Phase 7A-E suite passed 40/40.
+All five decisions produced deterministic traces with stable reason codes and
+SHA-256 digests, dependency health remained clean, the bounded secret scan returned
+no matches, and the research branch remained clean.
+
+Phase 7F will freeze the IJCAI benchmark contract before benchmark construction:
+scenario schema, paired valid/invalid design, hard-negative taxonomy, gold-label
+fields, split policy, deterministic scoring, and baseline/condition identifiers.
+The hidden expert test must remain unavailable to method tuning.
