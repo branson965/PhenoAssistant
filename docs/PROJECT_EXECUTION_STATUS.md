@@ -160,9 +160,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 73%**
+**Overall completion: 74%**
 
-**Current phase completion: 55%**
+**Current phase completion: 64%**
 
 **Phases completed: 5/9**
 
@@ -242,3 +242,23 @@ Phase 7F will freeze the IJCAI benchmark contract before benchmark construction:
 scenario schema, paired valid/invalid design, hard-negative taxonomy, gold-label
 fields, split policy, deterministic scoring, and baseline/condition identifiers.
 The hidden expert test must remain unavailable to method tuning.
+
+
+## Phase 7F work committed
+
+- corrected the only active research-document reference that still named the obsolete
+  AAMAS benchmark; the authoritative target is IJCAI 2027;
+- project status now explicitly records IJCAI 2027 as the stretch target, the
+  2026-11-30 internal go/no-go, ECAI 2027 as primary fallback, and AAMAS 2028 only
+  as a later option;
+- benchmark scenario and hidden-gold schemas committed;
+- matched valid/invalid pair contract committed;
+- evidence-source hierarchy distinguishes real domain shifts from provenance-backed
+  metadata cases and synthetic metadata stress tests;
+- deterministic decision scoring committed for exact correctness, unsafe execution,
+  and unnecessary abstention;
+- hidden scenarios are structurally label-free;
+- the current IJCAI baseline family is documented from the authoritative
+  scientific-applicability paper plan;
+- ten Phase 7F benchmark-contract tests are committed but not runtime-verified until
+  they execute on Plato.
