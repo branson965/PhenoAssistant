@@ -133,11 +133,20 @@ class McpV2Session:
 
         self._client = None
 
-        return await client.__aexit__(
-            exc_type,
-            exc,
-            traceback,
+        # The MCP SDK owns an AnyIO task group internally. Passing a
+        # PhenoAssistant boundary exception into Client.__aexit__ causes that
+        # already-classified exception to be re-emitted inside an
+        # ExceptionGroup. Close the transport normally instead so the original
+        # McpV2* / validation exception propagates unchanged to callers.
+        del exc_type, exc, traceback
+
+        await client.__aexit__(
+            None,
+            None,
+            None,
         )
+
+        return None
 
     def _require_client(self) -> Client:
         client = self._client
