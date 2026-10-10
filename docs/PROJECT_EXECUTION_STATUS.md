@@ -84,12 +84,27 @@ approved alternative provenance route.
 No retraining, substitution of a different checkpoint, or claim of Case 3
 reproduction is authorised by this phase transition.
 
+## Phase 6 work completed so far
+
+- official MCP Python SDK v2 baseline fixed to stable `mcp==2.3.0`;
+- modern protocol target remains `2026-07-28`;
+- new `phenoassistant_mcp` package created without modifying the frozen Vincent v1 baseline;
+- bounded MCP v2 server implemented for the three exact semantic parity tools only:
+  `calculator`, `perform_anova`, and `perform_tukey_test`;
+- server results use explicit structured envelopes rather than unvalidated free text;
+- first-class MCP v2 `Client` boundary implemented with modern protocol pinning and
+  fail-closed structured-result validation;
+- deterministic discovery/direct-vs-MCP parity tests added for the three-tool vertical slice.
+
+These Phase 6 tests are committed but not yet counted as verified execution until they
+run in the Plato environment.
+
 ## Current progress
 
-**Overall completion: 55%**
+**Overall completion: 56%**
 
-**Current phase completion: 94%**
+**Current phase completion: 15%**
 
 **Phases completed: 4/9**
 
-The percentage is intentionally conservative. Case 1 GPU scientific reproduction is fully closed under the restored declared environment. The remaining Case 3 gate is externally blocked on the exact historical private artefacts, so it is carried forward without being counted as reproduced. Phase 6 can proceed independently.
+The percentage is intentionally conservative. Case 1 GPU scientific reproduction is fully closed and the remaining Case 3 gate is externally blocked. Phase 6 has now started with the bounded MCP v2 three-tool vertical slice committed, but its tests still need to execute on Plato before Gate A/B are counted as passed.
