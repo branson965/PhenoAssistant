@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+import json
+from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
@@ -250,3 +252,49 @@ def test_frozen_method_scores_exactly_on_mechanical_qualification_manifest() -> 
         item.unsafe_execution
         for item in scores
     )
+
+
+
+def test_machine_readable_protocol_freeze_matches_code_contract() -> None:
+    payload = json.loads(
+        (
+            Path(__file__).resolve().parents[2]
+            / "docs"
+            / "research"
+            / "IJCAI_2027_PROTOCOL_FREEZE.json"
+        ).read_text(
+            encoding="utf-8",
+        )
+    )
+
+    protocol = build_protocol_freeze()
+
+    assert payload["venue"] == protocol.venue
+    assert payload["internal_go_no_go"] == protocol.internal_go_no_go
+    assert payload["primary_interface"] == protocol.primary_interface.value
+    assert payload["conditions"] == [
+        item.condition_id.value
+        for item in protocol.conditions
+    ]
+    assert payload["required_metrics"] == [
+        item.value
+        for item in protocol.required_metrics
+    ]
+
+
+def test_machine_readable_freeze_preserves_blinding_and_negative_results() -> None:
+    payload = json.loads(
+        (
+            Path(__file__).resolve().parents[2]
+            / "docs"
+            / "research"
+            / "IJCAI_2027_PROTOCOL_FREEZE.json"
+        ).read_text(
+            encoding="utf-8",
+        )
+    )
+
+    assert payload["hidden_labels_available_to_method"] is False
+    assert payload["negative_results_retained"] is True
+    assert payload["post_unblinding_method_changes_authorized"] is False
+    assert payload["qualification_manifest"]["hidden_cases"] == 0
