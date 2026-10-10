@@ -1,0 +1,55 @@
+{
+  "schema": "phenoguard-ijcai2027-condition-prompt-contract-v0.1",
+  "status": "PRE_OUTCOME_CANDIDATE",
+  "base_manager_instruction_source": "phenoassistant_maf/manager.py",
+  "invariants": [
+    "same base scientific task wording for directly compared conditions",
+    "same provider and model identity for directly compared conditions",
+    "same temperature, retry policy, iteration limit, and session reset policy",
+    "condition-specific text may only expose the information or verifier assigned to that condition",
+    "gold labels and hidden expert adjudication must never appear in prompts",
+    "tool result evidence must not be rewritten between directly compared tool-using conditions"
+  ],
+  "conditions": {
+    "C0_MODEL_ONLY": {
+      "tool_visibility": "none",
+      "verification": "none"
+    },
+    "C1_MANAGER_TOOL_NAMES": {
+      "tool_visibility": "names_only",
+      "verification": "none"
+    },
+    "C2_MANAGER_TOOL_DESCRIPTIONS": {
+      "tool_visibility": "names_and_descriptions",
+      "verification": "none"
+    },
+    "C3_MANAGER_TOOL_SCHEMAS": {
+      "tool_visibility": "names_descriptions_schemas_mcp_metadata",
+      "verification": "none"
+    },
+    "C4_MANAGER_GENERIC_CRITIC": {
+      "tool_visibility": "names_descriptions_schemas_mcp_metadata",
+      "verification": "generic_llm_critic"
+    },
+    "C5_STRUCTURAL_VALIDATOR": {
+      "tool_visibility": "names_descriptions_schemas_mcp_metadata",
+      "verification": "deterministic_structural_schema"
+    },
+    "C6_SOE_ONLY": {
+      "tool_visibility": "schemas_plus_scientific_operating_envelopes",
+      "verification": "none"
+    },
+    "C7_SOE_VERIFIER": {
+      "tool_visibility": "schemas_plus_scientific_operating_envelopes",
+      "verification": "pre_execution_applicability_verifier"
+    },
+    "C8_FULL_PHENOGUARD": {
+      "tool_visibility": "schemas_plus_scientific_operating_envelopes",
+      "verification": "full_pre_and_post_execution_phenoguard"
+    },
+    "C9_EXPERT_ORACLE": {
+      "tool_visibility": "expert_gold_only_outside_model_execution",
+      "verification": "expert_oracle"
+    }
+  }
+}
