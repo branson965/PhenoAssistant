@@ -97,7 +97,7 @@ def test_model_plan_uses_fixed_primary_and_predeclared_breadth_models() -> None:
         "model_plan.json"
     )
 
-    assert payload["status"] == "PRE_OUTCOME_FROZEN"
+    assert payload["status"] == "PROVISIONAL_PRE_OUTCOME_PENDING_SUPERVISOR_CONFIRMATION"
     assert payload["primary"]["model_id"] == (
         "openai/gpt-5.6-luna"
     )
@@ -133,7 +133,7 @@ def test_runtime_plan_freezes_seed_schedule_and_one_tool_budget() -> None:
     sampling = payload["sampling"]
     tool_loop = payload["tool_loop"]
 
-    assert payload["status"] == "PRE_OUTCOME_FROZEN"
+    assert payload["status"] == "PROVISIONAL_PRE_OUTCOME_PENDING_SUPERVISOR_CONFIRMATION"
     assert sampling["temperature_parameter_sent"] is False
     assert sampling["seed_schedule"] == [
         2026,
@@ -211,3 +211,17 @@ def test_runtime_capture_bootstraps_repo_root_before_project_import() -> None:
     )
 
     assert root_index < bootstrap_index < project_import_index
+
+
+
+def test_model_and_runtime_plans_require_supervisor_confirmation() -> None:
+    model = load_experiment_json(
+        "model_plan.json"
+    )
+
+    runtime = load_experiment_json(
+        "runtime_plan.json"
+    )
+
+    assert model["supervisor_confirmation_required"] is True
+    assert runtime["supervisor_confirmation_required"] is True
