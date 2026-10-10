@@ -1,0 +1,75 @@
+{
+  "schema": "phenoguard-ijcai2027-protocol-freeze-v0.1",
+  "status": "FROZEN_STRUCTURE_BEFORE_PHASE8_OUTCOMES",
+  "venue": "IJCAI 2027",
+  "internal_go_no_go": "2026-11-30",
+  "primary_interface": "mcp",
+  "portability_interfaces": [
+    "direct",
+    "mcp"
+  ],
+  "portability_condition_ids": [
+    "C3_MANAGER_TOOL_SCHEMAS",
+    "C8_FULL_PHENOGUARD"
+  ],
+  "conditions": [
+    "C0_MODEL_ONLY",
+    "C1_MANAGER_TOOL_NAMES",
+    "C2_MANAGER_TOOL_DESCRIPTIONS",
+    "C3_MANAGER_TOOL_SCHEMAS",
+    "C4_MANAGER_GENERIC_CRITIC",
+    "C5_STRUCTURAL_VALIDATOR",
+    "C6_SOE_ONLY",
+    "C7_SOE_VERIFIER",
+    "C8_FULL_PHENOGUARD",
+    "C9_EXPERT_ORACLE"
+  ],
+  "required_metrics": [
+    "valid_execution_accuracy",
+    "unsafe_execution_rate",
+    "correct_abstention_rate",
+    "unnecessary_abstention_rate",
+    "clarification_accuracy",
+    "reselection_accuracy",
+    "coverage",
+    "risk_coverage",
+    "repeated_run_reliability",
+    "final_answer_grounding",
+    "latency",
+    "cost",
+    "failure_category_distribution"
+  ],
+  "qualification_manifest": {
+    "development_cases": 8,
+    "validation_cases": 4,
+    "hidden_cases": 0,
+    "matched_pairs": 5,
+    "unpaired_training_policy_cases": 2,
+    "purpose": "harness qualification only; not final scientific performance evidence"
+  },
+  "runtime_controls_required_before_first_outcome_bearing_pilot": [
+    "provider",
+    "model_id",
+    "model_revision",
+    "temperature",
+    "max_output_tokens",
+    "prompt_bundle_sha256",
+    "tool_catalogue_sha256",
+    "task_manifest_sha256",
+    "retry_policy",
+    "iteration_limit",
+    "session_reset_policy",
+    "package_lock_sha256",
+    "hardware_class"
+  ],
+  "claim_boundary": {
+    "claim_1": "Empirical callability-insufficiency claim requires at least one callable/schema-valid baseline unsafe execution on a gold-labelled invalid case.",
+    "claim_2": "Strong reliability-improvement claim requires full PhenoGuard to reduce unsafe execution versus both Manager+schemas and generic-Critic baselines without lower valid-execution accuracy than both.",
+    "claim_2_tradeoff": "If unsafe execution improves but valid-execution accuracy falls, only a safety/coverage trade-off claim is authorised.",
+    "claim_3": "Deterministic direct/MCP portability claim requires exact semantic parity on frozen deterministic qualification cases; stochastic equivalence requires a separately predeclared margin.",
+    "claim_4": "Distribution-shift failure-signature claim requires differences on real or independently justified shift cases; synthetic metadata stress alone is insufficient."
+  },
+  "hidden_labels_available_to_method": false,
+  "negative_results_retained": true,
+  "post_unblinding_method_changes_authorized": false
+}
