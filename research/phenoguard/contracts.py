@@ -311,3 +311,62 @@ class ScientificApplicabilityAssessment(BaseModel):
     hard_violations: tuple[ConstraintEvaluation, ...]
     soft_warnings: tuple[ConstraintEvaluation, ...]
     evaluations: tuple[ConstraintEvaluation, ...]
+
+
+class CatalogueApplicabilityResolution(BaseModel):
+    """Structured resolution across a catalogue of scientific capabilities."""
+
+    model_config = ConfigDict(
+        frozen=True,
+        extra="forbid",
+    )
+
+    schema_version: Literal["0.1"] = "0.1"
+    decision: ApplicabilityDecision
+    requested_capability_id: str | None = None
+    selected_capability_id: str | None = None
+    executable_capability_ids: tuple[str, ...]
+    assessments: tuple[ScientificApplicabilityAssessment, ...]
+
+    @model_validator(mode="after")
+    def validate_resolution(
+        self,
+    ) -> "CatalogueApplicabilityResolution":
+        actionable = {
+            ApplicabilityDecision.EXECUTE,
+            ApplicabilityDecision.RESELECT,
+        }
+
+        if self.decision in actionable:
+            if self.selected_capability_id is None:
+                raise ValueError(
+                    "actionable catalogue decisions require a selected capability"
+                )
+
+            if self.selected_capability_id not in self.executable_capability_ids:
+                raise ValueError(
+                    "selected capability must be executable"
+                )
+        elif self.selected_capability_id is not None:
+            raise ValueError(
+                "non-actionable catalogue decisions must not select a capability"
+            )
+
+        assessment_ids = tuple(
+            item.capability_id
+            for item in self.assessments
+        )
+
+        if len(assessment_ids) != len(set(assessment_ids)):
+            raise ValueError(
+                "catalogue assessments must use unique capability IDs"
+            )
+
+        if len(self.executable_capability_ids) != len(
+            set(self.executable_capability_ids)
+        ):
+            raise ValueError(
+                "executable_capability_ids must be unique"
+            )
+
+        return self
