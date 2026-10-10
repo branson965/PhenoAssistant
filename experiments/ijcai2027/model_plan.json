@@ -1,0 +1,59 @@
+{
+  "schema": "phenoguard-ijcai2027-model-plan-v0.1",
+  "status": "PRE_OUTCOME_FROZEN",
+  "frozen_utc_date": "2026-10-10",
+  "selection_basis": [
+    "fixed model slugs rather than the historical dynamic openrouter/free router",
+    "native tool-calling support",
+    "same-generation primary and breadth models to reduce architecture confounding",
+    "cost-effective primary suitable for repeated reliability trials",
+    "stronger breadth model predeclared before outcome inspection"
+  ],
+  "primary": {
+    "model_id": "openai/gpt-5.6-luna",
+    "model_release_date": "2026-07-09",
+    "model_revision_label": "openrouter-release-2026-07-09-provider-managed",
+    "upstream_provider": "openai",
+    "allow_provider_fallbacks": false,
+    "require_parameters": true,
+    "role": "primary C0-C8 repeated evaluation"
+  },
+  "breadth": {
+    "model_id": "openai/gpt-5.6-sol",
+    "model_release_date": "2026-07-09",
+    "model_revision_label": "openrouter-release-2026-07-09-provider-managed",
+    "upstream_provider": "openai",
+    "allow_provider_fallbacks": false,
+    "require_parameters": true,
+    "role": "predeclared stronger-model breadth evaluation",
+    "condition_ids": [
+      "C3_MANAGER_TOOL_SCHEMAS",
+      "C4_MANAGER_GENERIC_CRITIC",
+      "C8_FULL_PHENOGUARD"
+    ]
+  },
+  "routing": {
+    "openrouter_provider_object": {
+      "order": [
+        "openai"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true
+    },
+    "reason": "prevent one experimental condition from silently reaching a different upstream provider"
+  },
+  "revision_limitation": {
+    "immutable_weight_revision_exposed_by_openrouter": false,
+    "mitigation": [
+      "freeze model slug and public release date",
+      "pin upstream provider and disable provider fallbacks",
+      "record OpenRouter/OpenAI response model identity and system_fingerprint on every live call when available",
+      "flag any model identity or fingerprint drift before aggregation"
+    ]
+  },
+  "historical_migration_model": {
+    "model_id": "openrouter/free",
+    "allowed_for_ijcai_main_evaluation": false,
+    "reason": "dynamic routing makes the underlying model identity non-controlled"
+  }
+}
