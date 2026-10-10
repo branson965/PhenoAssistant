@@ -160,9 +160,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 81%**
+**Overall completion: 82%**
 
-**Current phase completion: 5%**
+**Current phase completion: 12%**
 
 **Phases completed: 6/9**
 
@@ -389,6 +389,55 @@ Committed Phase 8A scaffolding:
   package lock and hardware snapshot, and writes a pre-outcome candidate;
 - `tests/research/test_phase8_preflight.py` with four guardrail tests.
 
-Phase 8A is not yet runtime-verified. The next Plato gate is to verify the experiment
-branch, inspect the current non-secret model/runtime configuration, then generate the
-runtime-control candidate before any outcome-bearing run.
+Phase 8A branch preflight is runtime-verified on Plato: the experiment branch matched
+origin, the Phase 7 freeze verifier passed, the complete research/preflight suite
+passed 86/86, and the non-secret runtime probe confirmed Python 3.11.17, MCP 2.3.0,
+Pydantic 2.13.4, and a CPU-only Phase 8A shell. The earlier
+`AGENT_FRAMEWORK_VERSION=<not-installed>` line was produced by probing the wrong
+distribution name; the repository pins `agent-framework-core==1.11.0` and
+`agent-framework-openai==1.11.0`, which are now checked explicitly by the runtime
+capture.
+
+No model/runtime variables were configured in the shell, so no outcome-bearing run
+has occurred.
+
+Before outcomes, the primary model is now prospectively frozen to
+`openai/gpt-5.6-luna` and the stronger breadth model to
+`openai/gpt-5.6-sol`. Both are routed through OpenRouter but pinned to the OpenAI
+upstream provider with provider fallbacks disabled. The historical
+`openrouter/free` router is excluded from the paper evaluation because its
+underlying model identity is dynamic.
+
+The Phase 8A runtime plan is also prospectively frozen: reasoning effort medium,
+paired seed schedule 2026/2027/2028, 2 model roundtrips, 1 function execution,
+no concurrent invocation, transport-only retries, and fresh client/agent/session
+state per scenario replicate. GPT-5.6 Luna's selected OpenRouter parameter surface
+does not expose temperature, so temperature is explicitly not sent; the frozen
+Phase 7 numeric temperature field uses a documented 0.0 schema sentinel only.
+
+A non-scientific live MAF/OpenRouter echo-tool preflight is committed. It must pass
+before the runtime-control candidate is marked frozen and before any scientific
+benchmark case is executed.
+
+
+## Phase 8A model and runtime freeze work
+
+- primary model predeclared: `openai/gpt-5.6-luna`;
+- breadth model predeclared: `openai/gpt-5.6-sol`;
+- breadth conditions predeclared: C3, C4, C8;
+- OpenRouter upstream provider pinned to `openai`;
+- provider fallbacks disabled and required-parameter routing enabled;
+- dynamic `openrouter/free` explicitly prohibited for the main IJCAI evaluation;
+- provider-managed revision limitation documented; response model identity and
+  `system_fingerprint` will be recorded on every live run when available;
+- sampling extension frozen to medium reasoning effort and paired seeds
+  2026/2027/2028;
+- temperature is not transmitted for the selected GPT-5.6 API surface;
+- tool loop frozen to 2 model roundtrips and at most 1 function execution;
+- transport retries frozen to at most 2; semantic/model retries frozen to 0;
+- package expectations now explicitly validate
+  `agent-framework-core==1.11.0`,
+  `agent-framework-openai==1.11.0`, `mcp==2.3.0`, and
+  `pydantic==2.13.4`;
+- non-scientific live provider/tool-call preflight committed;
+- no Phase 8 scientific outcome has been observed.
