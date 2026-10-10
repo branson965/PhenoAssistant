@@ -188,14 +188,18 @@ def main() -> None:
         RUNTIME_PLAN
     )
 
-    if model_plan["status"] != "PRE_OUTCOME_FROZEN":
+    allowed_pre_outcome_status = (
+        "PROVISIONAL_PRE_OUTCOME_PENDING_SUPERVISOR_CONFIRMATION"
+    )
+
+    if model_plan["status"] != allowed_pre_outcome_status:
         raise SystemExit(
-            "model plan is not frozen"
+            "model plan is not in the expected provisional pre-outcome state"
         )
 
-    if runtime_plan["status"] != "PRE_OUTCOME_FROZEN":
+    if runtime_plan["status"] != allowed_pre_outcome_status:
         raise SystemExit(
-            "runtime plan is not frozen"
+            "runtime plan is not in the expected provisional pre-outcome state"
         )
 
     primary_model = model_plan["primary"]
@@ -311,7 +315,7 @@ def main() -> None:
         "schema": (
             "phenoguard-ijcai2027-runtime-controls-candidate-v0.2"
         ),
-        "status": "CANDIDATE_PRE_OUTCOME",
+        "status": "CANDIDATE_PRE_OUTCOME_PENDING_SUPERVISOR_CONFIRMATION",
         "captured_utc": datetime.now(
             UTC
         ).isoformat(),
