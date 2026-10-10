@@ -2,7 +2,7 @@
 
 **Updated:** 2026-10-10  
 **Active branch:** `research/phenoguard`  
-**Current phase:** Phase 7 — scientific-applicability research method (Phase 5 Case 3 external gate carried forward)
+**Current phase:** Phase 8 — full IJCAI experiments, ablations, hidden evaluation, and failure analysis (Phase 5 Case 3 external gate carried forward)
 
 ## Authoritative venue strategy
 
@@ -31,8 +31,8 @@ Any older AAMAS-specific plan is historical context only and must not drive curr
 | 4 | Audit Vincent MCP branch and freeze integration contract | complete |
 | 5 | Execute and validate GPU scientific workflows | blocked only on external Case 3 private-resource access; Case 1 closed |
 | 6 | Migrate MCP to v2, integrate with MAF, prove parity | complete |
-| 7 | Implement/freeze scientific-applicability research method | active |
-| 8 | Full experiments, ablations, hidden evaluation, failure analysis | pending |
+| 7 | Implement/freeze scientific-applicability research method | complete |
+| 8 | Full experiments, ablations, hidden evaluation, failure analysis | active |
 | 9 | Manuscript, artifact, hostile review, submission | pending |
 
 ## Frozen baselines
@@ -160,18 +160,18 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 79%**
+**Overall completion: 80%**
 
-**Current phase completion: 94%**
+**Current phase completion: 0%**
 
-**Phases completed: 5/9**
+**Phases completed: 6/9**
 
 Case 1 GPU scientific reproduction remains fully closed and the remaining Case 3 gate
-is externally blocked. Phase 6 is now closed with direct/MCP scientific parity,
-production-shaped MAF -> MCP execution, fail-closed errors, explicit timeout/lifecycle
-semantics, and cold/warm interface-overhead evidence. Phase 7 must now implement and
-freeze the scientific-applicability method on a separate research branch without
-polluting the frozen migration interface.
+is externally blocked. Phase 6 is closed. Phase 7 is now also closed with a
+content-addressed IJCAI scientific-applicability method freeze, prospectively frozen
+condition protocol, label-free hidden-test contract, deterministic scoring, bounded
+post-execution validation, and runtime-verified 82/82 research tests. Phase 8 begins
+from the preserved Phase 7 closure without modifying the frozen scientific method.
 
 
 ## Phase 7 work committed so far
@@ -288,16 +288,17 @@ the machine-readable protocol freeze validated, dependency health was clean, the
 bounded secret scan returned no matches, stale 2027-target checks returned no matches,
 and the branch remained clean.
 
-Phase 7I now creates the final immutable method-freeze package. Twenty-two scientific
-method/protocol files are pinned by SHA-256 with aggregate digest
+Phase 7I is runtime-verified on Plato. The complete Phase 7A-I targeted suite passed
+82/82 and full `tests/research` discovery also passed 82/82. The standalone freeze
+verifier confirmed all 22 frozen files and aggregate digest
 `337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f`.
-A standalone verifier and five integrity tests are committed. Phase 7 is not counted
-as complete until this final freeze gate executes on Plato and the preservation ref is
-created.
+The venue/policy smoke passed, dependency health was clean, the bounded secret scan
+returned no matches, the stale-target scan returned no matches, and the branch
+remained clean.
 
-Concrete provider/model/runtime values remain intentionally unfilled and must be pinned
-and hashed before the first outcome-bearing Phase 8 pilot; they must not be selected
-after inspecting favourable outcomes.
+Phase 7 is closed. Concrete provider/model/runtime values remain intentionally
+unfilled and must be pinned and hashed before the first outcome-bearing Phase 8
+pilot; they must not be selected after inspecting favourable outcomes.
 
 
 ## Phase 7H prospective IJCAI freeze
@@ -340,5 +341,33 @@ after inspecting favourable outcomes.
 - five freeze-integrity tests committed;
 - scientific-method changes after Phase 8 outcomes require an explicit Phase 7 reopen,
   a new manifest version, re-verification, and retention of all pre-change results;
-- preservation ref `baseline/phenoguard-method-freeze-20261010` will be created only
-  after the final Plato gate passes.
+- preservation ref `baseline/phenoguard-method-freeze-20261010` is created at the verified Phase 7 closure commit.
+
+
+## Phase 7 closure and Phase 8 transition
+
+Phase 7 closure evidence on Plato:
+
+- targeted Phase 7A-I suite: 82/82 passed;
+- full `tests/research` discovery: 82/82 passed;
+- frozen file count: 22;
+- aggregate method digest:
+  `337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f`;
+- freeze policy: IJCAI 2027, hidden labels unavailable to method, negative results
+  retained, post-unblinding method changes prohibited;
+- dependency health: clean;
+- bounded secret scan: no matches;
+- stale 2027 target scan: no matches;
+- worktree at runtime gate: clean.
+
+Phase 8 rules:
+
+- branch: `experiments/ijcai2027`;
+- do not modify the 22 frozen scientific-method/protocol files;
+- pin concrete provider/model/runtime controls before the first outcome-bearing pilot;
+- begin with development/validation pilot execution and harness qualification;
+- retain every attempt, including negative or failed runs;
+- do not create or inspect final hidden expert labels until the experiment harness,
+  scoring analysis, and run controls are frozen;
+- carry the externally blocked Case 3 historical-resource gate separately without
+  substituting an unapproved dataset/checkpoint.
