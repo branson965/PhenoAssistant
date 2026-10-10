@@ -1,15 +1,17 @@
 """Prepare the pre-outcome IJCAI Phase 8 runtime-control candidate.
 
 This script performs no LLM call and executes no scientific benchmark. It captures
-and hashes the runtime identity required by the frozen Phase 7 protocol.
+the prospectively frozen model/runtime plan plus the local software/hardware identity.
+It never reads or prints the OpenRouter API key.
 """
 
 from __future__ import annotations
 
 import hashlib
+import importlib.metadata
 import json
-import os
 import platform
+import socket
 import subprocess
 import sys
 from datetime import UTC, datetime
@@ -19,12 +21,10 @@ from research.phenoguard import ControlledVariables
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "experiments" / "ijcai2027" / "runtime"
-PROMPT_CONTRACT = (
-    ROOT
-    / "experiments"
-    / "ijcai2027"
-    / "condition_prompt_contract.json"
-)
+EXPERIMENT_DIR = ROOT / "experiments" / "ijcai2027"
+PROMPT_CONTRACT = EXPERIMENT_DIR / "condition_prompt_contract.json"
+MODEL_PLAN = EXPERIMENT_DIR / "model_plan.json"
+RUNTIME_PLAN = EXPERIMENT_DIR / "runtime_plan.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -57,18 +57,12 @@ def aggregate_sha256(paths: tuple[Path, ...]) -> str:
     ).hexdigest()
 
 
-def require_env(name: str) -> str:
-    value = os.environ.get(
-        name,
-        "",
-    ).strip()
-
-    if not value:
-        raise SystemExit(
-            f"missing required environment variable: {name}"
+def read_json(path: Path) -> dict:
+    return json.loads(
+        path.read_text(
+            encoding="utf-8",
         )
-
-    return value
+    )
 
 
 def pip_freeze() -> tuple[str, ...]:
@@ -94,12 +88,47 @@ def pip_freeze() -> tuple[str, ...]:
     )
 
 
+def package_version(name: str) -> str:
+    try:
+        return importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError as exc:
+        raise SystemExit(
+            f"required package is not installed: {name}"
+        ) from exc
+
+
+def package_snapshot(
+    expected: dict[str, str],
+) -> dict[str, str]:
+    observed: dict[str, str] = {}
+
+    for name, expected_version in expected.items():
+        actual = package_version(name)
+        observed[name] = actual
+
+        if actual != expected_version:
+            raise SystemExit(
+                f"package version mismatch for {name}: "
+                f"expected {expected_version}, observed {actual}"
+            )
+
+    try:
+        observed["openai"] = importlib.metadata.version(
+            "openai"
+        )
+    except importlib.metadata.PackageNotFoundError:
+        observed["openai"] = "<not-installed>"
+
+    return observed
+
+
 def torch_snapshot() -> dict[str, object]:
     try:
         import torch
     except Exception:
         return {
             "torch_imported": False,
+            "gpu_required_for_phase8a": False,
         }
 
     return {
@@ -121,21 +150,20 @@ def torch_snapshot() -> dict[str, object]:
             if torch.cuda.is_available()
             else []
         ),
+        "gpu_required_for_phase8a": False,
     }
 
 
 def main() -> None:
-    phase7_manifest = (
+    phase7_manifest_path = (
         ROOT
         / "docs"
         / "research"
         / "IJCAI_2027_PHASE7_METHOD_FREEZE_MANIFEST.json"
     )
 
-    frozen = json.loads(
-        phase7_manifest.read_text(
-            encoding="utf-8",
-        )
+    frozen = read_json(
+        phase7_manifest_path
     )
 
     expected_aggregate = (
@@ -147,57 +175,55 @@ def main() -> None:
             "Phase 7 freeze aggregate is not the expected verified digest"
         )
 
-    provider = require_env("IJCAI_PROVIDER")
-
-    model_id = (
-        os.environ.get(
-            "IJCAI_MODEL_ID",
-            "",
-        ).strip()
-        or os.environ.get(
-            "OPENROUTER_MODEL",
-            "",
-        ).strip()
+    model_plan = read_json(
+        MODEL_PLAN
+    )
+    runtime_plan = read_json(
+        RUNTIME_PLAN
     )
 
-    if not model_id:
+    if model_plan["status"] != "PRE_OUTCOME_FROZEN":
         raise SystemExit(
-            "missing IJCAI_MODEL_ID and OPENROUTER_MODEL"
+            "model plan is not frozen"
         )
 
-    model_revision = require_env(
-        "IJCAI_MODEL_REVISION"
-    )
-
-    temperature = float(
-        require_env(
-            "IJCAI_TEMPERATURE"
+    if runtime_plan["status"] != "PRE_OUTCOME_FROZEN":
+        raise SystemExit(
+            "runtime plan is not frozen"
         )
-    )
 
-    max_output_tokens = int(
-        require_env(
-            "IJCAI_MAX_OUTPUT_TOKENS"
+    primary_model = model_plan["primary"]
+
+    if (
+        runtime_plan["primary_model"]["model_id"]
+        != primary_model["model_id"]
+    ):
+        raise SystemExit(
+            "model plan and runtime plan disagree on primary model"
         )
-    )
 
-    retry_policy = require_env(
-        "IJCAI_RETRY_POLICY"
-    )
-
-    iteration_limit = int(
-        require_env(
-            "IJCAI_ITERATION_LIMIT"
+    if (
+        runtime_plan["primary_model"]["revision_label"]
+        != primary_model["model_revision_label"]
+    ):
+        raise SystemExit(
+            "model plan and runtime plan disagree on revision label"
         )
+
+    provider = (
+        runtime_plan["provider"]["gateway"]
+        + "->"
+        + runtime_plan["provider"]["upstream_provider"]
     )
 
-    session_reset_policy = require_env(
-        "IJCAI_SESSION_RESET_POLICY"
-    )
+    sampling = runtime_plan["sampling"]
+    retry = runtime_plan["retry_policy"]
+    tool_loop = runtime_plan["tool_loop"]
 
-    hardware_class = require_env(
-        "IJCAI_HARDWARE_CLASS"
-    )
+    if sampling["temperature_parameter_sent"] is not False:
+        raise SystemExit(
+            "Phase 8A expects temperature to remain unsent for GPT-5.6"
+        )
 
     prompt_inputs = (
         ROOT / "phenoassistant_maf" / "manager.py",
@@ -235,12 +261,22 @@ def main() -> None:
         encoding="utf-8",
     )
 
+    packages = package_snapshot(
+        runtime_plan["package_expectations"]
+    )
+
     controls = ControlledVariables(
         provider=provider,
-        model_id=model_id,
-        model_revision=model_revision,
-        temperature=temperature,
-        max_output_tokens=max_output_tokens,
+        model_id=primary_model["model_id"],
+        model_revision=primary_model[
+            "model_revision_label"
+        ],
+        temperature=float(
+            sampling["temperature_schema_value"]
+        ),
+        max_output_tokens=int(
+            sampling["max_output_tokens"]
+        ),
         prompt_bundle_sha256=aggregate_sha256(
             prompt_inputs
         ),
@@ -250,18 +286,24 @@ def main() -> None:
         task_manifest_sha256=aggregate_sha256(
             task_inputs
         ),
-        retry_policy=retry_policy,
-        iteration_limit=iteration_limit,
-        session_reset_policy=session_reset_policy,
+        retry_policy=retry["label"],
+        iteration_limit=int(
+            tool_loop["max_iterations"]
+        ),
+        session_reset_policy=runtime_plan[
+            "session_reset_policy"
+        ],
         package_lock_sha256=sha256_file(
             lock_path
         ),
-        hardware_class=hardware_class,
+        hardware_class=runtime_plan[
+            "hardware_class"
+        ],
     )
 
     payload = {
         "schema": (
-            "phenoguard-ijcai2027-runtime-controls-candidate-v0.1"
+            "phenoguard-ijcai2027-runtime-controls-candidate-v0.2"
         ),
         "status": "CANDIDATE_PRE_OUTCOME",
         "captured_utc": datetime.now(
@@ -276,6 +318,30 @@ def main() -> None:
         "controls": controls.model_dump(
             mode="json",
         ),
+        "extensions": {
+            "temperature_parameter_sent": sampling[
+                "temperature_parameter_sent"
+            ],
+            "temperature_note": sampling[
+                "temperature_note"
+            ],
+            "reasoning": sampling["reasoning"],
+            "seed_schedule": sampling[
+                "seed_schedule"
+            ],
+            "tool_loop": tool_loop,
+            "provider_routing": model_plan[
+                "routing"
+            ][
+                "openrouter_provider_object"
+            ],
+            "response_identity_policy": runtime_plan[
+                "response_identity_policy"
+            ],
+            "breadth_model": model_plan[
+                "breadth"
+            ],
+        },
         "hash_inputs": {
             "prompt_bundle": [
                 path.relative_to(ROOT).as_posix()
@@ -289,14 +355,32 @@ def main() -> None:
                 path.relative_to(ROOT).as_posix()
                 for path in task_inputs
             ],
+            "model_plan": {
+                "path": MODEL_PLAN.relative_to(
+                    ROOT
+                ).as_posix(),
+                "sha256": sha256_file(
+                    MODEL_PLAN
+                ),
+            },
+            "runtime_plan": {
+                "path": RUNTIME_PLAN.relative_to(
+                    ROOT
+                ).as_posix(),
+                "sha256": sha256_file(
+                    RUNTIME_PLAN
+                ),
+            },
             "package_lock": lock_path.relative_to(
                 ROOT
             ).as_posix(),
         },
         "environment": {
+            "hostname": socket.gethostname(),
             "python_version": sys.version,
             "python_executable": sys.executable,
             "platform": platform.platform(),
+            "packages": packages,
             **torch_snapshot(),
         },
         "outcome_bearing_work_performed": False,
@@ -324,6 +408,11 @@ def main() -> None:
     )
 
     print(
+        "PHASE8A_PROVIDER="
+        + controls.provider
+    )
+
+    print(
         "PHASE8A_MODEL_ID="
         + controls.model_id
     )
@@ -331,6 +420,25 @@ def main() -> None:
     print(
         "PHASE8A_MODEL_REVISION="
         + controls.model_revision
+    )
+
+    print(
+        "PHASE8A_TEMPERATURE_PARAMETER_SENT="
+        + str(
+            sampling[
+                "temperature_parameter_sent"
+            ]
+        ).lower()
+    )
+
+    print(
+        "PHASE8A_SEED_SCHEDULE="
+        + ",".join(
+            str(seed)
+            for seed in sampling[
+                "seed_schedule"
+            ]
+        )
     )
 
     print(
