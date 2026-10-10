@@ -17,9 +17,15 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
-from research.phenoguard import ControlledVariables
-
 ROOT = Path(__file__).resolve().parents[2]
+
+if str(ROOT) not in sys.path:
+    sys.path.insert(
+        0,
+        str(ROOT),
+    )
+
+from research.phenoguard import ControlledVariables
 OUT_DIR = ROOT / "experiments" / "ijcai2027" / "runtime"
 EXPERIMENT_DIR = ROOT / "experiments" / "ijcai2027"
 PROMPT_CONTRACT = EXPERIMENT_DIR / "condition_prompt_contract.json"
