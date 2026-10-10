@@ -5,7 +5,16 @@ from __future__ import annotations
 
 import asyncio
 import json
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+
+if str(ROOT) not in sys.path:
+    sys.path.insert(
+        0,
+        str(ROOT),
+    )
 
 from functions.stat_test import (
     perform_anova,
@@ -28,7 +37,6 @@ from phenoassistant_mcp.server_v2 import build_phase6_mcp_server
 from tests.phenoassistant_maf.fakes import ScriptedToolClient
 
 
-ROOT = Path(__file__).resolve().parents[2]
 FIXTURE = (
     ROOT
     / "tests"
