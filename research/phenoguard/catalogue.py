@@ -8,7 +8,9 @@ from research.phenoguard.contracts import (
     CatalogueApplicabilityResolution,
     ScientificOperatingEnvelope,
     ScientificRequestContext,
+    TrainingReadinessContext,
 )
+from research.phenoguard.training import assess_training_readiness
 
 
 def resolve_capability_catalogue(
@@ -16,14 +18,16 @@ def resolve_capability_catalogue(
     request: ScientificRequestContext,
     *,
     requested_capability_id: str | None = None,
+    training_readiness: TrainingReadinessContext | None = None,
 ) -> CatalogueApplicabilityResolution:
     """Resolve one request across a bounded capability catalogue.
 
     RESELECT is emitted only when the requested capability is not executable
     and exactly one alternative capability is executable.
 
-    RECOMMEND_TRAINING is intentionally not emitted here. That decision requires
-    a separate, explicit training-readiness policy.
+    RECOMMEND_TRAINING is emitted only when the catalogue has no executable
+    capability, no capability is merely waiting on missing request context, and
+    the explicit training-readiness policy returns positive evidence.
     """
     if not envelopes:
         raise ValueError("capability catalogue must not be empty")
@@ -55,6 +59,15 @@ def resolve_capability_catalogue(
         assessment.capability_id
         for assessment in assessments
         if assessment.decision is ApplicabilityDecision.EXECUTE
+    )
+
+    training_assessment = (
+        assess_training_readiness(
+            request,
+            training_readiness,
+        )
+        if training_readiness is not None
+        else None
     )
 
     if requested_capability_id in executable:
@@ -90,6 +103,16 @@ def resolve_capability_catalogue(
             for assessment in assessments
         ):
             decision = ApplicabilityDecision.CLARIFY
+        elif (
+            training_assessment is not None
+            and training_assessment.task_supported
+        ):
+            if training_assessment.recommend_training:
+                decision = ApplicabilityDecision.RECOMMEND_TRAINING
+            elif training_assessment.missing_requirements:
+                decision = ApplicabilityDecision.CLARIFY
+            else:
+                decision = ApplicabilityDecision.ABSTAIN
         else:
             decision = ApplicabilityDecision.ABSTAIN
 
@@ -99,4 +122,5 @@ def resolve_capability_catalogue(
         selected_capability_id=selected,
         executable_capability_ids=executable,
         assessments=assessments,
+        training_readiness=training_assessment,
     )
