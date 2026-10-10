@@ -2,7 +2,7 @@
 
 **Updated:** 2026-10-10  
 **Active branch:** `feature/maf-mcp-v2-integration`  
-**Current phase:** Phase 6 — MCP v2 + MAF integration (Phase 5 Case 3 external gate carried forward)
+**Current phase:** Phase 7 — scientific-applicability research method (Phase 5 Case 3 external gate carried forward)
 
 ## Progress model
 
@@ -15,8 +15,8 @@
 | 3 | Migrate and validate CPU case-study behaviour | complete |
 | 4 | Audit Vincent MCP branch and freeze integration contract | complete |
 | 5 | Execute and validate GPU scientific workflows | blocked only on external Case 3 private-resource access; Case 1 closed |
-| 6 | Migrate MCP to v2, integrate with MAF, prove parity | active |
-| 7 | Implement/freeze scientific-applicability research method | pending |
+| 6 | Migrate MCP to v2, integrate with MAF, prove parity | complete |
+| 7 | Implement/freeze scientific-applicability research method | active |
 | 8 | Full experiments, ablations, hidden evaluation, failure analysis | pending |
 | 9 | Manuscript, artifact, hostile review, submission | pending |
 
@@ -126,24 +126,34 @@ reproduction is authorised by this phase transition.
   are committed for the next Plato gate;
 - interface documentation now records the bounded tool surface, trust boundary,
   lifecycle, timeout, failure mapping, and current evidence;
-- a machine-readable direct/one-shot/persistent MCP transport microbenchmark is
-  committed for cold/warm interface-overhead measurement.
+- the final Phase 6E suite passed 19/19 on Plato;
+- reusable persistent MCP sessions, lifecycle misuse rejection, and caller-controlled
+  timeout semantics are runtime-verified;
+- typed PhenoAssistant boundary exceptions remain visible across MCP SDK cleanup;
+- the final 100-trial transport microbenchmark passed with exact result parity:
+  direct median 0.0002445 ms, one-shot MCP median 1.5335825 ms, and persistent-session
+  MCP median 0.3698135 ms;
+- `pip check` remained clean;
+- the bounded repository secret-pattern scan returned no matches;
+- Phase 6 closure evidence is preserved in
+  `docs/maf/evidence/PHASE6_MCP_V2_INTEGRATION_20261010.md`;
+- machine-readable benchmark evidence is preserved in
+  `docs/maf/evidence/PHASE6E_MCP_TRANSPORT_BENCHMARK_20261010.json`.
 
-Phase 6D is runtime-verified. The Phase 6E timeout/session implementation and transport
-overhead probe are committed but are not counted as verified evidence until they run
-successfully on Plato.
+Phase 6 is closed. The verified MCP/MAF boundary is frozen as infrastructure for
+Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 64%**
+**Overall completion: 67%**
 
-**Current phase completion: 68%**
+**Current phase completion: 0%**
 
-**Phases completed: 4/9**
+**Phases completed: 5/9**
 
 Case 1 GPU scientific reproduction remains fully closed and the remaining Case 3 gate
-is externally blocked. Phase 6 transport parity, real scientific direct/MCP parity,
-production-shaped MAF -> MCP execution, and fail-closed error behaviour are now
-verified. The next gate is explicit persistent-session lifecycle, timeout semantics,
-and cold/warm MCP transport-overhead instrumentation before the integration interface
-is frozen for the research-method phase.
+is externally blocked. Phase 6 is now closed with direct/MCP scientific parity,
+production-shaped MAF -> MCP execution, fail-closed errors, explicit timeout/lifecycle
+semantics, and cold/warm interface-overhead evidence. Phase 7 must now implement and
+freeze the scientific-applicability method on a separate research branch without
+polluting the frozen migration interface.

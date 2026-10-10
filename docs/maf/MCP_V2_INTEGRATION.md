@@ -1,6 +1,6 @@
 # MCP v2 Integration Contract
 
-**Status:** Phase 6 integration contract  
+**Status:** Phase 6 integration contract — CLOSED 2026-10-10  
 **Protocol:** MCP `2026-07-28`  
 **SDK:** `mcp==2.3.0`  
 **MAF:** `agent-framework-core==1.11.0`, `agent-framework-openai==1.11.0`
@@ -77,7 +77,10 @@ On Plato, the Phase 6 evidence currently includes:
 - identical typed MAF result envelopes for direct and MCP scientific paths;
 - production-shaped Manager -> FunctionTool -> MCP -> preserved ANOVA execution;
 - trusted dataset path hidden from the Manager;
-- injected tool, schema, and lifecycle failures fail closed.
+- injected tool, schema, and lifecycle failures fail closed;
+- final Phase 6E suite passes 19/19 on Plato;
+- explicit timeout and persistent-session lifecycle semantics are verified;
+- typed boundary errors survive MCP client cleanup without ExceptionGroup masking.
 
 ## Transport overhead probe
 
@@ -95,3 +98,18 @@ experimental conditions.
 No provider credential is required for the deterministic MCP integration tests.
 Credentials remain environment/configuration concerns and must never be embedded in
 the MCP server, bridge, tests, benchmark outputs, or documentation.
+
+
+## Phase 6 closure benchmark
+
+Final Plato transport-only microbenchmark, 10 warmup calls and 100 measured trials:
+
+- direct median: `0.0002445 ms`;
+- one-shot MCP median: `1.5335825 ms`;
+- persistent-session MCP median: `0.3698135 ms`;
+- one-shot median overhead vs direct: `1.533338 ms`;
+- persistent median overhead vs direct: `0.369569 ms`;
+- result parity: PASS.
+
+The complete closure record is
+`docs/maf/evidence/PHASE6_MCP_V2_INTEGRATION_20261010.md`.

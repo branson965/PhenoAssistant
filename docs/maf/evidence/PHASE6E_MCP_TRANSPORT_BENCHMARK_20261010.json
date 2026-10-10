@@ -1,0 +1,45 @@
+{
+  "schema": "phenoassistant-phase6e-mcp-transport-overhead-v1",
+  "recorded_date": "2026-10-10",
+  "evaluated_commit": "514b0a9a36b1bfb75c24aeb29e33c1aaf096d012",
+  "environment": {
+    "host": "University of Nottingham Plato",
+    "python": "3.11.17",
+    "mcp": "2.3.0",
+    "agent-framework-core": "1.11.0",
+    "agent-framework-openai": "1.11.0",
+    "protocol": "2026-07-28"
+  },
+  "scope": "transport-only calculator microbenchmark; not end-to-end scientific latency",
+  "warmup": 10,
+  "trials": 100,
+  "direct": {
+    "max_ms": 0.00064,
+    "mean_ms": 0.00025253,
+    "median_ms": 0.0002445,
+    "min_ms": 0.000234,
+    "p95_ms": 0.000263
+  },
+  "mcp_one_shot_session": {
+    "max_ms": 1.901791,
+    "mean_ms": 1.55223348,
+    "median_ms": 1.5335825,
+    "min_ms": 1.447312,
+    "p95_ms": 1.696495
+  },
+  "mcp_persistent_session": {
+    "max_ms": 0.558057,
+    "mean_ms": 0.37902302,
+    "median_ms": 0.3698135,
+    "min_ms": 0.3638,
+    "p95_ms": 0.433335
+  },
+  "median_overhead_ms": {
+    "one_shot_minus_direct": 1.533338,
+    "persistent_minus_direct": 0.36956900000000004
+  },
+  "parity": {
+    "all_paths_match": true,
+    "expected_result": 12
+  }
+}
