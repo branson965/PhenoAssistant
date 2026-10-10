@@ -160,9 +160,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 75%**
+**Overall completion: 77%**
 
-**Current phase completion: 73%**
+**Current phase completion: 84%**
 
 **Phases completed: 5/9**
 
@@ -266,11 +266,47 @@ The hidden expert test must remain unavailable to method tuning.
   returned no matches, and the branch remained clean;
 - the active research documentation now contains no stale 2027 benchmark target.
 
-Phase 7G adds the bounded post-execution scientific-validation layer required by the
-authoritative IJCAI full-method condition. It checks phenotype invariants, statistical
-claim grounding, and identifier preservation without an LLM judge. Twelve Phase 7G
-tests are committed but are not counted as runtime-verified until they execute on
-Plato.
+Phase 7G is runtime-verified on Plato. The complete Phase 7A-G suite passed 62/62.
+The post-validation smoke accepted valid phenotype/statistical/identifier evidence and
+failed closed on negative phenotype values, inconsistent statistical claims, and
+identifier mismatch. Dependency health was clean, the bounded secret scan returned no
+matches, the active research documentation contained no stale 2027 target, and the
+branch remained clean.
 
-The baseline/condition protocol must not be frozen until Phase 7G passes, because the
-full-method condition explicitly includes post-execution validation.
+Phase 7H now prospectively freezes the IJCAI experiment structure before outcome-
+bearing Phase 8 runs. It commits the ten authoritative baseline/method condition IDs,
+the complete required metric set, an MCP-primary/direct-vs-MCP portability design,
+a typed controlled-variable schema, a 12-case development/validation harness-
+qualification manifest with five matched valid/shifted pairs, mechanical gold labels,
+and an explicit pre-outcome claim boundary. The qualification manifest is not the
+final benchmark and contains no hidden cases.
+
+Thirteen Phase 7H protocol-freeze tests are committed but are not counted as runtime-
+verified until they execute on Plato. Concrete provider/model/runtime values remain
+intentionally unfilled and must be pinned and hashed before the first outcome-bearing
+Phase 8 pilot; they must not be selected after inspecting favourable outcomes.
+
+
+## Phase 7H prospective IJCAI freeze
+
+- condition catalogue frozen as C0-C9 from model-only through expert oracle;
+- full PhenoGuard C8 structurally requires bounded post-execution validation;
+- primary tool-using interface frozen to MCP;
+- portability subset frozen to C3 and C8 under direct and MCP execution;
+- all authoritative IJCAI metrics retained;
+- typed controlled-variable contract requires provider/model revision, temperature,
+  token limit, prompt/tool/task hashes, retry/iteration/session policy, package lock,
+  and hardware class before compared runs;
+- development/validation qualification manifest frozen at 12 mechanically
+  adjudicable cases: 8 development, 4 validation, 5 matched pairs, 2 unpaired
+  training-policy cases, 0 hidden;
+- machine-readable protocol freeze committed at
+  `docs/research/IJCAI_2027_PROTOCOL_FREEZE.json`;
+- narrative protocol/claim boundary committed at
+  `docs/research/IJCAI_2027_PROTOCOL_FREEZE.md`;
+- strong Claim 2 is authorised only if unsafe execution falls versus both
+  Manager+schemas and generic-Critic baselines without lower valid-execution accuracy
+  than both; otherwise the claim is narrowed to the observed safety/coverage trade-off
+  or a negative result;
+- hidden labels remain inaccessible, negative results are retained, and post-unblinding
+  method changes remain prohibited.
