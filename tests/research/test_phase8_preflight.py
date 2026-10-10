@@ -74,3 +74,114 @@ def test_runtime_capture_source_never_reads_api_key() -> None:
     assert "OPENROUTER_API_KEY" not in source
     assert "api_key_read" in source
     assert '"api_key_read": False' in source
+
+
+
+def load_experiment_json(name: str) -> dict:
+    path = (
+        ROOT
+        / "experiments"
+        / "ijcai2027"
+        / name
+    )
+
+    return json.loads(
+        path.read_text(
+            encoding="utf-8",
+        )
+    )
+
+
+def test_model_plan_uses_fixed_primary_and_predeclared_breadth_models() -> None:
+    payload = load_experiment_json(
+        "model_plan.json"
+    )
+
+    assert payload["status"] == "PRE_OUTCOME_FROZEN"
+    assert payload["primary"]["model_id"] == (
+        "openai/gpt-5.6-luna"
+    )
+    assert payload["breadth"]["model_id"] == (
+        "openai/gpt-5.6-sol"
+    )
+    assert payload["historical_migration_model"][
+        "allowed_for_ijcai_main_evaluation"
+    ] is False
+
+
+def test_model_plan_pins_openai_provider_without_fallbacks() -> None:
+    payload = load_experiment_json(
+        "model_plan.json"
+    )
+
+    routing = payload["routing"][
+        "openrouter_provider_object"
+    ]
+
+    assert routing["order"] == [
+        "openai",
+    ]
+    assert routing["allow_fallbacks"] is False
+    assert routing["require_parameters"] is True
+
+
+def test_runtime_plan_freezes_seed_schedule_and_one_tool_budget() -> None:
+    payload = load_experiment_json(
+        "runtime_plan.json"
+    )
+
+    sampling = payload["sampling"]
+    tool_loop = payload["tool_loop"]
+
+    assert payload["status"] == "PRE_OUTCOME_FROZEN"
+    assert sampling["temperature_parameter_sent"] is False
+    assert sampling["seed_schedule"] == [
+        2026,
+        2027,
+        2028,
+    ]
+    assert sampling["reasoning"] == {
+        "effort": "medium",
+    }
+    assert tool_loop["max_iterations"] == 2
+    assert tool_loop["max_function_calls"] == 1
+    assert tool_loop["allow_concurrent_invocation"] is False
+    assert tool_loop["terminate_on_unknown_calls"] is True
+
+
+def test_runtime_plan_locks_phase8a_package_versions() -> None:
+    payload = load_experiment_json(
+        "runtime_plan.json"
+    )
+
+    assert payload["package_expectations"] == {
+        "agent-framework-core": "1.11.0",
+        "agent-framework-openai": "1.11.0",
+        "mcp": "2.3.0",
+        "pydantic": "2.13.4",
+    }
+
+
+def test_live_preflight_is_non_scientific_and_does_not_log_api_key() -> None:
+    source = (
+        ROOT
+        / "scripts"
+        / "research"
+        / "validate_ijcai_openrouter_preflight.py"
+    ).read_text(
+        encoding="utf-8",
+    )
+
+    assert "phase8_preflight_echo" in source
+    assert "OPENROUTER_API_KEY" in source
+    assert "print(api_key" not in source
+    assert "PHASE8A_LIVE_PREFLIGHT_OUTCOME_BEARING=false" in source
+    assert "temperature" not in (
+        source.split(
+            "options = {",
+            maxsplit=1,
+        )[1].split(
+            "try:",
+            maxsplit=1,
+        )[0]
+    )
