@@ -1,6 +1,6 @@
 # PhenoAssistant MAF + MCP + Research Execution Status
 
-**Updated:** 2026-10-08  
+**Updated:** 2026-10-10  
 **Active branch:** `feature/maf-mcp-v2-integration`  
 **Current phase:** Phase 6 — MCP v2 + MAF integration (Phase 5 Case 3 external gate carried forward)
 
@@ -94,17 +94,33 @@ reproduction is authorised by this phase transition.
 - server results use explicit structured envelopes rather than unvalidated free text;
 - first-class MCP v2 `Client` boundary implemented with modern protocol pinning and
   fail-closed structured-result validation;
-- deterministic discovery/direct-vs-MCP parity tests added for the three-tool vertical slice.
+- isolated Plato Python 3.11.17 Phase 6 environment created;
+- frozen MCP/MAF dependency set installed with `pip check` clean;
+- first-class MCP v2 import contract verified on Plato;
+- MCP protocol `2026-07-28` verified at runtime;
+- bounded discovery/direct-vs-MCP transport suite passed 4/4 on Plato;
+- real preserved ANOVA direct-versus-MCP parity passed with three identical records;
+- real preserved Tukey direct-versus-MCP parity passed with three identical records;
+- transport regression suite remained 4/4 after scientific dependencies were installed;
+- MAF-facing MCP bridge implemented for the same three-tool parity slice;
+- trusted dataset paths remain application-bound and are not exposed to the Manager;
+- MCP-backed MAF tools preserve the direct MAF names, descriptions, input models,
+  and typed result envelopes;
+- deterministic MAF-to-MCP integration tests and a real scientific validation script
+  are committed for the next Plato gate.
 
-These Phase 6 tests are committed but not yet counted as verified execution until they
-run in the Plato environment.
+The MAF-to-MCP bridge code is committed but is not counted as runtime-verified until
+the Phase 6C tests and real validation script execute successfully on Plato.
 
 ## Current progress
 
-**Overall completion: 56%**
+**Overall completion: 60%**
 
-**Current phase completion: 15%**
+**Current phase completion: 40%**
 
 **Phases completed: 4/9**
 
-The percentage is intentionally conservative. Case 1 GPU scientific reproduction is fully closed and the remaining Case 3 gate is externally blocked. Phase 6 has now started with the bounded MCP v2 three-tool vertical slice committed, but its tests still need to execute on Plato before Gate A/B are counted as passed.
+Case 1 GPU scientific reproduction remains fully closed and the remaining Case 3 gate
+is externally blocked. Phase 6 transport and real scientific direct/MCP parity are now
+verified. The next gate is the production-shaped MAF Manager -> FunctionTool -> MCP v2
+Client -> MCP Server -> preserved scientific implementation path.
