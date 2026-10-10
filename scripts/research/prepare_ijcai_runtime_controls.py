@@ -402,10 +402,34 @@ def main() -> None:
         encoding="utf-8",
     )
 
+    candidate_sha256 = sha256_file(
+        out_path
+    )
+
     print(
         "PHASE8A_RUNTIME_CONTROLS_CANDIDATE="
         + out_path.relative_to(ROOT).as_posix()
     )
+
+    print(
+        "PHASE8A_RUNTIME_CONTROLS_CANDIDATE_SHA256="
+        + candidate_sha256
+    )
+
+    print(
+        "PHASE8A_HOSTNAME="
+        + payload["environment"]["hostname"]
+    )
+
+    for package_name in sorted(
+        payload["environment"]["packages"]
+    ):
+        print(
+            "PHASE8A_PACKAGE_"
+            + package_name.upper().replace("-", "_")
+            + "="
+            + payload["environment"]["packages"][package_name]
+        )
 
     print(
         "PHASE8A_PROVIDER="
