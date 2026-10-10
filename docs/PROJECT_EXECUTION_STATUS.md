@@ -1,7 +1,7 @@
 # PhenoAssistant MAF + MCP + Research Execution Status
 
 **Updated:** 2026-10-10  
-**Active branch:** `feature/maf-mcp-v2-integration`  
+**Active branch:** `research/phenoguard`  
 **Current phase:** Phase 7 — scientific-applicability research method (Phase 5 Case 3 external gate carried forward)
 
 ## Progress model
@@ -145,9 +145,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 69%**
+**Overall completion: 70%**
 
-**Current phase completion: 16%**
+**Current phase completion: 26%**
 
 **Phases completed: 5/9**
 
@@ -180,5 +180,17 @@ Phase 7B now adds the first provenance-backed real capability envelope for the
 registered Case Study 1 Arabidopsis instance-segmentation model. Its scope is
 intentionally narrow: species is the only currently frozen hard context rule.
 Unverified view/modality/environment assumptions are not silently encoded as facts.
-The five Phase 7B provenance-envelope tests are committed but are not counted as
-runtime-verified until they execute on Plato.
+Phase 7B is runtime-verified on Plato. The combined Phase 7A+7B research suite passed
+13/13, the real-envelope smoke test emitted EXECUTE for the evidenced Arabidopsis
+request, CLARIFY for missing species, and ABSTAIN for a mismatched species, and
+dependency health remained clean.
+
+Phase 7C now adds a second provenance-backed real capability envelope for Case Study 2
+potato Leaf-only SAM plus deterministic catalogue-level resolution. This is the first
+method slice that can emit RESELECT: only when a requested capability is scientifically
+inapplicable and exactly one alternative capability is currently executable. Ambiguous
+multiple matches require CLARIFY, and no-match cases remain ABSTAIN. RECOMMEND_TRAINING
+is still deliberately withheld until a separate training-readiness policy is defined.
+
+The ten Phase 7C catalogue tests are committed but are not counted as runtime-verified
+until they execute on Plato.
