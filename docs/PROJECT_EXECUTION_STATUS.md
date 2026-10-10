@@ -145,9 +145,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 67%**
+**Overall completion: 68%**
 
-**Current phase completion: 0%**
+**Current phase completion: 8%**
 
 **Phases completed: 5/9**
 
@@ -157,3 +157,20 @@ production-shaped MAF -> MCP execution, fail-closed errors, explicit timeout/lif
 semantics, and cold/warm interface-overhead evidence. Phase 7 must now implement and
 freeze the scientific-applicability method on a separate research branch without
 polluting the frozen migration interface.
+
+
+## Phase 7 work committed so far
+
+- dedicated research/phenoguard branch created from the closed Phase 6 interface;
+- typed Scientific Operating Envelope v0.1 committed;
+- typed request context, hard/soft constraints, five global decision actions, and
+  structured applicability assessment committed;
+- deterministic single-capability pre-execution checker committed;
+- checker intentionally emits only EXECUTE, CLARIFY, or ABSTAIN until catalogue and
+  training-readiness evidence exists for RESELECT and RECOMMEND_TRAINING;
+- eight contract/mechanics tests committed;
+- method contract documents the current claim boundary and explicitly states that
+  synthetic unit fixtures do not establish scientific validity.
+
+The Phase 7A code is not counted as runtime-verified until the new research tests pass
+on Plato.
