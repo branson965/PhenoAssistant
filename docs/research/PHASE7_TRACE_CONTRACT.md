@@ -7,7 +7,7 @@
 ## Purpose
 
 PhenoGuard must produce machine-readable evidence that can later support the frozen
-AAMAS benchmark, failure analysis, and reproducible scoring. A final decision label
+IJCAI 2027 benchmark, failure analysis, and reproducible scoring. A final decision label
 alone is insufficient: the experiment must retain the scientific request, catalogue
 state, per-capability assessments, training-readiness evidence when relevant, selected
 capability, and a stable reason for the final action.
