@@ -160,9 +160,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 74%**
+**Overall completion: 75%**
 
-**Current phase completion: 64%**
+**Current phase completion: 73%**
 
 **Phases completed: 5/9**
 
@@ -260,5 +260,17 @@ The hidden expert test must remain unavailable to method tuning.
 - hidden scenarios are structurally label-free;
 - the current IJCAI baseline family is documented from the authoritative
   scientific-applicability paper plan;
-- ten Phase 7F benchmark-contract tests are committed but not runtime-verified until
-  they execute on Plato.
+- Phase 7F is runtime-verified on Plato: the complete Phase 7A-F suite passed 50/50,
+  the matched species-shift pair scored exactly correct, hidden scenario payloads
+  remained gold-label-free, dependency health was clean, the bounded secret scan
+  returned no matches, and the branch remained clean;
+- the active research documentation now contains no stale 2027 benchmark target.
+
+Phase 7G adds the bounded post-execution scientific-validation layer required by the
+authoritative IJCAI full-method condition. It checks phenotype invariants, statistical
+claim grounding, and identifier preservation without an LLM judge. Twelve Phase 7G
+tests are committed but are not counted as runtime-verified until they execute on
+Plato.
+
+The baseline/condition protocol must not be frozen until Phase 7G passes, because the
+full-method condition explicitly includes post-execution validation.
