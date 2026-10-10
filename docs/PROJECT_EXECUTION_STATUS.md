@@ -145,9 +145,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 70%**
+**Overall completion: 71%**
 
-**Current phase completion: 26%**
+**Current phase completion: 36%**
 
 **Phases completed: 5/9**
 
@@ -192,5 +192,18 @@ inapplicable and exactly one alternative capability is currently executable. Amb
 multiple matches require CLARIFY, and no-match cases remain ABSTAIN. RECOMMEND_TRAINING
 is still deliberately withheld until a separate training-readiness policy is defined.
 
-The ten Phase 7C catalogue tests are committed but are not counted as runtime-verified
-until they execute on Plato.
+Phase 7C is runtime-verified on Plato. The combined Phase 7A+7B+7C suite passed
+23/23. The real catalogue smoke emitted RESELECT from the invalid Arabidopsis model
+to the potato Leaf-only SAM model, CLARIFY for missing context, and ABSTAIN when no
+catalogue capability matched. The model-zoo provenance cross-check passed and
+dependency health remained clean.
+
+Phase 7D now adds the final global action, RECOMMEND_TRAINING, behind an explicit
+training-readiness policy. The frozen v0.1 policy is deliberately limited to the
+paper-documented image-classification training path. A catalogue miss alone cannot
+trigger training: labelled data and supported-format evidence are required, missing
+readiness yields CLARIFY, unsupported training tasks remain ABSTAIN, and an existing
+applicable capability always takes precedence.
+
+The eight Phase 7D training-readiness tests are committed but are not counted as
+runtime-verified until they execute on Plato.
