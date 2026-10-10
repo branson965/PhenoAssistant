@@ -1,9 +1,9 @@
 # IJCAI 2027 Pre-Outcome Model Selection
 
 **Frozen:** 2026-10-10  
-**Status:** pre-outcome  
-**Primary:** `openai/gpt-5.6-luna`  
-**Breadth:** `openai/gpt-5.6-sol`
+**Status:** provisional pre-outcome, pending supervisor confirmation  
+**Provisional primary:** `openai/gpt-5.6-luna`  
+**Provisional breadth:** `openai/gpt-5.6-sol`
 
 ## Why the historical model is not reused
 
@@ -117,3 +117,14 @@ is intrinsically better than another model family.
 
 The breadth model is evidence about whether the observed PhenoGuard effect survives a
 stronger same-family model, not evidence of universal cross-model generality.
+
+
+## Supervisor gate
+
+Before the first authenticated provider call or scientific Phase 8 run, Valerio must
+confirm the credential/provider route and whether this provisional Luna/Sol model
+selection should remain the study configuration.
+
+No scientific outcomes have been observed under this model plan, so changing the
+provider or models in response to supervisor guidance would remain a pre-outcome
+design decision rather than outcome-driven tuning.
