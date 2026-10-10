@@ -1,7 +1,7 @@
 # PhenoAssistant MAF + MCP + Research Execution Status
 
 **Updated:** 2026-10-10  
-**Active branch:** `research/phenoguard`  
+**Active branch:** `experiments/ijcai2027`  
 **Current phase:** Phase 8 — full IJCAI experiments, ablations, hidden evaluation, and failure analysis (Phase 5 Case 3 external gate carried forward)
 
 ## Authoritative venue strategy
@@ -160,9 +160,9 @@ Phase 7 scientific-applicability research work.
 
 ## Current progress
 
-**Overall completion: 80%**
+**Overall completion: 81%**
 
-**Current phase completion: 0%**
+**Current phase completion: 5%**
 
 **Phases completed: 6/9**
 
@@ -371,3 +371,24 @@ Phase 8 rules:
   scoring analysis, and run controls are frozen;
 - carry the externally blocked Case 3 historical-resource gate separately without
   substituting an unapproved dataset/checkpoint.
+
+
+## Phase 8A pre-outcome runtime-control preparation
+
+The experiment branch has been initialised from the verified Phase 7 closure commit.
+No frozen scientific-method file has been modified.
+
+Committed Phase 8A scaffolding:
+
+- `experiments/ijcai2027/README.md` with experiment ordering and freeze rules;
+- `experiments/ijcai2027/condition_prompt_contract.json` covering C0-C9 and
+  prohibiting hidden-gold leakage;
+- `scripts/research/prepare_ijcai_runtime_controls.py`, which performs no LLM call
+  and no scientific benchmark, reads no API key, verifies the Phase 7 aggregate,
+  captures provider/model/runtime identity, hashes prompt/tool/task inputs, captures a
+  package lock and hardware snapshot, and writes a pre-outcome candidate;
+- `tests/research/test_phase8_preflight.py` with four guardrail tests.
+
+Phase 8A is not yet runtime-verified. The next Plato gate is to verify the experiment
+branch, inspect the current non-secret model/runtime configuration, then generate the
+runtime-control candidate before any outcome-bearing run.
