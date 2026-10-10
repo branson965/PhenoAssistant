@@ -1,0 +1,41 @@
+{
+  "schema": "phenoguard-ijcai2027-phase7-method-freeze-v0.1",
+  "status": "FROZEN_PENDING_RUNTIME_VERIFICATION",
+  "venue": "IJCAI 2027",
+  "date": "2026-10-10",
+  "hash_source_commit": "c58741bb9b0bcc8ebef68755e3d8528de9533312",
+  "aggregate_algorithm": "sha256(sorted(path + TAB + sha256 + LF))",
+  "aggregate_sha256": "337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f",
+  "frozen_file_count": 22,
+  "frozen_files": {
+    "docs/research/IJCAI_2027_BENCHMARK_CONTRACT.md": "787c5509e2a1962b79076b15aea16ee288ce0cdbe8a07845e63489b0467e8515",
+    "docs/research/IJCAI_2027_POST_VALIDATION.md": "3e51f2631b4631869c6cee1f3a4280886f586d187fb7e8d29553509535bc83b1",
+    "docs/research/IJCAI_2027_PROTOCOL_FREEZE.json": "0e463614e8efc7f9868196edd73a471d9283ed368741732cf06b1cb596dc027d",
+    "docs/research/IJCAI_2027_PROTOCOL_FREEZE.md": "c886c6b6cba96a013e55d2f71762000d3a0f5038482c19c88ba3bee0fe574999",
+    "docs/research/PHASE7_CASE1_PROVENANCE_ENVELOPE.md": "6cd71362cce17476d6a3e8fd067a6dc4070b6685a1de016da65d323245079d93",
+    "docs/research/PHASE7_CATALOGUE_RESOLUTION.md": "111aa853a8fa3936b961c784fa7ad009d8499e108a597872ab202df8bbdf126f",
+    "docs/research/PHASE7_METHOD_CONTRACT.md": "8425cc513579f7db9a3e46108d541901ef09c090c27019de21cf0b1f90836d19",
+    "docs/research/PHASE7_TRACE_CONTRACT.md": "7975e604ec07cc59387c872f4604d9af89abcc7919955a6abefbdd581bc23849",
+    "docs/research/PHASE7_TRAINING_READINESS.md": "95ab52d56e8484fde4e3c4717ae703b1d2a5671efd034221cc5b634817efbaa6",
+    "docs/research/SCIENTIFIC_APPLICABILITY_PAPER_PLAN.md": "1fc53de6fea65065e065c70a7ea36fc3d519c8e63ac73588aac5811ad21b9b7e",
+    "model_zoo.json": "4c58adec327baf9d5ec45bf1cfed812e1128612ba9f4d55e4c34e8a77a4a0ff4",
+    "research/phenoguard/__init__.py": "21540f5c3cf4fe204de9e570affa2f15be48e6b4d99dbd4518570f6dd2cd9812",
+    "research/phenoguard/benchmark.py": "5ee1bbc9359cbd730991126c355154530bbb9b69813b442c4b9e7c375c103084",
+    "research/phenoguard/catalogue.py": "07e036b5806ffe386a7dd315847fa7ee8152a7feaa5c1468c076e1e48a9080d6",
+    "research/phenoguard/checker.py": "c4387303434452475ae8953412041662f425919403fcf39cf3c73e3756269995",
+    "research/phenoguard/contracts.py": "c891a9b5a5dbac5dd0611e9738d4246397e42999e07cd5c4a16cd0575eb7faeb",
+    "research/phenoguard/experiment_protocol.py": "c99e39eeefae24a75e7aff276195683b08d604208037bff446b9673ebe9707ec",
+    "research/phenoguard/pilot_manifest.py": "bd73382c911df596cdd50e3180f983634f1d32c3aa57f0fdf64bd2bd15f89a81",
+    "research/phenoguard/post_validation.py": "e7c814f3bc9635f3ba07037d813fd4d67b3b752d1795ad8a8ed243a6f4ac1aeb",
+    "research/phenoguard/provenance.py": "33f088285bb8099a2352efa2affd6b4b152e3de7149e9c3eb8088850bc0bfa88",
+    "research/phenoguard/trace.py": "3874d698fff6d49b5bce86de36c4045d2809c28b1bfb763be33ca97558314937",
+    "research/phenoguard/training.py": "c3d27a0226e061a99d1c21bfd454a45f63272b09df7c1a2cdbf5aa922e9f911d"
+  },
+  "freeze_rules": {
+    "negative_results_retained": true,
+    "hidden_labels_available_to_method": false,
+    "post_unblinding_method_changes_authorized": false,
+    "phase8_may_modify_frozen_files": false,
+    "change_policy": "Any scientific-method change requires an explicit Phase 7 reopen record, new manifest version, and re-verification before further outcome inspection."
+  }
+}
