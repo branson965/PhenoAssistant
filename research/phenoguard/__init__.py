@@ -58,6 +58,13 @@ __all__ = [
     "ShiftDimension",
     "score_decision_trace",
     "validate_matched_pair",
+    "PostExecutionValidation",
+    "PostValidationIssue",
+    "ValidationIssueCode",
+    "ValidationSeverity",
+    "validate_identifier_preservation",
+    "validate_phenotype_records",
+    "validate_statistical_claim",
 ]
 
 from research.phenoguard.trace import (
@@ -78,4 +85,14 @@ from research.phenoguard.benchmark import (
     ShiftDimension,
     score_decision_trace,
     validate_matched_pair,
+)
+
+from research.phenoguard.post_validation import (
+    PostExecutionValidation,
+    PostValidationIssue,
+    ValidationIssueCode,
+    ValidationSeverity,
+    validate_identifier_preservation,
+    validate_phenotype_records,
+    validate_statistical_claim,
 )
