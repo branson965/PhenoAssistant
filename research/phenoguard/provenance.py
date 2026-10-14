@@ -123,10 +123,91 @@ def build_case2_potato_segmentation_envelope(
     )
 
 
+CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID = (
+    "fengchen025/"
+    "dinov2-base_winter-wheat_fertiliser-identification_dnd-ww2020"
+)
+
+CASE3_WINTER_WHEAT_CLASSIFICATION_REVISION = (
+    "89d6b3ca17dba118d7d25c7b8a87ff205dc6235e"
+)
+
+CASE3_WINTER_WHEAT_CLASSIFICATION_WEIGHT_SHA256 = (
+    "4a29f8b73438a6d16cbc80287c40002af40029fd529146f0be73d7825befbbf5"
+)
+
+
+def build_case3_winter_wheat_classification_envelope(
+) -> ScientificOperatingEnvelope:
+    """Return the evidence-backed envelope for the Case 3 full-FT classifier."""
+    return ScientificOperatingEnvelope(
+        capability_id=CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID,
+        scientific_task="image classification",
+        constraints=(
+            ApplicabilityConstraint(
+                field="species",
+                allowed_values=("winter wheat",),
+                severity=ConstraintSeverity.HARD,
+                rationale=(
+                    "The collaborator-provided functioning Case Study 3 "
+                    "checkpoint is the fully fine-tuned DND-WW2020 winter-wheat "
+                    "fertiliser-treatment classifier."
+                ),
+            ),
+            ApplicabilityConstraint(
+                field="modality",
+                allowed_values=("RGB",),
+                severity=ConstraintSeverity.HARD,
+                rationale=(
+                    "DND-WW2020 consists of UAV-based RGB images, so non-RGB "
+                    "inputs are outside the directly evidenced operating scope."
+                ),
+            ),
+        ),
+        required_context_fields=(
+            "species",
+            "modality",
+        ),
+        output_semantics=(
+            "seven-class fertiliser-treatment image classification with labels "
+            "unfertilized, _PKCa, N_KCa, NP_Ca, NPK_, NPKCa, and NPKCa+m+s"
+        ),
+        assumptions=(
+            "the input follows the preserved PhenoAssistant image-classification "
+            "preprocessing path",
+        ),
+        limitations=(
+            "training provenance is DND-WW2020 winter-wheat UAV RGB imagery",
+            "the current request schema does not encode UAV acquisition platform "
+            "as a dedicated operating-envelope field",
+            "the official README montage GPU smoke establishes compatibility only "
+            "and is not an accuracy estimate",
+            "applicability to winter rye, other species, non-RGB modalities, or "
+            "other acquisition regimes is not asserted",
+        ),
+        known_failure_conditions=(
+            "a non-winter-wheat species is outside the directly evidenced scope",
+            "a non-RGB modality is outside the directly evidenced scope",
+        ),
+        provenance=(
+            "PhenoAssistant Nature Communications Case Study 3; Feng Chen "
+            "collaborator clarification dated 2026-10-14; public full-FT "
+            "DND-WW2020 checkpoint; Plato checkpoint-integrity audit and "
+            "PEFT-isolated RTX A4000 compatibility execution"
+        ),
+        version_or_checkpoint=(
+            f"{CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID}"
+            f"@{CASE3_WINTER_WHEAT_CLASSIFICATION_REVISION}"
+            f"#sha256={CASE3_WINTER_WHEAT_CLASSIFICATION_WEIGHT_SHA256}"
+        ),
+    )
+
+
 def build_default_provenance_catalogue(
 ) -> tuple[ScientificOperatingEnvelope, ...]:
     """Return the currently evidence-backed instance-segmentation catalogue."""
     return (
         build_case1_arabidopsis_segmentation_envelope(),
         build_case2_potato_segmentation_envelope(),
+        build_case3_winter_wheat_classification_envelope(),
     )
