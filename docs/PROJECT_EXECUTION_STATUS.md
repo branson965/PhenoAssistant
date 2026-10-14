@@ -604,3 +604,21 @@ checkpoint and add its evidence-backed operating envelope. The v0.1 manifest has
 archived, and a controlled v0.2 manifest generator is committed. No benchmark,
 scoring, C0-C9 condition, hidden-label, or claim-boundary rule is authorised to change
 during this reopen.
+
+
+## Phase 7 v0.2 re-freeze candidate — 2026-10-14
+
+The controlled Case 3 provenance reopen has now produced an active v0.2 freeze
+manifest. The frozen scope remains exactly 22 paths. Only four frozen files differ
+from v0.1: the catalogue-resolution document, model catalogue, provenance exports,
+and provenance envelope implementation.
+
+v0.2 source commit:
+`ed725f6c578717b61e855d694a0c450b431f183f`
+
+v0.2 aggregate SHA-256:
+`25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`
+
+The v0.1 manifest is preserved separately. Runtime verification on Plato, including
+the complete research suite and Case 3 readiness tests, is still required before
+Phase 7 is re-closed and a new preservation ref is created.
