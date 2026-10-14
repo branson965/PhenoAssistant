@@ -31,7 +31,7 @@ CASE3_DATASET_NAME = (
 
 CASE3_EXPECTED_CHECKPOINT = (
     "fengchen025/"
-    "winter-wheat_nutri-defi-identify_dndww20_dino2b_lora"
+    "dinov2-base_winter-wheat_fertiliser-identification_dnd-ww2020"
 )
 
 
