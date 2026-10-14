@@ -94,3 +94,28 @@ After the Phase 7I runtime gate passes on Plato:
 
 The first outcome-bearing Phase 8 run must therefore be traceable to an immutable
 Phase 7 method snapshot.
+
+
+## Controlled reopen and v0.2 re-freeze — 2026-10-14
+
+The v0.1 freeze was explicitly reopened before any outcome-bearing IJCAI scientific
+run because collaborator clarification established that the frozen Case 3 LoRA
+checkpoint was demonstration-only, while a functioning fully fine-tuned checkpoint
+was available publicly.
+
+The preserved v0.1 manifest is retained at:
+
+`docs/research/IJCAI_2027_PHASE7_METHOD_FREEZE_MANIFEST_V0.1.json`
+
+The reopen record is:
+
+`docs/research/IJCAI_2027_PHASE7_REOPEN_CASE3_20261014.md`
+
+The authorised method change is limited to Case 3 provenance/capability identity and
+its directly evidenced operating envelope. The benchmark protocol, C0-C9 condition
+definitions, scoring, hidden-label policy, negative-result retention, and claim
+boundaries remain unchanged.
+
+A v0.2 active manifest must be generated only after the updated frozen files are
+committed and must again verify the same 22 frozen paths before Phase 8 scientific
+outcomes are allowed.
