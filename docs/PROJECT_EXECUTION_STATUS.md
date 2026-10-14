@@ -622,3 +622,31 @@ v0.2 aggregate SHA-256:
 The v0.1 manifest is preserved separately. Runtime verification on Plato, including
 the complete research suite and Case 3 readiness tests, is still required before
 Phase 7 is re-closed and a new preservation ref is created.
+
+
+## Phase 7 v0.2 runtime re-freeze closure — 2026-10-14
+
+Plato verification completed successfully for the Case 3-controlled Phase 7 v0.2
+re-freeze.
+
+Verified runtime evidence:
+
+- Phase 8 preflight regression: 11/11 passed;
+- complete research suite: 103/103 passed;
+- Case 3 MAF readiness suite: 9/9 passed;
+- Case 3 provenance decisions: EXECUTE for valid winter-wheat RGB, CLARIFY for
+  missing modality, ABSTAIN for wrong species, ABSTAIN for non-RGB modality;
+- model catalogue contains only the verified full-FT Case 3 checkpoint for image
+  classification;
+- v0.1 archive aggregate preserved as
+  `337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f`;
+- v0.2 active aggregate verified as
+  `25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`;
+- dependency health clean;
+- bounded secret scan returned no matches;
+- final repository state matched the experiment branch with no tracked changes.
+
+Phase 7 v0.2 is therefore re-closed. Case 3 checkpoint access/callability and the
+scientific-capability provenance correction are complete. The unavailable historical
+prepared dataset remains a separate exact-training-reproduction limitation and does
+not reopen the verified checkpoint/runtime gate.
