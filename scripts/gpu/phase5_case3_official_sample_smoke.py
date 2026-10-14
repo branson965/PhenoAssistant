@@ -208,7 +208,9 @@ def main() -> Path:
         image_urls=[
             str(INPUT_PATH),
         ],
-        checkpoint=resolved_checkpoint,
+        checkpoint=str(
+            resolved_checkpoint
+        ),
         batch_size=1,
         device="cuda",
         output_dir=str(
