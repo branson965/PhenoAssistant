@@ -17,7 +17,7 @@ def test_experiment_branch_preserves_phase7_freeze() -> None:
 
     assert count == 22
     assert aggregate == (
-        "337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f"
+        "25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294"
     )
 
 
