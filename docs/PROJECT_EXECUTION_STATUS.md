@@ -486,3 +486,30 @@ outcome-bearing IJCAI experiment.
 
 Feng also authorised using a newly created model when the objective is to validate
 PhenoAssistant's training ability rather than reproduce the historical Case 3 model.
+
+
+## Case 3 public-model metadata gate — 2026-10-14
+
+Runtime verification on Plato passed for Feng's collaborator-provided public full-FT
+checkpoint.
+
+Observed:
+
+- full-FT checkpoint reachable: true;
+- full-FT checkpoint private: false;
+- full-FT immutable Hugging Face revision:
+  `89d6b3ca17dba118d7d25c7b8a87ff205dc6235e`;
+- pipeline tag: `image-classification`;
+- architecture: `Dinov2ForImageClassification`;
+- label mapping contains seven fertilizer-treatment classes;
+- historical LoRA demonstration checkpoint is now also public at revision
+  `1b2f6bfd4ccb0f28bfe8757f8468161cfa7104be`;
+- historical prepared dataset remains unreachable.
+
+The raw config does not serialize an explicit `num_labels` field, but it exposes
+the complete seven-class `id2label` mapping; this is not treated as a metadata
+failure.
+
+A GPU compatibility smoke is now prepared using the official DND-Diko-WWWR example
+image linked by the dataset authors. That smoke is explicitly checkpoint-load /
+inference compatibility evidence only and cannot be used as an accuracy estimate.
