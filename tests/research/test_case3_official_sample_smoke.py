@@ -27,6 +27,17 @@ def test_case3_official_sample_smoke_contract() -> None:
         in source
     )
     assert (
+        "4a29f8b73438a6d16cbc80287c40002af40029fd529146f0be73d7825befbbf5"
+        in source
+    )
+    assert "adapter_config.json" in source
+    assert "adapter_model.safetensors" in source
+    assert "adapter_files_excluded_from_runtime" in source
+    assert (
+        "audited_fullft_only_snapshot_without_peft_autodetection"
+        in source
+    )
+    assert (
         "202306200458172.png"
         in source
     )
