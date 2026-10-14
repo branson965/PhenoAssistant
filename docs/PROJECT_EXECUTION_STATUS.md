@@ -541,3 +541,34 @@ integrity audit has therefore been added to verify whether the full weight file 
 contains a seven-class classifier head and to hash that exact weight file.
 
 Do not reopen or modify the frozen Phase 7 catalogue until this integrity audit passes.
+
+
+## Case 3 checkpoint-integrity audit — 2026-10-14
+
+The pinned collaborator checkpoint at revision
+`89d6b3ca17dba118d7d25c7b8a87ff205dc6235e` passed a direct safetensors
+integrity audit.
+
+Observed:
+
+- `model.safetensors` SHA-256:
+  `4a29f8b73438a6d16cbc80287c40002af40029fd529146f0be73d7825befbbf5`;
+- 225 state-dict keys;
+- seven labels in `id2label`;
+- `classifier.weight` present with shape `[7, 1536]`;
+- `classifier.bias` present with shape `[7]`;
+- classifier output dimension matches the seven-label config;
+- PEFT `adapter_config.json` and `adapter_model.safetensors` also coexist in the
+  same public repository.
+
+This resolves the concern that the full weight file lacked a trained classifier head.
+However, the coexistence of PEFT artefacts explains why ordinary Transformers loading
+may auto-detect the repository as an adapter package and first instantiate the
+`facebook/dinov2-base` base model, producing the earlier newly-initialized classifier
+warning.
+
+The authoritative compatibility smoke has therefore been hardened to construct a
+clean local runtime view containing only the audited `config.json`,
+`preprocessor_config.json`, and exact `model.safetensors`. The PEFT files are
+explicitly excluded from runtime loading. A second GPU smoke using this clean full-FT
+view is required before reopening the frozen Phase 7 catalogue.
