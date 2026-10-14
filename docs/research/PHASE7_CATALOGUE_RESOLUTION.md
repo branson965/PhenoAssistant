@@ -56,3 +56,31 @@ That policy is the next method gate.
 The resolver is deterministic infrastructure for the research method. Its existence
 does not demonstrate improved agent safety or scientific correctness. Those claims
 require the frozen paired benchmark and controlled baseline comparison.
+
+
+## Controlled Case 3 provenance extension — 2026-10-14
+
+Phase 7 was explicitly reopened before any outcome-bearing IJCAI scientific run to
+replace the historical demonstration-only LoRA classifier with Feng Chen's public,
+functioning fully fine-tuned Case 3 checkpoint.
+
+The default provenance catalogue now also contains the verified winter-wheat
+image-classification capability:
+
+`fengchen025/dinov2-base_winter-wheat_fertiliser-identification_dnd-ww2020`
+
+Runtime provenance is pinned to:
+
+- Hugging Face revision
+  `89d6b3ca17dba118d7d25c7b8a87ff205dc6235e`;
+- `model.safetensors` SHA-256
+  `4a29f8b73438a6d16cbc80287c40002af40029fd529146f0be73d7825befbbf5`.
+
+The envelope freezes only directly supported scientific applicability constraints:
+winter wheat species and RGB modality are hard requirements. DND-WW2020's UAV
+acquisition provenance is retained as a limitation rather than being overloaded into
+the current `view` field. Missing modality therefore requires `CLARIFY`; a
+non-winter-wheat species or non-RGB modality requires `ABSTAIN`.
+
+The official DND-Diko-WWWR README montage GPU run is compatibility evidence only and
+must not be interpreted as an accuracy result.
