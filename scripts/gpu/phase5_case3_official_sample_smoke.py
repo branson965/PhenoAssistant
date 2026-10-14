@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import shutil
 import sys
 import time
 from datetime import UTC, datetime
@@ -36,6 +38,10 @@ CHECKPOINT = (
 
 CHECKPOINT_REVISION = (
     "89d6b3ca17dba118d7d25c7b8a87ff205dc6235e"
+)
+
+FULL_WEIGHT_SHA256 = (
+    "4a29f8b73438a6d16cbc80287c40002af40029fd529146f0be73d7825befbbf5"
 )
 
 SOURCE_URL = (
@@ -87,6 +93,79 @@ def download_input() -> None:
     )
 
 
+def _prepare_clean_fullft_snapshot(
+    source_snapshot: Path,
+) -> Path:
+    """Expose only the full-FT files so Transformers cannot auto-detect PEFT."""
+
+    hf_home = Path(
+        os.environ.get(
+            "HF_HOME",
+            Path.home() / ".cache" / "huggingface",
+        )
+    )
+
+    clean_snapshot = (
+        hf_home
+        / "phenoassistant_case3_fullft_clean"
+        / CHECKPOINT_REVISION
+    )
+
+    clean_snapshot.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    required = (
+        "config.json",
+        "preprocessor_config.json",
+        "model.safetensors",
+    )
+
+    for name in required:
+        source = source_snapshot / name
+        target = clean_snapshot / name
+
+        if not source.is_file():
+            raise FileNotFoundError(source)
+
+        if target.exists() or target.is_symlink():
+            target.unlink()
+
+        try:
+            os.link(
+                source,
+                target,
+            )
+        except OSError:
+            shutil.copy2(
+                source,
+                target,
+            )
+
+    for forbidden in (
+        "adapter_config.json",
+        "adapter_model.safetensors",
+    ):
+        path = clean_snapshot / forbidden
+
+        if path.exists() or path.is_symlink():
+            path.unlink()
+
+    if (
+        sha256_file(
+            clean_snapshot / "model.safetensors"
+        )
+        != FULL_WEIGHT_SHA256
+    ):
+        raise RuntimeError(
+            "clean full-FT model.safetensors hash does not match "
+            "the audited collaborator checkpoint"
+        )
+
+    return clean_snapshot
+
+
 def main() -> Path:
     if not torch.cuda.is_available():
         raise RuntimeError(
@@ -95,10 +174,16 @@ def main() -> Path:
 
     download_input()
 
-    resolved_checkpoint = snapshot_download(
-        repo_id=CHECKPOINT,
-        revision=CHECKPOINT_REVISION,
-        local_files_only=True,
+    source_snapshot = Path(
+        snapshot_download(
+            repo_id=CHECKPOINT,
+            revision=CHECKPOINT_REVISION,
+            local_files_only=True,
+        )
+    )
+
+    resolved_checkpoint = _prepare_clean_fullft_snapshot(
+        source_snapshot
     )
 
     started = time.perf_counter()
@@ -174,8 +259,13 @@ def main() -> Path:
         ),
         "checkpoint": CHECKPOINT,
         "checkpoint_revision": CHECKPOINT_REVISION,
-        "resolved_checkpoint_path": resolved_checkpoint,
-        "checkpoint_resolution": "pinned_hub_revision_local_cache",
+        "source_snapshot_path": str(source_snapshot),
+        "resolved_checkpoint_path": str(resolved_checkpoint),
+        "checkpoint_resolution": (
+            "audited_fullft_only_snapshot_without_peft_autodetection"
+        ),
+        "full_weight_sha256": FULL_WEIGHT_SHA256,
+        "adapter_files_excluded_from_runtime": True,
         "device": torch.cuda.get_device_name(
             0
         ),
@@ -224,7 +314,7 @@ def main() -> Path:
     )
     print(
         "CASE3_FULLFT_RESOLVED_SNAPSHOT="
-        + resolved_checkpoint
+        + str(resolved_checkpoint)
     )
     print(
         "CASE3_FULLFT_DEVICE="
