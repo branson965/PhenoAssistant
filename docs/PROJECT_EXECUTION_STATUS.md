@@ -166,8 +166,7 @@ Phase 7 scientific-applicability research work.
 
 **Phases completed: 6/9**
 
-Case 1 GPU scientific reproduction remains fully closed and the remaining Case 3 gate
-is externally blocked. Phase 6 is closed. Phase 7 is now also closed with a
+Case 1 GPU scientific reproduction remains fully closed. The Case 3 model-access gate has been partially unblocked by Feng's 2026-10-14 collaborator update; runtime verification of the newly public checkpoints is pending, while dataset availability remains a separate question. Phase 6 is closed. Phase 7 is now also closed with a
 content-addressed IJCAI scientific-applicability method freeze, prospectively frozen
 condition protocol, label-free hidden-test contract, deterministic scoring, bounded
 post-execution validation, and runtime-verified 82/82 research tests. Phase 8 begins
@@ -460,3 +459,30 @@ before importing `research.phenoguard`, with a regression guard added.
 
 No OpenRouter account should be created and no personal credential should be purchased
 or committed solely to unblock this gate before supervisor confirmation.
+
+
+## Case 3 collaborator update — 2026-10-14
+
+Feng confirmed that the previously discussed Case 3 models have been made public.
+He clarified that the historical LoRA checkpoint is demonstration-only and was not
+trained to convergence, while the non-LoRA fully fine-tuned model is the functioning
+scientific checkpoint. He supplied the fallback/public identifier:
+
+`fengchen025/dinov2-base_winter-wheat_fertiliser-identification_dnd-ww2020`
+
+The experiment branch now:
+
+- metadata-probes both the historical LoRA demonstration checkpoint and the
+  collaborator-provided fully fine-tuned checkpoint;
+- includes an inference-only Case 3 wrapper that runs the existing bounded GPU smoke
+  against the fully fine-tuned checkpoint without changing the frozen model catalogue;
+- adds a static regression test for that collaborator-approved checkpoint path.
+
+The frozen `model_zoo.json` has intentionally not been modified yet. First verify the
+public model metadata and one bounded GPU inference. If that passes, reopen Phase 7
+explicitly, replace the demonstration checkpoint with the verified full-FT checkpoint,
+recompute the content-addressed freeze, and rerun the affected suite before any
+outcome-bearing IJCAI experiment.
+
+Feng also authorised using a newly created model when the objective is to validate
+PhenoAssistant's training ability rather than reproduce the historical Case 3 model.
