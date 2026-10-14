@@ -572,3 +572,35 @@ clean local runtime view containing only the audited `config.json`,
 `preprocessor_config.json`, and exact `model.safetensors`. The PEFT files are
 explicitly excluded from runtime loading. A second GPU smoke using this clean full-FT
 view is required before reopening the frozen Phase 7 catalogue.
+
+
+## Case 3 authoritative full-FT runtime pass and Phase 7 reopen — 2026-10-14
+
+The PEFT-isolated authoritative GPU rerun passed on Nottingham Plato using an
+NVIDIA RTX A4000.
+
+Observed authoritative runtime evidence:
+
+- exact full-FT revision:
+  `89d6b3ca17dba118d7d25c7b8a87ff205dc6235e`;
+- exact `model.safetensors` SHA-256:
+  `4a29f8b73438a6d16cbc80287c40002af40029fd529146f0be73d7825befbbf5`;
+- clean runtime contained `config.json`, `preprocessor_config.json`, and
+  `model.safetensors` only;
+- colocated PEFT adapter files were excluded from runtime loading;
+- the earlier newly-initialized classifier warning did not recur;
+- PhenoAssistant image-classification inference completed successfully;
+- the compatibility input was the official DND-Diko-WWWR README montage and remains
+  explicitly non-accuracy evidence;
+- Phase 7 v0.1 remained intact through the runtime gate.
+
+Case 3 checkpoint access/callability is therefore closed for the functioning full-FT
+model. The remaining unavailable historical prepared dataset is a separate
+training-reproduction issue, not a checkpoint-access blocker.
+
+Phase 7 is now explicitly reopened before any outcome-bearing IJCAI scientific run
+to replace the demonstration-only LoRA catalogue entry with the verified full-FT
+checkpoint and add its evidence-backed operating envelope. The v0.1 manifest has been
+archived, and a controlled v0.2 manifest generator is committed. No benchmark,
+scoring, C0-C9 condition, hidden-label, or claim-boundary rule is authorised to change
+during this reopen.
