@@ -39,6 +39,7 @@ def test_case3_official_sample_smoke_contract() -> None:
     )
     assert "source.resolve" in source
     assert "target.is_symlink()" in source
+    assert "checkpoint=str(" in source
     assert (
         "202306200458172.png"
         in source
