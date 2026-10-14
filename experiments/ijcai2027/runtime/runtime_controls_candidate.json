@@ -1,0 +1,107 @@
+{
+  "api_key_read": false,
+  "captured_utc": "2026-10-14T15:08:08.333242+00:00",
+  "controls": {
+    "hardware_class": "uon-plato-cpu-orchestration",
+    "iteration_limit": 2,
+    "max_output_tokens": 2048,
+    "model_id": "openai/gpt-5.6-luna",
+    "model_revision": "openrouter-release-2026-07-09-provider-managed",
+    "package_lock_sha256": "2c67b0b895b81a482c148512ee5ab0de23e333bd21a4d44c31061e2fb19a6391",
+    "prompt_bundle_sha256": "386764c3a6c5afff140c404ee98eaa2626a04f20b784cae168c65bf7766eff0f",
+    "provider": "OpenRouter->openai",
+    "retry_policy": "transport_only_max_2_no_semantic_retry",
+    "session_reset_policy": "fresh_client_agent_and_session_per_scenario_replicate",
+    "task_manifest_sha256": "827c6ff2bb703f41c04174f8dbca755308cb1f22195242a22e414561e89d0bf0",
+    "temperature": 0.0,
+    "tool_catalogue_sha256": "72f217660486f54a2a53028c316287837f36dac057a1b844ac93d5b4c59484fe"
+  },
+  "environment": {
+    "gpu_required_for_phase8a": false,
+    "hostname": "plato.cs.nott.ac.uk",
+    "packages": {
+      "agent-framework-core": "1.11.0",
+      "agent-framework-openai": "1.11.0",
+      "mcp": "2.3.0",
+      "openai": "2.54.0",
+      "pydantic": "2.13.4"
+    },
+    "platform": "Linux-5.14.0-687.12.1.el9_8.x86_64-x86_64-with-glibc2.34",
+    "python_executable": "/home/psxbk8/.local/envs/phenoassistant-phase6-mcp/bin/python",
+    "python_version": "3.11.17 (main, Oct  7 2026, 00:02:24) [GCC 15.3.0]",
+    "torch_imported": false
+  },
+  "extensions": {
+    "breadth_model": {
+      "allow_provider_fallbacks": false,
+      "condition_ids": [
+        "C3_MANAGER_TOOL_SCHEMAS",
+        "C4_MANAGER_GENERIC_CRITIC",
+        "C8_FULL_PHENOGUARD"
+      ],
+      "model_id": "openai/gpt-5.6-sol",
+      "model_release_date": "2026-07-09",
+      "model_revision_label": "openrouter-release-2026-07-09-provider-managed",
+      "require_parameters": true,
+      "role": "predeclared stronger-model breadth evaluation",
+      "upstream_provider": "openai"
+    },
+    "provider_routing": {
+      "allow_fallbacks": false,
+      "order": [
+        "openai"
+      ],
+      "require_parameters": true
+    },
+    "reasoning": {
+      "effort": "medium"
+    },
+    "response_identity_policy": {
+      "drift_action": "flag before aggregation; do not pool mismatched response identities silently",
+      "record_response_model": true,
+      "record_system_fingerprint_when_available": true
+    },
+    "seed_schedule": [
+      2026,
+      2027,
+      2028
+    ],
+    "temperature_note": "GPT-5.6 Luna OpenRouter parameter surface does not expose temperature; 0.0 is a schema sentinel only and is never transmitted.",
+    "temperature_parameter_sent": false,
+    "tool_loop": {
+      "allow_concurrent_invocation": false,
+      "max_function_calls": 1,
+      "max_iterations": 2,
+      "terminate_on_unknown_calls": true
+    }
+  },
+  "hash_inputs": {
+    "model_plan": {
+      "path": "experiments/ijcai2027/model_plan.json",
+      "sha256": "4b64f53d66185dd0755c78b9c59c274fd22aacba642b8daa6516f6de941261d6"
+    },
+    "package_lock": "experiments/ijcai2027/runtime/requirements_phase8_pilot.lock",
+    "prompt_bundle": [
+      "phenoassistant_maf/manager.py",
+      "experiments/ijcai2027/condition_prompt_contract.json"
+    ],
+    "runtime_plan": {
+      "path": "experiments/ijcai2027/runtime_plan.json",
+      "sha256": "f8f1a820368970c8a5e9bdb52e44d3f7439de5663f212009ebd8a63ea9e67d43"
+    },
+    "task_manifest": [
+      "research/phenoguard/pilot_manifest.py",
+      "docs/research/IJCAI_2027_PROTOCOL_FREEZE.json"
+    ],
+    "tool_catalogue": [
+      "model_zoo.json",
+      "phenoassistant_maf/registry.py",
+      "phenoassistant_mcp/maf_bridge_v2.py"
+    ]
+  },
+  "outcome_bearing_work_performed": false,
+  "phase7_closure_branch": "baseline/phenoguard-method-freeze-v0.2-20261014",
+  "phase7_freeze_aggregate_sha256": "25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294",
+  "schema": "phenoguard-ijcai2027-runtime-controls-candidate-v0.2",
+  "status": "CANDIDATE_PRE_OUTCOME_PENDING_SUPERVISOR_CONFIRMATION"
+}
