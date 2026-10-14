@@ -1,6 +1,6 @@
 # IJCAI 2027 Experiments
 
-This branch begins from the runtime-verified Phase 7 closure.
+This branch now carries the runtime-verified Phase 7 v0.2 closure after the controlled Case 3 provenance correction. The original v0.1 freeze is preserved separately.
 
 ## Frozen scientific method
 
@@ -10,7 +10,7 @@ Do not modify the 22 files listed in:
 
 The frozen method aggregate is:
 
-`337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f`
+`25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`
 
 Any required scientific-method change after outcome inspection must reopen Phase 7,
 version the freeze manifest, rerun the complete research suite, and preserve every
