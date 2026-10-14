@@ -513,3 +513,31 @@ failure.
 A GPU compatibility smoke is now prepared using the official DND-Diko-WWWR example
 image linked by the dataset authors. That smoke is explicitly checkpoint-load /
 inference compatibility evidence only and cannot be used as an accuracy estimate.
+
+
+## Case 3 GPU compatibility result — 2026-10-14
+
+The collaborator-provided full-FT checkpoint executed successfully on Nottingham
+Plato using one NVIDIA RTX A4000. The exact pinned Hugging Face revision was
+`89d6b3ca17dba118d7d25c7b8a87ff205dc6235e`. The official
+DND-Diko-WWWR README montage was used only as a compatibility input, so no accuracy
+claim is authorised from this run.
+
+Observed runtime evidence:
+
+- CUDA available with one visible NVIDIA RTX A4000;
+- exact pinned snapshot resolved from the shared Hugging Face cache;
+- PhenoAssistant image-classification inference completed;
+- compatibility marker passed;
+- evidence verification passed;
+- Phase 7 freeze still matched the original 22-file aggregate;
+- dependency health remained clean.
+
+The run emitted a Transformers warning stating that classifier weights were newly
+initialized from `facebook/dinov2-base`. Because the public repository also contains
+PEFT adapter artefacts alongside `model.safetensors`, this warning must be resolved
+before treating the checkpoint as scientifically validated. A non-loading checkpoint
+integrity audit has therefore been added to verify whether the full weight file itself
+contains a seven-class classifier head and to hash that exact weight file.
+
+Do not reopen or modify the frozen Phase 7 catalogue until this integrity audit passes.
