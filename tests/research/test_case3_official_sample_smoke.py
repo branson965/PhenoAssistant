@@ -38,3 +38,9 @@ def test_case3_official_sample_smoke_contract() -> None:
         "CASE3_FULLFT_GPU_COMPATIBILITY_PASS=true"
         in source
     )
+    assert "snapshot_download" in source
+    assert "local_files_only=True" in source
+    assert (
+        "89d6b3ca17dba118d7d25c7b8a87ff205dc6235e"
+        in source
+    )
