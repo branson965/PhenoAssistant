@@ -129,18 +129,34 @@ def _prepare_clean_fullft_snapshot(
         if not source.is_file():
             raise FileNotFoundError(source)
 
+        source_real = source.resolve(
+            strict=True,
+        )
+
         if target.exists() or target.is_symlink():
             target.unlink()
 
         try:
             os.link(
-                source,
+                source_real,
                 target,
             )
         except OSError:
             shutil.copy2(
-                source,
+                source_real,
                 target,
+            )
+
+        if not target.is_file():
+            raise RuntimeError(
+                "clean full-FT runtime file was not materialized: "
+                + str(target)
+            )
+
+        if target.is_symlink():
+            raise RuntimeError(
+                "clean full-FT runtime file must be a regular file, not a symlink: "
+                + str(target)
             )
 
     for forbidden in (
