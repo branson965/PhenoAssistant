@@ -173,7 +173,7 @@ def main() -> None:
     )
 
     expected_aggregate = (
-        "337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f"
+        "25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294"
     )
 
     if frozen["aggregate_sha256"] != expected_aggregate:
@@ -323,7 +323,7 @@ def main() -> None:
             frozen["aggregate_sha256"]
         ),
         "phase7_closure_branch": (
-            "baseline/phenoguard-method-freeze-20261010"
+            "baseline/phenoguard-method-freeze-v0.2-20261014"
         ),
         "controls": controls.model_dump(
             mode="json",
