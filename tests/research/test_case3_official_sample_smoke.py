@@ -37,6 +37,8 @@ def test_case3_official_sample_smoke_contract() -> None:
         "audited_fullft_only_snapshot_without_peft_autodetection"
         in source
     )
+    assert "source.resolve" in source
+    assert "target.is_symlink()" in source
     assert (
         "202306200458172.png"
         in source
