@@ -119,3 +119,26 @@ boundaries remain unchanged.
 A v0.2 active manifest must be generated only after the updated frozen files are
 committed and must again verify the same 22 frozen paths before Phase 8 scientific
 outcomes are allowed.
+
+
+### v0.2 active manifest identity
+
+The active v0.2 manifest was generated from the authorised frozen-file state at
+source commit:
+
+`ed725f6c578717b61e855d694a0c450b431f183f`
+
+The frozen scope remains exactly 22 paths. Relative to v0.1, only these four frozen
+paths changed:
+
+- `docs/research/PHASE7_CATALOGUE_RESOLUTION.md`;
+- `model_zoo.json`;
+- `research/phenoguard/__init__.py`;
+- `research/phenoguard/provenance.py`.
+
+The v0.2 aggregate SHA-256 is:
+
+`25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`
+
+Runtime verification on Plato is still required before the re-freeze is considered
+closed.
