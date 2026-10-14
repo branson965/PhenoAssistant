@@ -22,9 +22,14 @@ RESOURCES = (
         "fengchen025/arabidopsis_leaf-instance-segmentation_cvppp2017-a1a4_m2fb_fullft",
     ),
     (
-        "case3_model",
+        "case3_lora_demo_model",
         "model",
         "fengchen025/winter-wheat_nutri-defi-identify_dndww20_dino2b_lora",
+    ),
+    (
+        "case3_fullft_model",
+        "model",
+        "fengchen025/dinov2-base_winter-wheat_fertiliser-identification_dnd-ww2020",
     ),
     (
         "case3_dataset",
