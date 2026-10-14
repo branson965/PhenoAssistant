@@ -1,6 +1,6 @@
 {
   "schema": "phenoguard-ijcai2027-phase7-method-freeze-v0.2",
-  "status": "FROZEN_PENDING_RUNTIME_VERIFICATION",
+  "status": "FROZEN_VERIFIED",
   "venue": "IJCAI 2027",
   "date": "2026-10-14",
   "hash_source_commit": "ed725f6c578717b61e855d694a0c450b431f183f",
@@ -52,5 +52,16 @@
     "post_unblinding_method_changes_authorized": false,
     "phase8_may_modify_frozen_files": false,
     "change_policy": "Any scientific-method change requires an explicit Phase 7 reopen record, new manifest version, and re-verification before further outcome inspection."
+  },
+  "runtime_verification": {
+    "date": "2026-10-14",
+    "environment": "UoN Plato, phenoassistant-phase6-mcp, Python 3.11.17",
+    "research_suite": "103 passed",
+    "phase8_preflight": "11 passed",
+    "case3_maf_readiness": "9 passed",
+    "dependency_health": "clean",
+    "secret_scan_matches": 0,
+    "final_freeze_verifier_passed": true,
+    "verified_aggregate_sha256": "25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294"
   }
 }
