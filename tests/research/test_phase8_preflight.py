@@ -225,3 +225,30 @@ def test_model_and_runtime_plans_require_supervisor_confirmation() -> None:
 
     assert model["supervisor_confirmation_required"] is True
     assert runtime["supervisor_confirmation_required"] is True
+
+
+
+def test_runtime_capture_uses_phase7_v02_closure() -> None:
+    source = (
+        ROOT
+        / "scripts"
+        / "research"
+        / "prepare_ijcai_runtime_controls.py"
+    ).read_text(
+        encoding="utf-8",
+    )
+
+    assert (
+        "25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294"
+        in source
+    )
+
+    assert (
+        "baseline/phenoguard-method-freeze-v0.2-20261014"
+        in source
+    )
+
+    assert (
+        "337764f319c33d3b3bb38dc2f4c64f214f0868398a139406f9d2cd0b92d42c9f"
+        not in source
+    )
