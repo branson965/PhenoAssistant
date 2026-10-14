@@ -29,3 +29,7 @@ data/AraCropData/
 
 # Phase 6 MCP v2 generated benchmark outputs
 results/maf_mcp_v2/
+
+# Phase 5 Case 3 generated evidence
+results/maf_gpu_case3_fullft_official_sample/
+results/maf_gpu_case3_checkpoint_audit/
