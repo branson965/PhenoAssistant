@@ -650,3 +650,40 @@ Phase 7 v0.2 is therefore re-closed. Case 3 checkpoint access/callability and th
 scientific-capability provenance correction are complete. The unavailable historical
 prepared dataset remains a separate exact-training-reproduction limitation and does
 not reopen the verified checkpoint/runtime gate.
+
+
+## Phase 8A offline runtime-control capture — 2026-10-14
+
+The post-Phase-7-v0.2 offline runtime-control capture completed successfully on Plato
+without reading an API key and without executing any outcome-bearing scientific run.
+
+Verified runtime evidence:
+
+- Phase 7 v0.2 freeze verifier: pass, 22 frozen files;
+- Phase 8 preflight regression: 12/12 passed;
+- complete research suite: 104/104 passed;
+- provider candidate: `OpenRouter->openai`;
+- primary model candidate: `openai/gpt-5.6-luna`;
+- provider-managed revision label:
+  `openrouter-release-2026-07-09-provider-managed`;
+- seed schedule: 2026, 2027, 2028;
+- temperature parameter transmitted: false;
+- prompt-bundle SHA-256:
+  `386764c3a6c5afff140c404ee98eaa2626a04f20b784cae168c65bf7766eff0f`;
+- tool-catalogue SHA-256:
+  `72f217660486f54a2a53028c316287837f36dac057a1b844ac93d5b4c59484fe`;
+- task-manifest SHA-256:
+  `827c6ff2bb703f41c04174f8dbca755308cb1f22195242a22e414561e89d0bf0`;
+- package-lock SHA-256:
+  `2c67b0b895b81a482c148512ee5ab0de23e333bd21a4d44c31061e2fb19a6391`;
+- runtime-controls candidate SHA-256:
+  `85acd6efd5ae880051548977355f05d6bdd5e048c365a945a512378023355ce1`;
+- API key read: false;
+- outcome-bearing work performed: false.
+
+The generated candidate remains explicitly
+`CANDIDATE_PRE_OUTCOME_PENDING_SUPERVISOR_CONFIRMATION`. It is evidence of a
+prospectively controlled pre-outcome state, not final approval of the provisional
+provider/model plan. The generated runtime candidate and package lock should now be
+committed as immutable evidence before any supervisor-driven provider/model change or
+live preflight.
