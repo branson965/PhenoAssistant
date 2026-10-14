@@ -19,6 +19,7 @@ from pathlib import Path
 import pandas as pd
 import requests
 import torch
+from huggingface_hub import snapshot_download
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -71,6 +72,9 @@ def download_input() -> None:
         exist_ok=True,
     )
 
+    if INPUT_PATH.is_file():
+        return
+
     response = requests.get(
         SOURCE_URL,
         timeout=60,
@@ -91,13 +95,19 @@ def main() -> Path:
 
     download_input()
 
+    resolved_checkpoint = snapshot_download(
+        repo_id=CHECKPOINT,
+        revision=CHECKPOINT_REVISION,
+        local_files_only=True,
+    )
+
     started = time.perf_counter()
 
     result = infer_image_classification(
         image_urls=[
             str(INPUT_PATH),
         ],
-        checkpoint=CHECKPOINT,
+        checkpoint=resolved_checkpoint,
         batch_size=1,
         device="cuda",
         output_dir=str(
@@ -164,6 +174,8 @@ def main() -> Path:
         ),
         "checkpoint": CHECKPOINT,
         "checkpoint_revision": CHECKPOINT_REVISION,
+        "resolved_checkpoint_path": resolved_checkpoint,
+        "checkpoint_resolution": "pinned_hub_revision_local_cache",
         "device": torch.cuda.get_device_name(
             0
         ),
@@ -209,6 +221,10 @@ def main() -> Path:
     print(
         "CASE3_FULLFT_REVISION="
         + CHECKPOINT_REVISION
+    )
+    print(
+        "CASE3_FULLFT_RESOLVED_SNAPSHOT="
+        + resolved_checkpoint
     )
     print(
         "CASE3_FULLFT_DEVICE="
