@@ -687,3 +687,23 @@ prospectively controlled pre-outcome state, not final approval of the provisiona
 provider/model plan. The generated runtime candidate and package lock should now be
 committed as immutable evidence before any supervisor-driven provider/model change or
 live preflight.
+
+
+## Phase 8A offline evidence preserved — 2026-10-14
+
+The exact offline runtime-control candidate and package lock were verified locally,
+committed, and pushed at commit
+`2c9717acf479191935fc0f19a980b66d813edfa5`.
+
+Preservation ref:
+`baseline/phase8a-runtime-candidate-20261014`
+
+The preserved candidate remains pre-outcome and pending supervisor confirmation. It
+records no API-key access and no outcome-bearing scientific work. The Phase 7 v0.2
+freeze remains the governing scientific-method baseline.
+
+At this point the offline Phase 8A preparation path is complete. The next live gate is
+supervisor/provider confirmation followed by the already-committed non-scientific
+OpenRouter/MAF echo-tool preflight. Scientific benchmark execution remains prohibited
+until that live infrastructure preflight passes and the provider/model route is
+confirmed.
