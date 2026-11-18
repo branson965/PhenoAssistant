@@ -1,6 +1,6 @@
 # PhenoAssistant MAF + MCP + Research Execution Status
 
-**Updated:** 2026-10-10  
+**Updated:** 2026-11-18  
 **Active branch:** `experiments/ijcai2027`  
 **Current phase:** Phase 8 — full IJCAI experiments, ablations, hidden evaluation, and failure analysis (Phase 5 Case 3 external gate carried forward)
 
@@ -29,11 +29,11 @@ Any older AAMAS-specific plan is historical context only and must not drive curr
 | 2 | Build bounded production-shaped MAF CPU architecture | complete |
 | 3 | Migrate and validate CPU case-study behaviour | complete |
 | 4 | Audit Vincent MCP branch and freeze integration contract | complete |
-| 5 | Execute and validate GPU scientific workflows | blocked only on external Case 3 private-resource access; Case 1 closed |
+| 5 | Execute and validate GPU scientific workflows | qualified (85%): Case 1 closed, full-FT Case 3 checkpoint/runtime validated; exact historical Case 3 training reproduction remains open |
 | 6 | Migrate MCP to v2, integrate with MAF, prove parity | complete |
 | 7 | Implement/freeze scientific-applicability research method | complete |
-| 8 | Full experiments, ablations, hidden evaluation, failure analysis | active |
-| 9 | Manuscript, artifact, hostile review, submission | pending |
+| 8 | Full experiments, ablations, hidden evaluation, failure analysis | active (20%): offline preparation closed; scientific outcomes pending |
+| 9 | Manuscript, artifact, hostile review, submission | pending (15%): paper story/plan exists; outcome-grounded manuscript pending |
 
 ## Frozen baselines
 
@@ -158,20 +158,33 @@ reproduction is authorised by this phase transition.
 Phase 6 is closed. The verified MCP/MAF boundary is frozen as infrastructure for
 Phase 7 scientific-applicability research work.
 
-## Current progress
+## Current progress — evidence-weighted recalibration (2026-11-18)
 
-**Overall completion: 82%**
+The older engineering-weighted progress figures are superseded by the authoritative,
+reproducible managerial scorecard:
+`docs/research/IJCAI_2027_COMPLETION_SCORECARD.md`.
 
-**Current phase completion: 14%**
+**Overall completion: 51%** (unrounded weighted sum 51.25/100).
 
-**Phases completed: 6/9**
+**Current phase, Phase 8: 20%**.
 
-Case 1 GPU scientific reproduction remains fully closed. The Case 3 model-access gate has been partially unblocked by Feng's 2026-10-14 collaborator update; runtime verification of the newly public checkpoints is pending, while dataset availability remains a separate question. Phase 6 is closed. Phase 7 is now also closed with a
-content-addressed IJCAI scientific-applicability method freeze, prospectively frozen
-condition protocol, label-free hidden-test contract, deterministic scoring, bounded
-post-execution validation, and runtime-verified 82/82 research tests. Phase 8 begins
-from the preserved Phase 7 closure without modifying the frozen scientific method.
+**Phases fully completed: 6/9** (Phases 1–4, 6 and 7).
+Phase 5 is *qualified at 85%*, not counted fully closed because exact historical
+Case 3 training reproduction or a formal scope disposition remains outstanding.
+Phase 9 is 15%: the scientific story exists but no outcomes-backed complete
+submission manuscript has been demonstrated.
 
+Weights: Phases 1–4 each 3%, Phase 5 8%, Phase 6 8%, Phase 7 14%,
+Phase 8 35%, and Phase 9 23%. This intentionally places 58% of the total
+score on the outcome-bearing experiments and manuscript/submission work,
+rather than treating migration infrastructure as equivalent to paper evidence.
+
+Phase 8 is pre-outcome: the Phase 7 v0.2 method remains frozen, the
+offline runtime candidate is preserved, and the live provider gate is still
+documented as awaiting supervisor-approved access. The qualification-fixture
+result and method unit tests are **not** scientific effectiveness results.
+No live pilot, main/hidden evaluation, or outcome-bearing claims are yet
+recorded. The 2026-11-30 internal IJCAI go/no-go is evidence-based.
 
 ## Phase 7 work committed so far
 
