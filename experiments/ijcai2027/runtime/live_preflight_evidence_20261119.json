@@ -1,0 +1,39 @@
+{
+  "schema": "phenoguard-phase8-live-maf-openrouter-preflight-evidence-v0.1",
+  "date": "2026-11-19",
+  "evidence_source": "researcher-provided Plato terminal output",
+  "evidence_kind": "non_scientific_live_infrastructure",
+  "repo_branch": "experiments/ijcai2027",
+  "code_commit_at_plato": "c52b2ab07e2812dcac50f81fec23010eb0248c42",
+  "runtime": {
+    "model_returned": "openai/gpt-5.6-luna",
+    "system_fingerprint": null,
+    "system_fingerprint_available": false,
+    "tool_calls": 1,
+    "expected_tool": "phase8_preflight_echo",
+    "provider_pin": "openai",
+    "provider_fallbacks": false,
+    "seed": 2026,
+    "temperature_sent": false,
+    "compatibility_adapter_enabled": true,
+    "outcome_bearing": false,
+    "preflight_pass": true
+  },
+  "offline_adapter_validation": {
+    "regression_tests_passed": 32,
+    "post_adapter_capture_pass": true,
+    "post_adapter_input_uses_max_tokens": 512,
+    "max_completion_tokens_present": false,
+    "parallel_tool_calls_present": false,
+    "paid_inference": false
+  },
+  "credential": {
+    "api_key_recorded": false,
+    "approved_provider_billing_route_verified_by_assistant": false,
+    "note": "Key worked, but supervisor approval of ownership/provider/billing/model route has not been explicitly evidenced in the conversation."
+  },
+  "scientific_outcomes_observed": false,
+  "hidden_labels_inspected": false,
+  "cost_usd_measured": null,
+  "limitation": "Preflight success does not establish Sol routing, final scientific harness compatibility, provider ownership approval or research efficacy."
+}
