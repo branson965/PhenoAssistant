@@ -1,7 +1,8 @@
 """Capture MAF's outgoing OpenRouter request shape WITHOUT sending it.
 
-Runs the unchanged non-scientific Phase 8A preflight with a synthetic API
-key and intercepts httpx.AsyncClient.send before any network transmission.
+Runs the non-scientific Phase 8A preflight with a synthetic API key, then
+intercepts the rewritten request at httpx.AsyncHTTPTransport, immediately
+before it could be sent over HTTPS.
 Prints only an allowlisted set of request-control fields and top-level JSON
 keys; it NEVER prints prompts, tool schemas, message contents or headers.
 
@@ -116,14 +117,14 @@ def safe_request_shape(request: httpx.Request) -> dict:
         "parallel_tool_calls_value": body.get("parallel_tool_calls", "<absent>"),
         "model": "openai/gpt-5.6-luna" if body.get("model") == "openai/gpt-5.6-luna" else "<unexpected>",
         "messages_present": isinstance(body.get("messages"), list),
-        "note": "request intercepted before transmission; no real API key used",
+        "note": "post-adapter request intercepted before transmission; no real API key used",
     }
 
 
 async def run_probe() -> dict:
     captured: list[dict] = []
 
-    async def intercept_send(self, request, *args, **kwargs):
+    async def intercept_transport(self, request):
         captured.append(safe_request_shape(request))
         raise _RequestIntercepted()
 
@@ -135,7 +136,7 @@ async def run_probe() -> dict:
     # remains in the Plato shell from the previous diagnostic.
     os.environ["OPENROUTER_API_KEY"] = "sk-or-v1-OFFLINE-CAPTURE-NOT-A-REAL-KEY"
     try:
-        with patch.object(httpx.AsyncClient, "send", intercept_send):
+        with patch.object(httpx.AsyncHTTPTransport, "handle_async_request", intercept_transport):
             with patch.object(socket.socket, "connect", refuse_socket_connect):
                 try:
                     await preflight_main()
