@@ -33,6 +33,9 @@ from scripts.research.phase8_condition_rehearsal import C3, C4, C8, Proposal
 from scripts.research.phase8_maf_decision_v1 import (
     MODEL, Phase8MafDecisionClient, ProposalEvidence,
 )
+from scripts.research.phase8_scientific_artifact_validator import (
+    make_c8_artifact_validator,
+)
 from scripts.research.phase8_proposal_mcp_bridge_v1 import (
     BridgeObservation, bridge_one, select_proposal, Phase8ProposalError,
 )
@@ -70,8 +73,16 @@ def mcp(tmp_path, approval):
             )
             (output_dir / filename).write_text(
                 json.dumps({
-                    "images": [{"id": 0, "file_name": "bound_image_1"}],
-                    "annotations": [],
+                    "images": [{
+                        "id": 0, "file_name": str(image_path),
+                        "width": 64, "height": 32,
+                    }],
+                    "annotations": [{
+                        "id": 0, "image_id": 0, "category_id": 0,
+                        "segmentation": {"size": [32, 64], "counts": "synthetic"},
+                        "area": 15.0, "score": 0.95, "iscrowd": 0,
+                    }],
+                    "categories": [{"id": 0, "name": "leaf"}],
                 }), encoding="utf-8",
             )
         elif capability_id == CASE3:
@@ -403,3 +414,81 @@ def test_end_to_end_real_maf_mock_http_to_real_mcp_fake_vision(
     assert "scientific_operating_envelopes" not in json.dumps(request)
     assert "expected_decision" not in json.dumps(request)
     assert result.result_scope == "INTEGRATION_ONLY_NOT_SCIENTIFIC_EVALUATION"
+
+
+def test_c8_uses_actual_artifact_postvalidator_not_dummy_phenotype(mcp, approval):
+    """Integrate C8 with actual COCO-file structural checks."""
+    server, seen = mcp
+    path, digest = approval
+    input_path = Path("experiments/ijcai2027/runtime/runtime_controls_candidate_v0.3.json")
+    assert input_path.is_file()
+    # The same trusted image is already SHA-bound in the server fixture.
+    # Use a fresh known path from test's fake-image delegate input after
+    # a separate inference? Instead bind the asset directly via the
+    # trusted image path held by the fixture's test temporary directory.
+    from phenoassistant_mcp.scientific_inference_v1 import ImageAsset, file_sha256
+    image_path = path.parent / "bound_image.png"
+    assert image_path.is_file()
+    bound = ImageAsset(image_path, file_sha256(image_path))
+    validated = make_c8_artifact_validator(
+        bound_asset_id="bound_image_1",
+        bound_asset=bound,
+        output_root=path.parent / "mcp-results",
+    )
+    agent = MockAgent(Proposal(ApplicabilityDecision.EXECUTE, CASE1))
+
+    async def run():
+        return await bridge_one(
+            condition=C8,
+            visible_view=view(1),  # Potato species, manager suggested Arabidopsis
+            approved_runtime_path=path,
+            approved_runtime_sha256=digest,
+            decision_client=agent,
+            mcp_server=server,
+            bound_image_asset_id="bound_image_1",
+            post_validator=validated,
+        )
+
+    result = asyncio.run(run())
+    assert result.c8_post_validation_applied is True
+    assert result.safe_to_report is True
+    assert result.selected_capability_id == CASE2
+    assert seen == [(CASE2, "bound_image_1", str(image_path.resolve()))]
+
+
+def test_c8_corrupt_artifact_is_not_safe_to_report(mcp, approval):
+    """A corrupted COCO file may execute, but cannot be reported as valid."""
+    server, seen = mcp
+    path, digest = approval
+    image_path = path.parent / "bound_image.png"
+    from phenoassistant_mcp.scientific_inference_v1 import ImageAsset, file_sha256
+    callback = make_c8_artifact_validator(
+        bound_asset_id="bound_image_1",
+        bound_asset=ImageAsset(image_path, file_sha256(image_path)),
+        output_root=path.parent / "mcp-results",
+    )
+
+    async def verify_corruption(result):
+        artifact = Path(result["artifact_path"])
+        # Simulates an on-disk change after the tool hashes the file.
+        artifact.write_text(artifact.read_text(encoding="utf-8") + "\n",
+                            encoding="utf-8")
+        return await callback(result)
+
+    agent = MockAgent(Proposal(ApplicabilityDecision.EXECUTE, CASE1))
+
+    async def run():
+        return await bridge_one(
+            condition=C8, visible_view=view(),
+            approved_runtime_path=path,
+            approved_runtime_sha256=digest,
+            decision_client=agent, mcp_server=server,
+            bound_image_asset_id="bound_image_1",
+            post_validator=verify_corruption,
+        )
+
+    observation = asyncio.run(run())
+    assert observation.scientific_tool_attempted is True
+    assert observation.c8_post_validation_applied is True
+    assert observation.safe_to_report is False
+    assert len(seen) == 1
