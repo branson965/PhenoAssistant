@@ -725,9 +725,15 @@ confirmed.
 ## Phase 8B access and cost gate opened — 2026-11-19
 
 The researcher reports receiving an OpenRouter API key with $9 credit.
-The key has **not** been pasted into chat or repository, and no credential
-verification or paid run has yet occurred. Credential possession is not
-equivalent to approval of the provider/billing/model route.
+The key has **not** been pasted into chat or repository. On 2026-11-19, Plato
+verified authenticated key metadata, both exact study model IDs, current
+catalogue pricing and a $6.2120448 estimated pre-outcome qualification pilot
+against an $8 planning ceiling; targeted offline tests passed 17/17. No
+paid MAF tool call or scientific outcome has occurred. The key's reported
+$50 remaining spending cap is not the account balance, which remains the
+researcher's unverified $9 estimate. Credential possession and successful
+metadata authentication do not establish supervisor approval of the
+provider/billing/model route.
 
 Pre-outcome tooling committed without modifying the frozen Phase 7 method:
 
@@ -740,11 +746,11 @@ Pre-outcome tooling committed without modifying the frozen Phase 7 method:
   exact, interactive-secret-safe Plato steps, ending at the single existing
   non-scientific MAF/OpenRouter echo-tool preflight.
 
-Current model catalogue prices were inspected externally but must be checked
-again via the tool at runtime. Based on 4,000 input and up to 2,048 output
-tokens for each of at most two model roundtrips, the estimated 12-scenario
-Luna qualification and 4-scenario Sol subset is about $6.92, not a measured
-cost or a guarantee. Reserve at least $1, and do not launch the full Sol
+Live authenticated catalogue prices on 2026-11-19: Luna $0.20/$1.20 and
+Sol $4.00/$20.00 per million input/output tokens. Based on 4,000 input and
+up to 2,048 output tokens for each of at most two model roundtrips, the
+estimated 12-scenario Luna qualification and 4-scenario Sol subset is
+$6.2120448, not measured cost or a guarantee. Reserve at least $1, and do not launch the full Sol
 breadth programme on this balance without actual call-cost evidence.
 
 **Evidence-weighted scores unchanged:** overall 51%; Phase 8 20%; 6/9 fully
