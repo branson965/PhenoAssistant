@@ -37,7 +37,8 @@ from scripts.research.phase8_scientific_artifact_validator import (
     make_c8_artifact_validator,
 )
 from scripts.research.phase8_proposal_mcp_bridge_v1 import (
-    BridgeObservation, bridge_one, select_proposal, Phase8ProposalError,
+    BridgeObservation, bridge_one, bridge_one_with_real_artifact_check,
+    select_proposal, Phase8ProposalError,
 )
 from scripts.research.prepare_phase8_qualification_matrix import model_visible_view
 
@@ -492,3 +493,71 @@ def test_c8_corrupt_artifact_is_not_safe_to_report(mcp, approval):
     assert observation.c8_post_validation_applied is True
     assert observation.safe_to_report is False
     assert len(seen) == 1
+
+
+@pytest.mark.parametrize("condition,case_index,model,expected_decision", [
+    (C3, 0, CASE1, "EXECUTE"),
+    (C8, 1, CASE1, "RESELECT"),
+])
+def test_bounded_bridge_uses_actual_c8_file_validation_not_dummy_metrics(
+    mcp, approval, condition, case_index, model, expected_decision,
+):
+    from phenoassistant_mcp.scientific_inference_v1 import ImageAsset, file_sha256
+    server, seen = mcp
+    path, digest = approval
+    image = path.parent / "bound_image.png"
+    bound = ImageAsset(image, file_sha256(image))
+    manager = MockAgent(Proposal(ApplicabilityDecision.EXECUTE, model))
+
+    async def run():
+        return await bridge_one_with_real_artifact_check(
+            condition=condition,
+            visible_view=view(case_index),
+            approved_runtime_path=path,
+            approved_runtime_sha256=digest,
+            decision_client=manager,
+            mcp_server=server,
+            bound_image_asset_id="bound_image_1",
+            bound_image_asset=bound,
+            output_root=path.parent / "mcp-results",
+        )
+
+    outcome = asyncio.run(run())
+    assert outcome.final_decision == expected_decision
+    assert outcome.mcp_dispatch_completed is True
+    assert len(seen) == 1
+    if condition == C8:
+        assert outcome.c8_post_validation_applied is True
+        assert outcome.safe_to_report is True
+        assert seen[0][0] == CASE2
+    else:
+        assert outcome.c8_post_validation_applied is False
+        assert outcome.safe_to_report is None
+        assert seen[0][0] == CASE1
+    assert outcome.result_scope == "INTEGRATION_ONLY_NOT_SCIENTIFIC_EVALUATION"
+
+
+def test_actual_validator_bridge_rejects_nonexistent_image_before_llm(
+    mcp, approval,
+):
+    server, seen = mcp
+    path, digest = approval
+    bad_asset = ImageAsset(path.parent / "missing.png", "0" * 64)
+    manager = MockAgent(Proposal(ApplicabilityDecision.EXECUTE, CASE1))
+
+    async def run():
+        return await bridge_one_with_real_artifact_check(
+            condition=C8, visible_view=view(),
+            approved_runtime_path=path,
+            approved_runtime_sha256=digest,
+            decision_client=manager,
+            mcp_server=server,
+            bound_image_asset_id="bound_image_1",
+            bound_image_asset=bad_asset,
+            output_root=path.parent / "mcp-results",
+        )
+
+    with pytest.raises(ScientificMcpDispatchError):
+        asyncio.run(run())
+    assert manager.calls == []
+    assert seen == []
