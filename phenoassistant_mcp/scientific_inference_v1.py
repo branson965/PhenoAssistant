@@ -219,8 +219,10 @@ def build_phase8_scientific_mcp_server(
         raise ScientificMcpDispatchError("invalid frozen trial ID")
     if not trusted_images:
         raise ScientificMcpDispatchError("approved image manifest is empty")
+    if output_root.is_symlink():
+        raise ScientificMcpDispatchError("output root must not be a symlink")
     root = output_root.resolve()
-    if root.exists() and (root.is_symlink() or not root.is_dir()):
+    if root.exists() and not root.is_dir():
         raise ScientificMcpDispatchError("unsafe output-root directory")
     implement = inference_delegate or canonical_inference
     server = MCPServer("phenoguard-phase8-scientific-inference-v1")
