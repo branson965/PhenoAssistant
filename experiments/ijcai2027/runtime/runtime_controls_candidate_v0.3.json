@@ -1,0 +1,198 @@
+{
+  "api_key_read": false,
+  "approval": {
+    "independently_verified_by_assistant": false,
+    "researcher_attested_supervisor_provider_billing_and_models": false
+  },
+  "captured_utc": "2026-11-19T21:29:29.354939+00:00",
+  "controls": {
+    "hardware_class": "uon-plato-cpu-orchestration",
+    "iteration_limit": 2,
+    "max_output_tokens": 2048,
+    "model_id": "openai/gpt-5.6-luna",
+    "model_revision": "openrouter-release-2026-07-09-provider-managed",
+    "package_lock_sha256": "2c67b0b895b81a482c148512ee5ab0de23e333bd21a4d44c31061e2fb19a6391",
+    "prompt_bundle_sha256": "386764c3a6c5afff140c404ee98eaa2626a04f20b784cae168c65bf7766eff0f",
+    "provider": "OpenRouter->openai",
+    "retry_policy": "transport_only_max_2_no_semantic_retry",
+    "session_reset_policy": "fresh_client_agent_and_session_per_scenario_replicate",
+    "task_manifest_sha256": "827c6ff2bb703f41c04174f8dbca755308cb1f22195242a22e414561e89d0bf0",
+    "temperature": 0.0,
+    "tool_catalogue_sha256": "72f217660486f54a2a53028c316287837f36dac057a1b844ac93d5b4c59484fe"
+  },
+  "extensions": {
+    "breadth_model": {
+      "allow_provider_fallbacks": false,
+      "condition_ids": [
+        "C3_MANAGER_TOOL_SCHEMAS",
+        "C4_MANAGER_GENERIC_CRITIC",
+        "C8_FULL_PHENOGUARD"
+      ],
+      "model_id": "openai/gpt-5.6-sol",
+      "model_release_date": "2026-07-09",
+      "model_revision_label": "openrouter-release-2026-07-09-provider-managed",
+      "require_parameters": true,
+      "role": "predeclared stronger-model breadth evaluation",
+      "upstream_provider": "openai"
+    },
+    "provider_routing": {
+      "allow_fallbacks": false,
+      "order": [
+        "openai"
+      ],
+      "require_parameters": true
+    },
+    "reasoning": {
+      "effort": "medium"
+    },
+    "response_identity_policy": {
+      "drift_action": "flag before aggregation; do not pool mismatched response identities silently",
+      "record_response_model": true,
+      "record_system_fingerprint_when_available": true
+    },
+    "seed_schedule": [
+      2026,
+      2027,
+      2028
+    ],
+    "temperature_note": "GPT-5.6 Luna OpenRouter parameter surface does not expose temperature; 0.0 is a schema sentinel only and is never transmitted.",
+    "temperature_parameter_sent": false,
+    "tool_loop": {
+      "allow_concurrent_invocation": false,
+      "max_function_calls": 1,
+      "max_iterations": 2,
+      "terminate_on_unknown_calls": true
+    }
+  },
+  "hash_inputs": {
+    "model_plan": {
+      "path": "experiments/ijcai2027/model_plan.json",
+      "sha256": "4b64f53d66185dd0755c78b9c59c274fd22aacba642b8daa6516f6de941261d6"
+    },
+    "package_lock": "experiments/ijcai2027/runtime/requirements_phase8_pilot.lock",
+    "prompt_bundle": [
+      "phenoassistant_maf/manager.py",
+      "experiments/ijcai2027/condition_prompt_contract.json"
+    ],
+    "runtime_plan": {
+      "path": "experiments/ijcai2027/runtime_plan.json",
+      "sha256": "f8f1a820368970c8a5e9bdb52e44d3f7439de5663f212009ebd8a63ea9e67d43"
+    },
+    "task_manifest": [
+      "research/phenoguard/pilot_manifest.py",
+      "docs/research/IJCAI_2027_PROTOCOL_FREEZE.json"
+    ],
+    "tool_catalogue": [
+      "model_zoo.json",
+      "phenoassistant_maf/registry.py",
+      "phenoassistant_mcp/maf_bridge_v2.py"
+    ]
+  },
+  "hidden_gold_unblinded": false,
+  "http_transport_compatibility": {
+    "application_side_max_function_calls": 1,
+    "interface_only": true,
+    "no_provider_fallbacks": true,
+    "omit_parallel_tool_calls_only_if_false": true,
+    "provider_require_parameters": true,
+    "rewrite_max_completion_tokens_to_max_tokens": true,
+    "scientific_harness_adoption": "NOT_YET_VERIFIED",
+    "source_hashes_sha256": {
+      "experiments/ijcai2027/condition_prompt_contract.json": "e5c10eadd9e4b4e769fe63ab8b54272b0abbab130a52d408357a267885268d6e",
+      "experiments/ijcai2027/model_plan.json": "4b64f53d66185dd0755c78b9c59c274fd22aacba642b8daa6516f6de941261d6",
+      "experiments/ijcai2027/runtime/live_preflight_evidence_20261119.json": "ded60f4b0c030e7df7107164c45022d784bfa7df39135d658590ca32ef3efe44",
+      "experiments/ijcai2027/runtime_plan.json": "f8f1a820368970c8a5e9bdb52e44d3f7439de5663f212009ebd8a63ea9e67d43",
+      "scripts/research/capture_phase8_maf_request_shape.py": "3316845bbbdeb5d2b886ba28e409e30c4f3698aa54ad00ba516630a425640142",
+      "scripts/research/check_phase8_openrouter_budget.py": "bd31d28614c996029dde86f8b36f1e821ea231655c11940d194e7778afb2662e",
+      "scripts/research/openrouter_compat.py": "95437a32664be9f8bc1e4e54a6906511613bdd7fa86cb2e57e74313033093f6d",
+      "scripts/research/validate_ijcai_openrouter_preflight.py": "1a95318f36a3bca8fc300dad3e80e3460bd838f131bc7c079b754b0ed6a1e4e4",
+      "tests/research/test_phase8_openrouter_compat.py": "585159da4a74e65a13e520468eaf9e8f1a63766386a77c7e30ef2cb52e82eff3"
+    },
+    "upstream_provider": "openai",
+    "verified_live_echo": true,
+    "verified_post_adapter_capture": true
+  },
+  "live_evidence": {
+    "path": "experiments/ijcai2027/runtime/live_preflight_evidence_20261119.json",
+    "response_model": "openai/gpt-5.6-luna",
+    "scientific_outcomes_observed": false,
+    "seed": 2026,
+    "sha256": "ded60f4b0c030e7df7107164c45022d784bfa7df39135d658590ca32ef3efe44",
+    "system_fingerprint": null,
+    "system_fingerprint_available": false,
+    "tool_calls": 1
+  },
+  "october_candidate_preserved": true,
+  "october_candidate_sha256": "85acd6efd5ae880051548977355f05d6bdd5e048c365a945a512378023355ce1",
+  "october_package_lock_sha256": "2c67b0b895b81a482c148512ee5ab0de23e333bd21a4d44c31061e2fb19a6391",
+  "outcome_bearing_work_performed": false,
+  "phase7_freeze_aggregate_sha256": "25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294",
+  "runtime_plan": {
+    "api_key_policy": {
+      "environment_variable": "OPENROUTER_API_KEY",
+      "print_in_logs": false,
+      "store_in_repository": false
+    },
+    "breadth_model": {
+      "model_id": "openai/gpt-5.6-sol",
+      "revision_label": "openrouter-release-2026-07-09-provider-managed"
+    },
+    "frozen_utc_date": "2026-10-10",
+    "hardware_class": "uon-plato-cpu-orchestration",
+    "package_expectations": {
+      "agent-framework-core": "1.11.0",
+      "agent-framework-openai": "1.11.0",
+      "mcp": "2.3.0",
+      "pydantic": "2.13.4"
+    },
+    "primary_model": {
+      "model_id": "openai/gpt-5.6-luna",
+      "revision_label": "openrouter-release-2026-07-09-provider-managed"
+    },
+    "provider": {
+      "allow_fallbacks": false,
+      "gateway": "OpenRouter",
+      "require_parameters": true,
+      "upstream_provider": "openai"
+    },
+    "response_identity_policy": {
+      "drift_action": "flag before aggregation; do not pool mismatched response identities silently",
+      "record_response_model": true,
+      "record_system_fingerprint_when_available": true
+    },
+    "retry_policy": {
+      "label": "transport_only_max_2_no_semantic_retry",
+      "retain_failed_attempts": true,
+      "semantic_retries": 0,
+      "transport_retries": 2
+    },
+    "sampling": {
+      "max_output_tokens": 2048,
+      "reasoning": {
+        "effort": "medium"
+      },
+      "seed_schedule": [
+        2026,
+        2027,
+        2028
+      ],
+      "temperature_note": "GPT-5.6 Luna OpenRouter parameter surface does not expose temperature; 0.0 is a schema sentinel only and is never transmitted.",
+      "temperature_parameter_sent": false,
+      "temperature_schema_value": 0
+    },
+    "schema": "phenoguard-ijcai2027-runtime-plan-v0.1",
+    "session_reset_policy": "fresh_client_agent_and_session_per_scenario_replicate",
+    "status": "PROVISIONAL_PRE_OUTCOME_PENDING_SUPERVISOR_CONFIRMATION",
+    "supervisor_confirmation_required": true,
+    "tool_loop": {
+      "allow_concurrent_invocation": false,
+      "max_function_calls": 1,
+      "max_iterations": 2,
+      "terminate_on_unknown_calls": true
+    }
+  },
+  "schema": "phenoguard-phase8-runtime-v0.3",
+  "scientific_execution_gate": "Only after this record is verified and preserved as a commit/ref, provider-route approval exists, and an identical approved transport is integrated into the scientific evaluation harness.",
+  "scientific_execution_permitted": false,
+  "status": "PRE_OUTCOME_RUNTIME_CANDIDATE_PENDING_SUPERVISOR_PROVIDER_APPROVAL"
+}
