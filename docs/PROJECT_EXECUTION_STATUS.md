@@ -967,3 +967,32 @@ JSON, and commit/push only that file. Subsequent work is building
 isolated C3/C4/C8 execution with matching MCP tool semantics and
 verified scoring/usage capture. Supervisor approval remains
 undocumented. **Scores unchanged: 51% overall; Phase 8 20%; 6/9 closed.**
+
+
+## Phase 8C matrix preserved; append-only attempt accounting added (2026-11-19)
+
+The qualification matrix was independently reverified on Plato:
+**18/18 tests passed**; 108 trial identities, no gold read/no API
+calls, exact SHA-256
+`8a9688aa464564bf99121656430ea09fc93bbf2b1d262a73a9b2276944876692`.
+The researcher committed and pushed the **single** matrix file as
+commit `97c8db2`. The remote GitHub branch and file were checked
+and found at that commit.
+
+New `scripts/research/phase8_attempt_ledger.py` and corresponding
+offline tests introduce an append-only, duplicate-rejecting,
+single-trial-at-a-time attempt journal and fail-closed handling of
+missing provider billing/usage data. The budget gate uses a $8
+software ceiling plus prospective per-trial reserve; it is not a
+substitute for a provider-side hard cap. The current candidate
+explicitly blocks all scientific calls. The ledger does NOT execute
+scientific tools or call an LLM. Plato must still run its new tests.
+
+Separate unclosed issue: the current MCP v2 implementation proves
+the calculator/ANOVA/Tukey parity slice, not a full scientific
+vision-model invocation/authorization boundary. Implement and test
+that boundary and genuinely distinct C3/C4/C8 execution before
+any scientific results are claimed. Provider/model approval is
+not attested.
+
+**Scores unchanged:** 51% overall; Phase 8 20%; 6/9 fully closed.
