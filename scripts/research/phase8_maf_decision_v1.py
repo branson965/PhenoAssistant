@@ -33,12 +33,11 @@ from openai import AsyncOpenAI
 from mcp import Client
 from mcp.server import MCPServer
 
-from phenoassistant_mcp.client_v2 import MCP_PROTOCOL_VERSION
-
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from phenoassistant_mcp.client_v2 import MCP_PROTOCOL_VERSION  # noqa: E402
 from phenoassistant_mcp.scientific_inference_v1 import verify_approved_runtime  # noqa: E402
 from research.phenoguard.contracts import ApplicabilityDecision, ScientificRequestContext, TrainingReadinessContext  # noqa: E402
 from research.phenoguard.provenance import build_default_provenance_catalogue  # noqa: E402
