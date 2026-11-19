@@ -1,7 +1,7 @@
 # Phase 8A Provider Gate
 
 **Date:** 2026-10-14  
-**Status:** BLOCKED_ON_SUPERVISOR_PROVIDER_CONFIRMATION
+**Status:** LIVE_MAF_PREFLIGHT_PASSED_PENDING_SUPERVISOR_ROUTE_ATTESTATION_AND_V0.3_RUNTIME_PRESERVATION
 
 ## Current preserved state
 
@@ -66,3 +66,24 @@ Do not execute development, validation, or hidden IJCAI scientific scenarios unt
 - the final provider/model/runtime candidate is frozen and content-addressed.
 
 The hidden expert benchmark remains sealed.
+
+
+## Live qualification update — 2026-11-19
+
+The authenticated Luna/MAF echo-tool preflight **passed** on Plato.
+Observed model `openai/gpt-5.6-luna`, exactly one tool call,
+OpenAI upstream pinned, no fallbacks, seed 2026, temperature not sent,
+compatibility adapter enabled, and
+`PHASE8A_LIVE_OPENROUTER_MAF_PREFLIGHT_PASS=true`.
+No system fingerprint was returned. The run was non-scientific.
+
+The historical October runtime candidate remains unchanged.
+The new live evidence is preserved in
+`experiments/ijcai2027/runtime/live_preflight_evidence_20261119.json`.
+Before outcome-bearing experiments, the approved provider route must
+be attested explicitly and the v0.3 runtime candidate must be verified
+and content-addressed. Scientific pilot integration must use the same
+validated HTTP compatibility transport, not silently bypass it.
+
+The key's successful use does not independently establish billing/credential
+ownership approval, Sol endpoint compatibility or any scientific claim.
