@@ -227,3 +227,78 @@ the distinct C3, C4, C8 conditions and actual scientific-model MCP
 tool boundary; test and record measured-provider-cost accounting.
 Do not claim the completed planning matrix or ledger tests as
 scientific effectiveness results.
+
+
+## Plato ledger gate passed; isolated condition rehearsal staged — 2026-11-19
+
+The researcher pulled branch `d6d0c82`, ran the targeted
+ledger / matrix / MAF preflight test suites, and observed **33/33 passed**.
+The offline CLI reported:
+
+```text
+PHASE8_LEDGER_REGISTERED_TRIALS=108
+PHASE8_LEDGER_BUDGET_CEILING_USD=8
+PHASE8_LEDGER_APPROVED_TO_RUN=false
+PHASE8_LEDGER_RUN_GATE_REASON=scientific execution prohibited by preserved runtime candidate
+PHASE8_LEDGER_NO_PROVIDER_CALLS=true
+PHASE8_LEDGER_GOLD_LABELS_READ=false
+PHASE8_LEDGER_OUTCOME_BEARING=false
+PHASE8_LEDGER_PREFLIGHT_PASS=true
+```
+
+These are correct successful *accounting and authorization* results.
+The false execution approval is required until actual supervisor approval,
+final runtime seal, verified MCP scientific dispatch and real C4 Critic
+and C8 pre/post validation are in place. No paid scientific result exists.
+
+A new executable **offline-only, injected-mock** condition isolation
+rehearsal has been committed in
+`scripts/research/phase8_condition_rehearsal.py` with negative-path
+tests in `tests/research/test_phase8_condition_rehearsal.py`.
+
+It explicitly exercises:
+- C3: Manager proposal goes to a simulated executor with no SOE
+  verifier or post-validation;
+- C4: the same base request goes through an independent generic-Critic
+  callback, with no SOE exposure;
+- C8: the real frozen catalogue applicability resolver governs
+  pre-execution selection, and a post-validator gates mock output
+  reporting;
+- identical allowlisted scenario-derived request facts in each condition;
+- rejection of category, shift, gold, split and scenario-ID fields at
+  the model-visible boundary.
+
+**Scientific boundary:** these are *scripted unit fixtures*. The Critic
+callback is a fake, not an LLM. The executor is a fake, not an MCP
+scientific vision-model invocation. They do not estimate unsafe
+execution rates, model accuracy or PhenoGuard efficacy and must never
+be pooled with paid scientific traces.
+
+Next Pluto / Plato no-charge gate:
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_condition_rehearsal.py \
+  tests/research/test_phase8_attempt_ledger.py \
+  tests/research/test_phase8_qualification_matrix_verify.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_condition_rehearsal.py
+```
+
+Expected: all tests pass,
+`PHASE8_CONDITION_REHEARSAL_PASS=true`,
+`PHASE8_CONDITION_REHEARSAL_PROVIDER_CALLS=0`,
+`PHASE8_CONDITION_REHEARSAL_REAL_GENERIC_LLM_CRITIC=false`,
+`PHASE8_CONDITION_REHEARSAL_REAL_SCIENTIFIC_DISPATCH=false`,
+`PHASE8_CONDITION_REHEARSAL_EXECUTION_APPROVED=false`.
+
+Next real engineering objective: integrate the real MAF/OpenRouter
+Manager and second LLM Critic with the same proven compatibility
+adapter, and an MCP-backed scientific capability/vision model
+dispatcher which distinguishes proposal from safe execution.
+The current Phase 6 MCP v2 calculator/ANOVA/Tukey bridge cannot
+substitute for that scientific-model capability. A final approved
+runtime hash and upstream spend cap are needed before outcome-bearing
+trials.
