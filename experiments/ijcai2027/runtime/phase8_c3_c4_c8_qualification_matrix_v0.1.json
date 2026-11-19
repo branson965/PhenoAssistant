@@ -1,0 +1,1036 @@
+{
+  "api_key_read": false,
+  "case_count": 12,
+  "conditions": [
+    "C3_MANAGER_TOOL_SCHEMAS",
+    "C4_MANAGER_GENERIC_CRITIC",
+    "C8_FULL_PHENOGUARD"
+  ],
+  "cost_forecast": {
+    "additional_generic_critic_calls_not_included": true,
+    "assumed_input_tokens_per_round": 4000,
+    "assumed_output_tokens_per_round": 2048,
+    "forecast_not_measured": true,
+    "forecast_scope": "planned Luna manager/model roundtrips only",
+    "input_usd_per_million": "0.20",
+    "max_rounds_per_trial": 2,
+    "not_a_spending_authorization": true,
+    "output_usd_per_million": "1.20",
+    "provider_retry_and_token_drift_not_included": true,
+    "scientific_tool_execution_or_gpu_cost_not_included": true,
+    "usd": "0.7036416"
+  },
+  "interface": "mcp",
+  "model": "openai/gpt-5.6-luna",
+  "model_visible_context": {
+    "field_allowlist": [
+      "scientific_request",
+      "requested_capability_id",
+      "training_readiness"
+    ],
+    "no_category_shift_labels_pair_ids_or_case_ids": true,
+    "note": "hashes bind visible case facts; do NOT send trial metadata as prompts",
+    "unique_scenario_view_hashes": 9
+  },
+  "outcome_bearing_work_performed": false,
+  "phase7_method_sha256": "25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294",
+  "purpose": "harness qualification on frozen development/validation only, NOT a scientific claim",
+  "required_before_paid_scientific_trials": [
+    "supervisor-approved credential/provider/billing/model route recorded",
+    "final runtime candidate approved and preserved with source hashes",
+    "C3/C4/C8 condition-specific tool/prompt exposure verified",
+    "same HTTP compatibility adapter applied to all model calls",
+    "MCP actual scientific-tool dispatch and sandbox/no-harm policy validated",
+    "append-only attempt logs, measured cost cap and no semantic retries tested",
+    "scientific C8 pre-and-post validation and C4 generic critic audited",
+    "hidden evaluation stays sealed"
+  ],
+  "runtime_v03_candidate_sha256": "e3a8826b8942f2b0951775b557ce3530b2a54ed7666e827e3687443974718c12",
+  "schema": "phenoguard-phase8-c3-c4-c8-qualification-matrix-v0.1",
+  "scientific_execution_permitted": false,
+  "seeds": [
+    2026,
+    2027,
+    2028
+  ],
+  "split_counts": {
+    "development": 8,
+    "validation": 4
+  },
+  "status": "OFFLINE_PLANNED_NOT_APPROVED_NOT_EXECUTED",
+  "trial_count": 108,
+  "trials": [
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p001-valid-arabidopsis",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "fdfe3f9e7321a3af7cb5a6cc"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p001-valid-arabidopsis",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "734fbad0f446c071b3c352aa"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p001-valid-arabidopsis",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "cc1b5c94fee184e560c4aa5b"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p001-valid-arabidopsis",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "442a50fa359327ef2651d325"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p001-valid-arabidopsis",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "31eb58e2903da61966d014ad"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p001-valid-arabidopsis",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "6c0b5040cc456e80a6e98018"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p001-valid-arabidopsis",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "96281666ae45962c3c929df3"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p001-valid-arabidopsis",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "2ea07832feab3066a4f4ec24"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p001-valid-arabidopsis",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "e0f040267ddcad9d05078f14"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "ad773eb25d0f7e8b3db9510688cc0ff89de8cdc70fdb7bc4668c965f514b6e54",
+      "scenario_id_internal_only": "dev-p001-species-potato",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "f23e47b715612800d673404d"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "ad773eb25d0f7e8b3db9510688cc0ff89de8cdc70fdb7bc4668c965f514b6e54",
+      "scenario_id_internal_only": "dev-p001-species-potato",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "4a29ea8b6595483d5f4b4d20"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "ad773eb25d0f7e8b3db9510688cc0ff89de8cdc70fdb7bc4668c965f514b6e54",
+      "scenario_id_internal_only": "dev-p001-species-potato",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "6e186df1c127275d2d34ccd5"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "ad773eb25d0f7e8b3db9510688cc0ff89de8cdc70fdb7bc4668c965f514b6e54",
+      "scenario_id_internal_only": "dev-p001-species-potato",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "8df844564e24d7f2068a7623"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "ad773eb25d0f7e8b3db9510688cc0ff89de8cdc70fdb7bc4668c965f514b6e54",
+      "scenario_id_internal_only": "dev-p001-species-potato",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "fb7032798c02b5faa9325a36"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "ad773eb25d0f7e8b3db9510688cc0ff89de8cdc70fdb7bc4668c965f514b6e54",
+      "scenario_id_internal_only": "dev-p001-species-potato",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "a75667f807f8d94f5027f595"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "ad773eb25d0f7e8b3db9510688cc0ff89de8cdc70fdb7bc4668c965f514b6e54",
+      "scenario_id_internal_only": "dev-p001-species-potato",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "88bc5fa8b8744a20f8c40dca"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "ad773eb25d0f7e8b3db9510688cc0ff89de8cdc70fdb7bc4668c965f514b6e54",
+      "scenario_id_internal_only": "dev-p001-species-potato",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "37b1070a914a7ed94f9bbdea"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "ad773eb25d0f7e8b3db9510688cc0ff89de8cdc70fdb7bc4668c965f514b6e54",
+      "scenario_id_internal_only": "dev-p001-species-potato",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "52caf341e231fed6fb98f3ad"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p002-valid-arabidopsis",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "666a1152f06371d342b942db"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p002-valid-arabidopsis",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "884b40a24c6a8d9f3b8b711b"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p002-valid-arabidopsis",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "1b93520f055dfbf3c7472fea"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p002-valid-arabidopsis",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "637f167a569df89e7246923f"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p002-valid-arabidopsis",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "f6d655040a898d3f50d27175"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p002-valid-arabidopsis",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "bc4efd71075894978727ca42"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p002-valid-arabidopsis",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "474d0c60de4a16f503a1eb7b"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p002-valid-arabidopsis",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "74568e317588a27ac1ae3378"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0",
+      "scenario_id_internal_only": "dev-p002-valid-arabidopsis",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "d8cb38331d52399ace103aad"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "53c7a4f635eb855f9e87217f9c9c55360e8420c25360ad111955d4574a1a66c2",
+      "scenario_id_internal_only": "dev-p002-missing-species",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "268fd1b79d6636177c7d888d"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "53c7a4f635eb855f9e87217f9c9c55360e8420c25360ad111955d4574a1a66c2",
+      "scenario_id_internal_only": "dev-p002-missing-species",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "c88c0009de6f184d4d2a8e15"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "53c7a4f635eb855f9e87217f9c9c55360e8420c25360ad111955d4574a1a66c2",
+      "scenario_id_internal_only": "dev-p002-missing-species",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "447cb998dde459dae034228a"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "53c7a4f635eb855f9e87217f9c9c55360e8420c25360ad111955d4574a1a66c2",
+      "scenario_id_internal_only": "dev-p002-missing-species",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "e680436eb841433566e970ff"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "53c7a4f635eb855f9e87217f9c9c55360e8420c25360ad111955d4574a1a66c2",
+      "scenario_id_internal_only": "dev-p002-missing-species",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "487fd7dbfcb6c846ab34aeba"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "53c7a4f635eb855f9e87217f9c9c55360e8420c25360ad111955d4574a1a66c2",
+      "scenario_id_internal_only": "dev-p002-missing-species",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "847d3ead04cd038c1b2532f1"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "53c7a4f635eb855f9e87217f9c9c55360e8420c25360ad111955d4574a1a66c2",
+      "scenario_id_internal_only": "dev-p002-missing-species",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "b9d453d6ef52e819ea27bb92"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "53c7a4f635eb855f9e87217f9c9c55360e8420c25360ad111955d4574a1a66c2",
+      "scenario_id_internal_only": "dev-p002-missing-species",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "abdeae0202e3fcf5d8e40921"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "53c7a4f635eb855f9e87217f9c9c55360e8420c25360ad111955d4574a1a66c2",
+      "scenario_id_internal_only": "dev-p002-missing-species",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "aa5dac93d3ca77739387adf7"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "dev-p003-valid-potato",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "eb12c792a279a0575def86e8"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "dev-p003-valid-potato",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "da029b572123a9b58c53e5d2"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "dev-p003-valid-potato",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "d4aa4fdaa51f447aeaac2b0f"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "dev-p003-valid-potato",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "3d548405336980d258523556"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "dev-p003-valid-potato",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "01152ba2d9fe80b3ee7eda21"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "dev-p003-valid-potato",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "f5857b4c25600c3d9f8ccc1e"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "dev-p003-valid-potato",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "617a970511ab466f0d172c96"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "dev-p003-valid-potato",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "ff14b72ca762277286fcc768"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "dev-p003-valid-potato",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "130f4e7dce62f7cc5146ebc4"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "7602161409ee88d213555dfc306d18c50d7e5fbf386175af7729c1f119d9e77c",
+      "scenario_id_internal_only": "dev-p003-species-maize",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "beb43b8d37715e123d0d5c71"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "7602161409ee88d213555dfc306d18c50d7e5fbf386175af7729c1f119d9e77c",
+      "scenario_id_internal_only": "dev-p003-species-maize",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "0a40b2b5a7cdd8f6606269eb"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "7602161409ee88d213555dfc306d18c50d7e5fbf386175af7729c1f119d9e77c",
+      "scenario_id_internal_only": "dev-p003-species-maize",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "b1f402bc0bc18d0ff569775f"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "7602161409ee88d213555dfc306d18c50d7e5fbf386175af7729c1f119d9e77c",
+      "scenario_id_internal_only": "dev-p003-species-maize",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "c71a9e05cc0cadccd594e3ca"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "7602161409ee88d213555dfc306d18c50d7e5fbf386175af7729c1f119d9e77c",
+      "scenario_id_internal_only": "dev-p003-species-maize",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "ac5202065f5bd13c49491570"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "7602161409ee88d213555dfc306d18c50d7e5fbf386175af7729c1f119d9e77c",
+      "scenario_id_internal_only": "dev-p003-species-maize",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "9c75322eec3e4e9aa16478b3"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "7602161409ee88d213555dfc306d18c50d7e5fbf386175af7729c1f119d9e77c",
+      "scenario_id_internal_only": "dev-p003-species-maize",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "a00ab94062d18d972ec6e63b"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "7602161409ee88d213555dfc306d18c50d7e5fbf386175af7729c1f119d9e77c",
+      "scenario_id_internal_only": "dev-p003-species-maize",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "46335308d422d53748930bcd"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "7602161409ee88d213555dfc306d18c50d7e5fbf386175af7729c1f119d9e77c",
+      "scenario_id_internal_only": "dev-p003-species-maize",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "a5cd756c8a74883152505b5c"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "9ba471e2e3d00fe3e60b3a5fc4388b0edfe102aa0067e409f50eeaa019dad16c",
+      "scenario_id_internal_only": "dev-training-ready",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "1b3a50f4847886da547ce148"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "9ba471e2e3d00fe3e60b3a5fc4388b0edfe102aa0067e409f50eeaa019dad16c",
+      "scenario_id_internal_only": "dev-training-ready",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "4359229af1c6a9349acebbeb"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "9ba471e2e3d00fe3e60b3a5fc4388b0edfe102aa0067e409f50eeaa019dad16c",
+      "scenario_id_internal_only": "dev-training-ready",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "3e0930e7d3d60e0fd6a8cda9"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "9ba471e2e3d00fe3e60b3a5fc4388b0edfe102aa0067e409f50eeaa019dad16c",
+      "scenario_id_internal_only": "dev-training-ready",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "a9fc42502698db3bcb05d163"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "9ba471e2e3d00fe3e60b3a5fc4388b0edfe102aa0067e409f50eeaa019dad16c",
+      "scenario_id_internal_only": "dev-training-ready",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "907f0db6e2010e1f43b4107e"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "9ba471e2e3d00fe3e60b3a5fc4388b0edfe102aa0067e409f50eeaa019dad16c",
+      "scenario_id_internal_only": "dev-training-ready",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "44ed7f420198c69d9ff04bf1"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "9ba471e2e3d00fe3e60b3a5fc4388b0edfe102aa0067e409f50eeaa019dad16c",
+      "scenario_id_internal_only": "dev-training-ready",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "32ca3ad851cbde4d9830f9e0"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "9ba471e2e3d00fe3e60b3a5fc4388b0edfe102aa0067e409f50eeaa019dad16c",
+      "scenario_id_internal_only": "dev-training-ready",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "248f5968ed7572f08cf9460c"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "9ba471e2e3d00fe3e60b3a5fc4388b0edfe102aa0067e409f50eeaa019dad16c",
+      "scenario_id_internal_only": "dev-training-ready",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "510b06de65047984c8b000b1"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "ee8028f433a960cdb0b86175c39f9e8a10510055b6366d21de1f636c8b760202",
+      "scenario_id_internal_only": "dev-training-missing-data",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "0ac73cbcf041f64c4d34fbc3"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "ee8028f433a960cdb0b86175c39f9e8a10510055b6366d21de1f636c8b760202",
+      "scenario_id_internal_only": "dev-training-missing-data",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "f553a114c6fe36ff110a7b94"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "ee8028f433a960cdb0b86175c39f9e8a10510055b6366d21de1f636c8b760202",
+      "scenario_id_internal_only": "dev-training-missing-data",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "57ea8bebafaed901c79d9dbf"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "ee8028f433a960cdb0b86175c39f9e8a10510055b6366d21de1f636c8b760202",
+      "scenario_id_internal_only": "dev-training-missing-data",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "fa5a8742673c46b6f2cc54ae"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "ee8028f433a960cdb0b86175c39f9e8a10510055b6366d21de1f636c8b760202",
+      "scenario_id_internal_only": "dev-training-missing-data",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "3be9073ae301590cd6b90382"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "ee8028f433a960cdb0b86175c39f9e8a10510055b6366d21de1f636c8b760202",
+      "scenario_id_internal_only": "dev-training-missing-data",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "e32fb415352a66791b38bb88"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "ee8028f433a960cdb0b86175c39f9e8a10510055b6366d21de1f636c8b760202",
+      "scenario_id_internal_only": "dev-training-missing-data",
+      "seed": 2026,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "6adad688b9652cc62738b8cc"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "ee8028f433a960cdb0b86175c39f9e8a10510055b6366d21de1f636c8b760202",
+      "scenario_id_internal_only": "dev-training-missing-data",
+      "seed": 2027,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "f68296cb8e4a0500f9ab35d7"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "ee8028f433a960cdb0b86175c39f9e8a10510055b6366d21de1f636c8b760202",
+      "scenario_id_internal_only": "dev-training-missing-data",
+      "seed": 2028,
+      "split_internal_only": "development",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "9483b59f3a64f853e1bb9357"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p001-valid-potato",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "09045379009b83d2616fb04a"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p001-valid-potato",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "9be85a1aa3dcbc4a5316873b"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p001-valid-potato",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "61b36ec100ddf2d13778f072"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p001-valid-potato",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "31112047063818f84b3d1cd1"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p001-valid-potato",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "478ab4a64fc07a7b771a223e"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p001-valid-potato",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "3ab01a312efdffb9986fc453"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p001-valid-potato",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "6cc2c945fb1479480353b30b"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p001-valid-potato",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "1f340cc796b861974dfea83f"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p001-valid-potato",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "ba0f208b3c5666acb5d3fb1f"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "ea159e6bb1ec6a361c37e87c720857e781529ea437d01fd14864e48f9c7413dd",
+      "scenario_id_internal_only": "val-p001-species-arabidopsis",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "458e9927791ef0affbf6cbd1"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "ea159e6bb1ec6a361c37e87c720857e781529ea437d01fd14864e48f9c7413dd",
+      "scenario_id_internal_only": "val-p001-species-arabidopsis",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "c4e6cbdba36765e2e975b380"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "ea159e6bb1ec6a361c37e87c720857e781529ea437d01fd14864e48f9c7413dd",
+      "scenario_id_internal_only": "val-p001-species-arabidopsis",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "fcd5e7331bb01c3d7fa2c6e1"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "ea159e6bb1ec6a361c37e87c720857e781529ea437d01fd14864e48f9c7413dd",
+      "scenario_id_internal_only": "val-p001-species-arabidopsis",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "a7453e3d55cc66db4b6c429e"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "ea159e6bb1ec6a361c37e87c720857e781529ea437d01fd14864e48f9c7413dd",
+      "scenario_id_internal_only": "val-p001-species-arabidopsis",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "f0223052ce6ba8e69c6f0032"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "ea159e6bb1ec6a361c37e87c720857e781529ea437d01fd14864e48f9c7413dd",
+      "scenario_id_internal_only": "val-p001-species-arabidopsis",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "948a4e2e0c4420bc3724f2e2"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "ea159e6bb1ec6a361c37e87c720857e781529ea437d01fd14864e48f9c7413dd",
+      "scenario_id_internal_only": "val-p001-species-arabidopsis",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "c3b6debe0548bdbb89934981"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "ea159e6bb1ec6a361c37e87c720857e781529ea437d01fd14864e48f9c7413dd",
+      "scenario_id_internal_only": "val-p001-species-arabidopsis",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "4656d9d372b5deb6ce6b0191"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "ea159e6bb1ec6a361c37e87c720857e781529ea437d01fd14864e48f9c7413dd",
+      "scenario_id_internal_only": "val-p001-species-arabidopsis",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "c54b120f1bb980a7478a9ce3"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p002-valid-potato",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "37e006019f978bb5d25da43a"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p002-valid-potato",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "a9fc7215beb964b26da5dbdf"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p002-valid-potato",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "986d1444480a5771429caabc"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p002-valid-potato",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "c44f54188bfc4127fdd61ac3"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p002-valid-potato",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "6bc8c638408b2f738b67edc2"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p002-valid-potato",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "2bcb17382815ba9ba490af2e"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p002-valid-potato",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "44b3929f450d781d40390ad5"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p002-valid-potato",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "df15e2f499e8b8277beb618e"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "b2c89d5871855d0015e4f96d2bdd9623ba0e8751fc4e15dd69a7a05b9f6ec69d",
+      "scenario_id_internal_only": "val-p002-valid-potato",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "dfb683218e65c470a1be29b7"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "2f7f35c94508d2013ff7726aff1cf666649006841463e5e5e941e51d4fd4172b",
+      "scenario_id_internal_only": "val-p002-missing-species",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "ff0fb8707d4821eff6af7b03"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "2f7f35c94508d2013ff7726aff1cf666649006841463e5e5e941e51d4fd4172b",
+      "scenario_id_internal_only": "val-p002-missing-species",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "591bd75684de1c44eee888ba"
+    },
+    {
+      "condition_id": "C3_MANAGER_TOOL_SCHEMAS",
+      "model_visible_view_sha256": "2f7f35c94508d2013ff7726aff1cf666649006841463e5e5e941e51d4fd4172b",
+      "scenario_id_internal_only": "val-p002-missing-species",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "a4bf04b215337f0f8535c815"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "2f7f35c94508d2013ff7726aff1cf666649006841463e5e5e941e51d4fd4172b",
+      "scenario_id_internal_only": "val-p002-missing-species",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "317b358758c773d7ef453a02"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "2f7f35c94508d2013ff7726aff1cf666649006841463e5e5e941e51d4fd4172b",
+      "scenario_id_internal_only": "val-p002-missing-species",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "8d9819e4e11a16a8a2401ddf"
+    },
+    {
+      "condition_id": "C4_MANAGER_GENERIC_CRITIC",
+      "model_visible_view_sha256": "2f7f35c94508d2013ff7726aff1cf666649006841463e5e5e941e51d4fd4172b",
+      "scenario_id_internal_only": "val-p002-missing-species",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "21c4c161539044207ba2f04b"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "2f7f35c94508d2013ff7726aff1cf666649006841463e5e5e941e51d4fd4172b",
+      "scenario_id_internal_only": "val-p002-missing-species",
+      "seed": 2026,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "94d3e78d800538ec51ea3044"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "2f7f35c94508d2013ff7726aff1cf666649006841463e5e5e941e51d4fd4172b",
+      "scenario_id_internal_only": "val-p002-missing-species",
+      "seed": 2027,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "06a45e91916baaa4e51df687"
+    },
+    {
+      "condition_id": "C8_FULL_PHENOGUARD",
+      "model_visible_view_sha256": "2f7f35c94508d2013ff7726aff1cf666649006841463e5e5e941e51d4fd4172b",
+      "scenario_id_internal_only": "val-p002-missing-species",
+      "seed": 2028,
+      "split_internal_only": "validation",
+      "status": "PLANNED_NO_MODEL_CALL",
+      "trial_id": "508389b8cddfca74ff60d765"
+    }
+  ]
+}
