@@ -1121,3 +1121,37 @@ approved final runtime still requires separate source hashing and
 supervisor/provider-route attestation before scientific execution.
 
 **Scores unchanged: 51% overall, Phase 8 20%, 6/9 closed.**
+
+
+## Phase 8 MAF request repair verified; mediated C3/C4/C8 MCP bridge staged — 2026-11-19
+
+Plato successfully pulled `277c320` and passed **77/77** targeted
+MAF/OpenRouter transport, scientific MCP and condition-isolation tests.
+The direct MAF decision CLI confirmed no provider calls, no Critic
+inference and no scientific execution, with
+`PHASE8_MAF_DECISION_OFFLINE_PREFLIGHT_PASS=true`, and the worktree
+was clean. The previous missing tool_choice and early import bugs
+are corrected under the pinned environment.
+
+New `scripts/research/phase8_proposal_mcp_bridge_v1.py`
+and `tests/research/test_phase8_proposal_mcp_bridge_v1.py`
+integrate approved-runtime-gated, model-proposed **typed JSON
+decisions** with C4-only independent Critic, C8-only frozen SOE
+resolver, and the identical MCP scientific tool protocol for
+app-bound image IDs. New test coverage includes full MAF SDK
+fake-HTTP → MCP real protocol → fake vision inference, no real
+credits or outcomes.
+
+The integration does **not** implement native model function
+calling, image-appropriate real post-validation, provider-billed
+metering, signed supervisor trust anchor, or the final approved
+scientific runner. Test approvals are synthetic. The bridge's
+C3/C4 post-validity is recorded as **unassessed/null**, never
+automatically marked unsafe from absence of C8 validation.
+
+These new bridge tests have **not yet run on Plato**; this commit
+does not advance scientific effectiveness evidence or authorize
+paid trials. Supervisor credential/billing/model approval remains
+unverified; the 108 planned scientific trials remain unexecuted.
+
+**Scores remain 51% overall, Phase 8 20%, six of nine phases closed.**
