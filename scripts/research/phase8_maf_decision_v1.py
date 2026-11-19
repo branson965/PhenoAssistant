@@ -38,7 +38,9 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from phenoassistant_mcp.client_v2 import MCP_PROTOCOL_VERSION  # noqa: E402
-from phenoassistant_mcp.scientific_inference_v1 import verify_approved_runtime  # noqa: E402
+from phenoassistant_mcp.scientific_inference_v1 import (  # noqa: E402
+    verify_approved_runtime, verify_trusted_runtime,
+)
 from research.phenoguard.contracts import ApplicabilityDecision, ScientificRequestContext, TrainingReadinessContext  # noqa: E402
 from research.phenoguard.provenance import build_default_provenance_catalogue  # noqa: E402
 from scripts.research.openrouter_compat import OpenRouterCompatTransport  # noqa: E402
@@ -291,8 +293,15 @@ class Phase8MafDecisionClient:
         seed: int,
         upstream: httpx.AsyncBaseTransport | None = None,
     ) -> "Phase8MafDecisionClient":
-        # Real-model construction is impossible with historic unapproved v0.3.
-        verify_approved_runtime(approved_runtime_path, approved_runtime_sha256)
+        # A caller-supplied JSON plus its own SHA is NOT authorization
+        # to spend real credits. The independent final-runtime digest pin
+        # is deliberately unset until actual supervisor/harness approval.
+        # Only genuine in-process httpx.MockTransport may use a synthetic
+        # approved record, for no-network protocol regression tests.
+        if isinstance(upstream, httpx.MockTransport):
+            verify_approved_runtime(approved_runtime_path, approved_runtime_sha256)
+        else:
+            verify_trusted_runtime(approved_runtime_path, approved_runtime_sha256)
         if not isinstance(api_key, str) or not api_key.strip():
             raise Phase8ProposalError("approved runtime requires an explicit key")
         if type(seed) is not int or seed not in SEEDS:
