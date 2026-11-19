@@ -9,6 +9,9 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
+import subprocess
+import sys
 from pathlib import Path
 
 import httpx
@@ -304,3 +307,28 @@ def test_no_scientific_cli_execution_or_hidden_gold_access():
     assert "PHASE8_MAF_DECISION_ACTUAL_REQUESTS=0" in source
     assert "PHASE8_MAF_DECISION_APPROVED_TO_RUN=false" in source
     assert "OpenRouterCompatTransport" in source
+
+
+def test_standalone_script_resolves_repo_imports_and_never_calls_provider():
+    """Reproduce the exact Plato direct-file invocation that previously failed."""
+    root = Path(__file__).resolve().parents[2]
+    env = dict(os.environ)
+    env.pop("OPENROUTER_API_KEY", None)
+    completed = subprocess.run(
+        [sys.executable, str(root / "scripts/research/phase8_maf_decision_v1.py")],
+        cwd=root,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+    assert completed.returncode == 0, (
+        "direct script execution failed: " + completed.stderr[-1600:]
+    )
+    output = completed.stdout
+    assert "PHASE8_MAF_DECISION_OFFLINE_PREFLIGHT_PASS=true" in output
+    assert "PHASE8_MAF_DECISION_ACTUAL_REQUESTS=0" in output
+    assert "PHASE8_MAF_DECISION_REAL_CRITIC_CALLS=0" in output
+    assert "PHASE8_MAF_DECISION_SCIENTIFIC_TOOL_CALLS=0" in output
+    assert "PHASE8_MAF_DECISION_APPROVED_TO_RUN=false" in output
