@@ -339,3 +339,91 @@ The eventual pre-outcome compatibility remedy should preserve:
 
 Do not submit further paid calls until the installed runtime's actual
 request confirms the set of unsupported parameters.
+
+
+## Exact post-MAF request captured, compatibility adapter staged (2026-11-19)
+
+Plato fast-forwarded to `6f09554`. The offline wire-capture regression
+suite passed **16/16**. The actual `agent-framework-openai==1.11.0`
+generated HTTP request contained **both** endpoint-incompatible fields:
+
+```text
+max_completion_tokens=512
+parallel_tool_calls=false
+```
+
+The remaining control fields were preserved and correct:
+`model=openai/gpt-5.6-luna`, `seed=2026`,
+`reasoning.effort=medium`, `tool_choice=required`,
+`provider.order=[openai]`, `allow_fallbacks=false`,
+`require_parameters=true`, `stream=false`, exactly one advertised
+tool. The capture used a fake key and blocked transmission; no
+inference charge.
+
+The OpenAI-tagged Luna endpoints advertise `max_tokens`, but not
+`max_completion_tokens` or `parallel_tool_calls`.
+
+The exact two-field *interface compatibility* remedy is committed:
+
+- `scripts/research/openrouter_compat.py` implements a fail-closed
+  `httpx.AsyncBaseTransport` that enforces the Luna model identity,
+  strict OpenAI routing, medium reasoning effort, 2026/2027/2028
+  seed schedule, no transmitted temperature, token ceiling, and
+  the permitted non-streaming request shape.
+- At the final HTTP transport boundary it converts
+  `max_completion_tokens: N` to `max_tokens: N`; it omits
+  `parallel_tool_calls` **only when false**. An enabled
+  parallel-tool request fails locally.
+- Prompts, messages, tools, seed, routing, model and token *value*
+  remain unchanged. MAF's `max_function_calls=1` and
+  `allow_concurrent_invocation=false` stay in force.
+- `scripts/research/validate_ijcai_openrouter_preflight.py`
+  now constructs an injected `AsyncOpenAI` client with that
+  compatibility transport. SDK automatic preflight retries
+  are disabled.
+- `scripts/research/capture_phase8_maf_request_shape.py`
+  now intercepts at `httpx.AsyncHTTPTransport.handle_async_request`
+  to capture the **post-adapter** request, not the pre-rewrite
+  MAF request.
+- `tests/research/test_phase8_openrouter_compat.py`
+  adds negative-path guardrails and an actual MAF no-network
+  integration assertion.
+
+Local isolated `httpx` adapter tests passed **14/14** in the authoring
+environment; the full MAF runtime integration tests must still
+be run on Plato.
+
+### Exact Plato validation before any paid retry
+
+First run `git pull --ff-only origin experiments/ijcai2027` as a
+standalone Git command and complete the SSH passphrase prompt.
+
+Then:
+
+```bash
+cd ~/PhenoAssistant
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_openrouter_compat.py \
+  tests/research/test_phase8_request_shape_capture.py \
+  tests/research/test_phase8_preflight.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/capture_phase8_maf_request_shape.py
+```
+
+Required offline output:
+- all targeted tests pass;
+- `PHASE8_WIRE_SHAPE_CAPTURE_PASS=true`;
+- `PHASE8_WIRE_SHAPE_PAID_INFERENCE=false`;
+- request body includes `max_tokens=512`;
+- request body contains **neither**
+  `max_completion_tokens` nor `parallel_tool_calls`;
+- strict provider pin and all other controls unchanged.
+
+Do **not** retry the paid OpenRouter echo until those outputs pass.
+After offline verification and confirmation of the approved
+billing/provider/model route, run one paid non-scientific echo
+using the existing script. The new wire-compatibility transport
+is an explicitly documented pre-outcome interface change, **not**
+a new scientific method or revised experimental condition.
+Before any scientific scenario, freeze a newly content-addressed
+final runtime candidate that records this adapter.
