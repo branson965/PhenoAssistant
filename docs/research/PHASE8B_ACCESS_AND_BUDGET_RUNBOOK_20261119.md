@@ -1,7 +1,7 @@
 # Phase 8B: New OpenRouter Key, No-Charge Budget Gate and First Paid Preflight
 
 **Date:** 2026-11-19  
-**Status:** CREDENTIAL_REPORTED_AVAILABLE; LIVE_ACCESS_NOT_VERIFIED  
+**Status:** KEY_AUTH_AND_MODEL_CATALOGUE_VERIFIED; PAID_MAF_TOOL_PREFLIGHT_PENDING  
 **Scope:** post-Phase-7-v0.2, strictly pre-outcome  
 **User-reported starting credit:** $9 USD (not independently verified)
 
@@ -23,8 +23,8 @@ phases fully closed.
 
 ## OpenRouter listed model costs at drafting time
 
-- `openai/gpt-5.6-luna`: $0.10/M input, $0.60/M output.
-- `openai/gpt-5.6-sol`: $5/M input, $30/M output.
+- `openai/gpt-5.6-luna`: **$0.20/M input, $1.20/M output** (authenticated model-catalogue check on 2026-11-19).
+- `openai/gpt-5.6-sol`: **$4.00/M input, $20.00/M output** (authenticated model-catalogue check on 2026-11-19).
 
 Prices can change. The public model catalogue is read at run time and its
 observed exact model prices must replace these estimates before paid work.
@@ -141,3 +141,46 @@ Sol breadth subset only after actual measured per-round spend is known.
 
 **Scientific execution remains forbidden** until the formal Phase 8A provider
 conditions and non-scientific preflight have passed.
+
+
+## Observed Plato results — 2026-11-19
+
+The researcher ran the exact gate on Plato on branch
+`experiments/ijcai2027`. The repository fast-forwarded from
+`2c9717a` to `24ba5f1`; the targeted offline suite passed
+**17/17** in 3.54 seconds.
+
+Observed safe marker set, transcribed without credentials:
+
+```text
+PHASE8_KEY_AUTH_VALID=true
+PHASE8_MODEL_LUNA_CATALOGUE_PRESENT=true
+PHASE8_MODEL_SOL_CATALOGUE_PRESENT=true
+PHASE8_KEY_LIMIT_REMAINING_USD=50
+PHASE8_ACCOUNT_BALANCE_SOURCE=user-reported-not-api-verified
+PHASE8_REPORTED_BALANCE_USD=9
+PHASE8_LUNA_INPUT_PER_MILLION_USD=0.2000000
+PHASE8_LUNA_OUTPUT_PER_MILLION_USD=1.2000000
+PHASE8_SOL_INPUT_PER_MILLION_USD=4.000000
+PHASE8_SOL_OUTPUT_PER_MILLION_USD=20.00000
+PHASE8_ESTIMATED_LUNA_USD=2.1109248
+PHASE8_ESTIMATED_SOL_USD=4.101120
+PHASE8_ESTIMATED_TOTAL_USD=6.2120448
+PHASE8_PILOT_COST_CEILING_USD=8.00
+PHASE8_ESTIMATED_HEADROOM_USD=1.7879552
+PHASE8_OUTCOME_BEARING=false
+PHASE8_BUDGET_CHECK_PASS=true
+```
+
+**Interpretation:** Authentication and exact study-model catalogue
+availability pass. The 50 USD number is a **per-key spending allowance**,
+not a verified account credit balance; budget against the reported
+9 USD until confirmed otherwise. The $6.21 forecast assumes up to two
+roundtrips per trial and is neither measured spend nor clearance to execute
+the entire pilot. No tool-call completion has been observed yet.
+
+**Next:** once supervisor/provider/billing approval of this key and model
+route is confirmed, execute exactly one non-scientific paid echo-tool
+preflight using the existing script. Preserve the printed safe markers;
+do not execute a scientific scenario yet. The paper progress score remains
+51% overall, 20% Phase 8, 6/9 phases fully closed.
