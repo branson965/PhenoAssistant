@@ -427,3 +427,43 @@ is an explicitly documented pre-outcome interface change, **not**
 a new scientific method or revised experimental condition.
 Before any scientific scenario, freeze a newly content-addressed
 final runtime candidate that records this adapter.
+
+
+## Plato post-adapter verification passed — 2026-11-19
+
+The researcher pulled experiment branch `c52b2ab` and executed the
+targeted MAF/transport/preflight suite on Plato. **32/32 tests passed**
+in 2.36 seconds.
+
+The real installed runtime's offline post-adapter HTTP capture
+reported:
+
+```text
+model=openai/gpt-5.6-luna
+max_tokens=512
+max_completion_tokens=ABSENT
+parallel_tool_calls=ABSENT
+seed=2026
+reasoning.effort=medium
+tool_choice=required
+provider.order=[openai]
+provider.allow_fallbacks=false
+provider.require_parameters=true
+stream=false
+tool_count=1
+PHASE8_WIRE_SHAPE_PAID_INFERENCE=false
+PHASE8_WIRE_SHAPE_OUTCOME_BEARING=false
+PHASE8_WIRE_SHAPE_CAPTURE_PASS=true
+```
+
+This verifies the exact two-field wire repair under the pinned
+Plato MAF environment with no real credential or paid inference call.
+The OpenAI provider pin, seed, reasoning effort, tool visibility and
+strict parameter requirements remained unchanged.
+
+**Gate decision:** offline compatibility **PASSED**. The next permitted
+step, once credential ownership/provider/billing/model approval is
+confirmed, is exactly one paid **non-scientific** MAF/OpenRouter
+`phase8_preflight_echo` using the already implemented preflight
+script. Its result must be inspected before any scientific trial.
+Do not yet mark live preflight passed or runtime controls finally frozen.
