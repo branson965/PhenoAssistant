@@ -1061,3 +1061,34 @@ trials. The 12-case qualification matrix and 108 planned trials
 remain unexecuted.
 
 **Scores unchanged:** 51% overall, Phase 8 20%, 6/9 phases closed.
+
+
+## Phase 8 scientific MCP passed; real MAF proposal and generic-Critic SDK wiring (2026-11-19)
+
+Plato pulled `63360dc` and passed **36/36** offline scientific MCP,
+condition and attempt-ledger tests in 5.98 seconds. The worktree was
+clean. This validates actual MCP client/server protocol and the
+provenance-bounded tool schema using **fake** vision inference, but
+no GPU execution or scientific outcomes.
+
+New `scripts/research/phase8_maf_decision_v1.py` and
+`tests/research/test_phase8_maf_decision_v1.py` are now committed
+to the experiment branch. They implement real MAF/OpenAI SDK proposal
+client construction through the already verified OpenRouter
+compatibility transport; C3/C4 exact same Manager prompts; C8-only
+SOE exposure; and a distinct C4 generic Critic LLM request without
+scientific-envelope/gold information. The client is impossible to
+construct against the historic unapproved v0.3 candidate. Its tests
+use a fake HTTP provider and a synthetic temporary approved record.
+These new tests have **not yet been verified on Plato**.
+
+The interface currently produces **typed proposals** and does not
+invoke native LLM tool calls, GPU vision models or the scientific
+MCP dispatcher. Real provider output, model/seed drift, per-call
+usage and provider-billed charges remain to be checked. No
+outcome-bearing experimental call is authorized, and supervisor
+approval of the credential/provider/billing/model route remains
+unconfirmed. Full scientific runner/harness and real protected
+fixtures are still outstanding.
+
+**Scores unchanged:** overall 51%, Phase 8 20%, 6/9 fully closed.
