@@ -326,3 +326,76 @@ def test_missing_asset_id_is_rejected(mcp, approval):
         asyncio.run(run())
     assert agent.calls == []
     assert seen == []
+
+
+def test_end_to_end_real_maf_mock_http_to_real_mcp_fake_vision(
+    mcp, approval,
+):
+    """A full SDK+HTTP-transport+MCP cycle, with zero external network."""
+    path, digest = approval
+    server, seen = mcp
+    sent = []
+    response_text = json.dumps({"decision": "EXECUTE", "capability_id": CASE1})
+
+    async def offline_provider(request):
+        payload = json.loads(request.content)
+        sent.append(payload)
+        return httpx.Response(200, json={
+            "id": "chatcmpl-offline-maf-mcp-bridge",
+            "object": "chat.completion",
+            "created": 1795095000,
+            "model": MODEL,
+            "choices": [{
+                "index": 0,
+                "message": {"role": "assistant", "content": response_text},
+                "finish_reason": "stop",
+            }],
+            "usage": {
+                "prompt_tokens": 150, "completion_tokens": 40, "total_tokens": 190,
+            },
+        })
+
+    async def run():
+        service = Phase8MafDecisionClient.create(
+            approved_runtime_path=path,
+            approved_runtime_sha256=digest,
+            api_key="sk-or-v1-SYNTHETIC-TEST-NOT-A-REAL-KEY",
+            seed=2026,
+            upstream=httpx.MockTransport(offline_provider),
+        )
+        try:
+            return await bridge_one(
+                condition=C3,
+                visible_view=view(),
+                approved_runtime_path=path,
+                approved_runtime_sha256=digest,
+                decision_client=service,
+                mcp_server=server,
+                bound_image_asset_id="bound_image_1",
+                post_validator=None,
+            )
+        finally:
+            await service.close()
+
+    result = asyncio.run(run())
+    assert result.model_call_count == 1
+    assert result.mcp_dispatch_completed is True
+    assert result.safe_to_report is False
+    assert result.final_decision == "EXECUTE"
+    assert len(seen) == 1 and len(sent) == 1
+    request = sent[0]
+    assert request["model"] == MODEL
+    assert request["provider"] == {
+        "order": ["openai"],
+        "allow_fallbacks": False,
+        "require_parameters": True,
+    }
+    assert request["seed"] == 2026
+    assert request["reasoning"] == {"effort": "medium"}
+    assert request["max_tokens"] == 2048
+    assert "max_completion_tokens" not in request
+    assert "parallel_tool_calls" not in request
+    assert "temperature" not in request
+    assert "scientific_operating_envelopes" not in json.dumps(request)
+    assert "expected_decision" not in json.dumps(request)
+    assert result.result_scope == "INTEGRATION_ONLY_NOT_SCIENTIFIC_EVALUATION"
