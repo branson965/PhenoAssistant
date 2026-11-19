@@ -173,26 +173,24 @@ def test_no_unbounded_scientific_paths_or_gpu_settings_in_mcp_schema(
     assert calls[0][0] == CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID
     assert calls[0][2] == tiny_asset["approved_image_1"].path.resolve()
 
-    # A second attempt may not silently overwrite the same scientific output.
-    with pytest.raises(ScientificMcpDispatchError, match="already exists"):
-        # This tests the direct registered handler's invariant in a fresh
-        # function invocation without translating SDK error envelopes.
-        server2 = make_server(
-            tmp_path, synthetic_final_record, tiny_asset, record_delegate
-        )
-        # Invoke the server tool through MCP and assert it raises a protocol error.
-        # The server will return is_error, propagated by McpV2Session.
-        async def duplicate():
-            async with McpV2Session(server2) as session:
-                await session.call_structured_tool(
-                    "run_scientific_model",
-                    {"capability_id": CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID,
-                     "image_asset_id": "approved_image_1"},
-                    timeout_seconds=10.0,
-                )
-        # Real MCP wraps the underlying error, so do not require exact wording.
-        # The idempotency check is enforced at the server boundary.
+    # A second invocation must return a real MCP tool-error envelope
+    # and must not execute the model again.
+    from phenoassistant_mcp.client_v2 import McpV2ToolError
+
+    async def duplicate():
+        async with McpV2Session(server) as session:
+            return await session.call_structured_tool(
+                "run_scientific_model",
+                {
+                    "capability_id": CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID,
+                    "image_asset_id": "approved_image_1",
+                },
+                timeout_seconds=10,
+            )
+
+    with pytest.raises(McpV2ToolError):
         asyncio.run(duplicate())
+    assert len(calls) == 1
 
 
 def test_mcp_classification_boundary_returns_verified_artifact(
