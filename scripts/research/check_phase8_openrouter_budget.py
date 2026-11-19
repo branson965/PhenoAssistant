@@ -138,7 +138,7 @@ def main() -> int:
         key_data = get_json("/key", api_key=key).get("data")
         if not isinstance(key_data, dict):
             raise ValueError("key endpoint returned no key information")
-        prices = extract_prices(get_json("/models"))
+        prices = extract_prices(get_json("/models", api_key=key))
         plan = budget_plan(
             prices,
             available_usd=args.reported_balance_usd,
