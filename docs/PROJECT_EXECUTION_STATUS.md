@@ -996,3 +996,33 @@ any scientific results are claimed. Provider/model approval is
 not attested.
 
 **Scores unchanged:** 51% overall; Phase 8 20%; 6/9 fully closed.
+
+
+## Phase 8 ledger gate PASS and offline C3/C4/C8 separation rehearsal — 2026-11-19
+
+The user pulled `d6d0c82` on Plato and passed **33/33** targeted
+offline tests in 0.27 seconds. Ledger output confirmed 108 registered
+trials, an $8 software cost ceiling, no gold-label reads, no
+provider calls, and `PHASE8_LEDGER_PREFLIGHT_PASS=true`.
+`PHASE8_LEDGER_APPROVED_TO_RUN=false` is intentionally correct because
+the pre-outcome runtime candidate still prohibits scientific execution.
+
+The experiment branch now includes
+`scripts/research/phase8_condition_rehearsal.py` and
+`tests/research/test_phase8_condition_rehearsal.py`, a separate
+OFFLINE simulated condition-isolation rehearsal. It instantiates
+C3 with no SOE verifier, C4 with an explicit separate generic-Critic
+callback (mocked in tests), and C8 with the real deterministic SOE
+resolver and injected post-execution validator. All three use the
+same narrowly allowlisted case facts. It rejects leaked gold,
+scenario category, internal ID, split and shift information.
+
+The staged rehearsal has **not yet been tested on Plato**.
+Any scripted unsafe attempt, correction or rejected mock output
+from its unit tests is *not a real LLM outcome*. The actual real
+C4 LLM critic, provider-backed MAF manager, verified full scientific
+MCP model dispatcher and measured billing integration are still
+required. The earlier three-tool parity MCP v2 bridge cannot be
+substituted for scientific model execution.
+
+**Scores unchanged:** overall 51%, Phase 8 20%, 6/9 phases closed.
