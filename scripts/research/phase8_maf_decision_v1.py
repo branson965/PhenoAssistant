@@ -30,6 +30,10 @@ import httpx
 from agent_framework import Message
 from agent_framework.openai import OpenAIChatCompletionClient
 from openai import AsyncOpenAI
+from mcp import Client
+from mcp.server import MCPServer
+
+from phenoassistant_mcp.client_v2 import MCP_PROTOCOL_VERSION
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -155,6 +159,26 @@ def validate_mcp_schema(tool: dict[str, Any]) -> dict:
         raise Phase8ProposalError("MCP schema property malformed")
     _reject_leakage(tool)
     return json.loads(json.dumps(tool))
+
+
+async def discover_real_mcp_tool(server: MCPServer) -> dict[str, Any]:
+    """Discover the scientific tool from the real MCP protocol without calling it.
+
+    This queries exactly one advertised tool and returns only schema metadata,
+    not a fixture, raw path, gold label or scientific result.
+    """
+    async with Client(server, mode=MCP_PROTOCOL_VERSION) as client:
+        listing = await asyncio.wait_for(client.list_tools(), timeout=10)
+    if len(listing.tools) != 1 or listing.tools[0].name != TOOL_NAME:
+        raise Phase8ProposalError("unexpected number or identity of MCP tools")
+    tool = listing.tools[0]
+    serialized = tool.model_dump(by_alias=True)
+    schema = serialized.get("inputSchema", serialized.get("input_schema"))
+    return validate_mcp_schema({
+        "name": tool.name,
+        "description": tool.description,
+        "input_schema": schema,
+    })
 
 
 def manager_prompt(
