@@ -184,3 +184,58 @@ route is confirmed, execute exactly one non-scientific paid echo-tool
 preflight using the existing script. Preserve the printed safe markers;
 do not execute a scientific scenario yet. The paper progress score remains
 51% overall, 20% Phase 8, 6/9 phases fully closed.
+
+
+## Live preflight failure and controlled diagnostic — 2026-11-19
+
+The first `scripts/research/validate_ijcai_openrouter_preflight.py` live
+attempt on Plato returned **HTTP 404** from OpenRouter:
+
+```text
+No endpoints found that can handle the requested parameters
+failed_routing_step=Filter by Parameters
+initial_endpoints=8
+after_regional_filter=5
+after_tier_filter=3
+```
+
+This is **not** a successful MAF tool-call preflight. It also is not
+evidence that the scientific PhenoGuard method failed, because no
+scientific scenario was executed. OpenRouter's parameter enforcement
+refused the request before the provider accepted it. The exact
+offending request parameter has **not** been established.
+
+The preflight includes a forced `tool_choice="required"`, seed 2026,
+reasoning effort medium, token cap, a single tool, and
+`provider.require_parameters=true`. Do not guess which one caused the
+404, disable strict parameter matching, or silently change
+provider/model/seed policy.
+
+New non-inference diagnostic:
+
+```bash
+cd ~/PhenoAssistant
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_routing_diagnostic.py \
+  tests/research/test_phase8_preflight.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/diagnose_phase8_openrouter_routing.py
+```
+
+It uses authenticated GET `/models` for exact model supported
+parameters and attempts authenticated GET
+`/models/openai/gpt-5.6-luna/endpoints` for per-endpoint
+supported-parameter sets. It prints no key and executes no model.
+The endpoints endpoint may require management-key access (403);
+in that case retain the model-level signal but **do not** infer which
+provider endpoint supports the full parameter combination.
+
+After inspecting the diagnostic output, the next action is to
+produce a bounded, explicit *pre-outcome* compatibility remedy, with
+a new runtime-candidate version if any study model/runtime control
+changes. Preserve the October candidate and the failure evidence.
+Only rerun the paid echo after the concrete incompatibility has
+been identified and the approved provider route is retained.
+
+**Status:** LIVE_ECHO_FAILED_PARAMETER_ROUTING; diagnostic pending.
+**Progress:** unchanged (overall 51%, Phase 8 20%, 6/9 fully closed).
