@@ -811,3 +811,35 @@ scientific-method file is modified, no further paid echo attempted, and
 no scientific outcome is claimed.
 
 **Scores unchanged:** overall 51%; Phase 8 20%; 6/9 fully closed.
+
+
+## Phase 8 preflight 404 exact request diagnosis and compatibility remedy — 2026-11-19
+
+Plato passed 16/16 offline wire-request capture tests. The captured
+non-scientific MAF 1.11.0 request had both
+`max_completion_tokens=512` and `parallel_tool_calls=false`.
+OpenRouter's OpenAI-tagged Luna endpoints advertise neither field,
+but do advertise `max_tokens` and the other transmitted controls.
+
+An isolated fail-closed HTTP compatibility adapter was committed outside
+the 22 frozen Phase 7 v0.2 scientific-method files. It translates
+`max_completion_tokens` to `max_tokens` without altering the numerical
+ceiling and omits `parallel_tool_calls` only when false, while keeping
+the model, single-tool application limit, strict OpenAI provider pin,
+retries, seed, reasoning and messages unchanged. The actual MAF
+preflight now injects the adapter through an `AsyncOpenAI` client,
+and the offline HTTP capture intercepts **after** the adapter.
+
+New tests include a real MAF no-network post-rewrite capture and
+negative-path rejection of changed model, provider, ceiling, seed,
+reasoning, temperature, or enabled parallel tool calls. Isolated
+adapter tests passed 14/14 in the authoring environment, but the
+actual Plato integration suite and corrected live paid echo are
+**not yet verified**.
+
+Next: pull experiment branch; run targeted Plato tests and the
+no-network post-adapter capture. Only if both pass, run a single
+approved, non-scientific paid echo preflight. Then preserve the new
+final pre-outcome runtime freeze before any scientific evaluation.
+
+**Scores unchanged:** overall 51%, Phase 8 20%, 6/9 fully closed.
