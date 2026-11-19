@@ -1026,3 +1026,38 @@ required. The earlier three-tool parity MCP v2 bridge cannot be
 substituted for scientific model execution.
 
 **Scores unchanged:** overall 51%, Phase 8 20%, 6/9 phases closed.
+
+
+## Phase 8 condition rehearsal verified; scientific MCP adapter prepared (2026-11-19)
+
+Plato successfully ran the C3/C4/C8 condition-isolation
+rehearsal after pulling `ad694f1`: **34/34 tests passed**,
+three simulated executions, identical base-request hash
+`da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0`.
+Its explicit markers correctly confirm no real generic-Critic
+LLM, no scientific model execution, no provider calls or outcome-bearing
+scientific evaluation.
+
+New pre-outcome scientific MCP integration code exists at
+`phenoassistant_mcp/scientific_inference_v1.py`, with
+`tests/research/test_phase8_scientific_mcp.py`.
+It exposes a bounded real MCP scientific tool whose production delegate
+calls canonical PhenoAssistant instance-segmentation or classification
+functions only after verifying a SHA-256-pinned final approved runtime;
+images must be explicitly authorized by opaque ID, source-file SHA and
+existence. Model-provided paths/checkpoints/GPU configuration are forbidden,
+and output artifacts are hashed. The real MCP-protocol tests use
+synthetic local approval and injected FAKE inference only; no genuine
+scientific inference has been performed through this new adapter.
+The module has **not yet been tested on Plato**.
+
+Remaining critical work: test scientific MCP adapter on Plato, bind
+reviewed real image fixtures, integrate genuine live Luna Manager and
+generic LLM Critic, preserve identical MCP tool semantics for matched
+conditions, apply C8 pre/post checking to actual tool outputs,
+integrate provider-metered cost traces, obtain documented approvals,
+freeze an approved runtime, and only then perform outcome-bearing
+trials. The 12-case qualification matrix and 108 planned trials
+remain unexecuted.
+
+**Scores unchanged:** 51% overall, Phase 8 20%, 6/9 phases closed.
