@@ -21,6 +21,9 @@ from phenoassistant_mcp.scientific_inference_v1 import (
     file_sha256,
     resolve_image_asset,
     verify_approved_runtime,
+    verify_trusted_runtime,
+    canonical_inference,
+    TRUSTED_APPROVED_RUNTIME_SHA256,
 )
 from research.phenoguard.provenance import (
     CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID,
@@ -336,3 +339,39 @@ def test_potato_artifact_filename_is_derived_from_repository_implementation():
         encoding="utf-8"
     )
     assert '"leaf_only_sam_results.json"' in adapter
+
+
+def test_self_declared_synthetic_approval_cannot_authorize_real_gpu(
+    tmp_path, synthetic_final_record, tiny_asset,
+):
+    """A caller-produced JSON and its hash cannot unlock canonical inference."""
+    path, digest = synthetic_final_record
+    assert TRUSTED_APPROVED_RUNTIME_SHA256 is None
+    with pytest.raises(ScientificMcpDispatchError, match="independently approved"):
+        verify_trusted_runtime(path, digest)
+    with pytest.raises(ScientificMcpDispatchError, match="independently approved"):
+        build_phase8_scientific_mcp_server(
+            approved_runtime_file=path,
+            approved_runtime_sha256=digest,
+            frozen_trial_id=TRIAL_ID,
+            trusted_images=tiny_asset,
+            output_root=tmp_path / "no-gpu-output",
+            inference_delegate=None,
+        )
+    assert not (tmp_path / "no-gpu-output").exists()
+
+
+def test_canonical_delegate_explicitly_injected_cannot_bypass_trust(
+    tmp_path, synthetic_final_record, tiny_asset,
+):
+    """Passing the real canonical function as the 'fake' is also blocked."""
+    path, digest = synthetic_final_record
+    with pytest.raises(ScientificMcpDispatchError, match="independently approved"):
+        build_phase8_scientific_mcp_server(
+            approved_runtime_file=path,
+            approved_runtime_sha256=digest,
+            frozen_trial_id=TRIAL_ID,
+            trusted_images=tiny_asset,
+            output_root=tmp_path / "blocked-real-output",
+            inference_delegate=canonical_inference,
+        )
