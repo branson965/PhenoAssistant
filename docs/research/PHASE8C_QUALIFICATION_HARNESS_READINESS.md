@@ -274,7 +274,7 @@ scientific vision-model invocation. They do not estimate unsafe
 execution rates, model accuracy or PhenoGuard efficacy and must never
 be pooled with paid scientific traces.
 
-Next Pluto / Plato no-charge gate:
+Next Plato no-charge gate:
 
 ```bash
 cd ~/PhenoAssistant
@@ -302,3 +302,21 @@ The current Phase 6 MCP v2 calculator/ANOVA/Tukey bridge cannot
 substitute for that scientific-model capability. A final approved
 runtime hash and upstream spend cap are needed before outcome-bearing
 trials.
+
+
+### Condition-exposure refinement
+
+The isolated C8 rehearsal now passes the real provenance-backed
+Scientific Operating Envelopes to its mocked Manager, while C3 and
+C4 receive the identical base scenario facts **without** SOEs. C4's
+separate mocked Critic also sees no SOE. This matches the frozen
+condition-information ordering, but does **not** establish that
+the actual live C3/C4 MCP schema advertisement is wired, nor that
+the C4 Critic is a real LLM. Those remain implementation gates.
+Only the prescribed base request is hashed for paired equality;
+condition-specific SOE exposure is expected and must be logged.
+
+Additional offline tests reject gold/shift/category/ID exposure,
+confirm that the user-visible base input cannot be mutated by
+mock components, and exercise the pre/post verification boundaries.
+No measured safety/accuracy results can be derived from these tests.
