@@ -843,3 +843,31 @@ approved, non-scientific paid echo preflight. Then preserve the new
 final pre-outcome runtime freeze before any scientific evaluation.
 
 **Scores unchanged:** overall 51%, Phase 8 20%, 6/9 fully closed.
+
+
+## Phase 8 corrected MAF preflight offline gate closed — 2026-11-19
+
+On Plato the researcher fast-forwarded to `c52b2ab`,
+ran the exact targeted compatibility/transport/preflight suite
+(**32/32 passed**), and captured the real installed MAF
+post-adapter request without paid inference.
+
+Verified controls:
+`max_tokens=512`, `max_completion_tokens` absent,
+`parallel_tool_calls` absent, `seed=2026`,
+`reasoning.effort=medium`, `tool_choice=required`,
+`provider.order=[openai]`, `allow_fallbacks=false`,
+`require_parameters=true`, one tool advertised.
+Markers:
+`PHASE8_WIRE_SHAPE_PAID_INFERENCE=false`,
+`PHASE8_WIRE_SHAPE_OUTCOME_BEARING=false`,
+`PHASE8_WIRE_SHAPE_CAPTURE_PASS=true`.
+
+The offline parameter-compatibility failure is now resolved
+under Plato's installed SDK. **A paid live echo has not yet
+succeeded and no scientific Phase 8 result exists.**
+Next action: approved single non-scientific live echo, then
+final runtime freeze before outcome-bearing experimental runs.
+The frozen Phase 7 v0.2 method is unchanged.
+
+**Scores remain:** overall 51%, Phase 8 20%, 6/9 fully closed.
