@@ -325,3 +325,14 @@ def test_second_different_model_is_still_blocked_within_same_trial(
 
     asyncio.run(run())
     assert calls == [CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID]
+
+
+def test_potato_artifact_filename_is_derived_from_repository_implementation():
+    """Pin adapter to canonical Leaf-only SAM output naming, not test fiction."""
+    from pathlib import Path
+    script = Path("functions/leaf_only_sam.py").read_text(encoding="utf-8")
+    assert 'f"leaf_only_{sam_version}_results.json"' in script
+    adapter = Path("phenoassistant_mcp/scientific_inference_v1.py").read_text(
+        encoding="utf-8"
+    )
+    assert '"leaf_only_sam_results.json"' in adapter
