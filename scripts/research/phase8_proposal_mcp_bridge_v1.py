@@ -30,7 +30,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from phenoassistant_mcp.client_v2 import McpV2Session  # noqa: E402
-from phenoassistant_mcp.scientific_inference_v1 import verify_approved_runtime  # noqa: E402
+from phenoassistant_mcp.scientific_inference_v1 import (  # noqa: E402
+    ImageAsset, resolve_image_asset, verify_approved_runtime,
+)
+from scripts.research.phase8_scientific_artifact_validator import (  # noqa: E402
+    make_c8_artifact_validator,
+)
 from research.phenoguard.catalogue import resolve_capability_catalogue  # noqa: E402
 from research.phenoguard.contracts import (  # noqa: E402
     ApplicabilityDecision, ScientificRequestContext, TrainingReadinessContext,
@@ -232,6 +237,54 @@ async def bridge_one(
     )
 
 
+async def bridge_one_with_real_artifact_check(
+    *,
+    condition: str,
+    visible_view: dict[str, Any],
+    approved_runtime_path: Path,
+    approved_runtime_sha256: str,
+    decision_client: DecisionClient,
+    mcp_server: MCPServer,
+    bound_image_asset_id: str,
+    bound_image_asset: ImageAsset,
+    output_root: Path,
+    timeout_seconds: float = 10.0,
+) -> BridgeObservation:
+    """Use an ACTUAL output-format-specific C8 validator, never a dummy result.
+
+    The same real scientific MCP server and reviewed image asset are supplied
+    for all three conditions. C3/C4 are never evaluated through a privileged
+    C8 validator; their outputs remain unassessed pending independent scoring.
+    """
+    if condition not in (C3, C4, C8):
+        raise Phase8ProposalError("unknown frozen condition")
+    if not isinstance(bound_image_asset, ImageAsset):
+        raise Phase8ProposalError("scientific image must be an approved asset binding")
+    resolve_image_asset(
+        bound_image_asset_id,
+        trusted_assets={bound_image_asset_id: bound_image_asset},
+    )
+    validator = (
+        make_c8_artifact_validator(
+            bound_asset_id=bound_image_asset_id,
+            bound_asset=bound_image_asset,
+            output_root=output_root,
+        )
+        if condition == C8 else None
+    )
+    return await bridge_one(
+        condition=condition,
+        visible_view=visible_view,
+        approved_runtime_path=approved_runtime_path,
+        approved_runtime_sha256=approved_runtime_sha256,
+        decision_client=decision_client,
+        mcp_server=mcp_server,
+        bound_image_asset_id=bound_image_asset_id,
+        post_validator=validator,
+        timeout_seconds=timeout_seconds,
+    )
+
+
 def main() -> int:
     """Intentionally offline: no model/vision tool/ledger execution."""
     matrix, candidate = load_verified_controls()
@@ -246,7 +299,7 @@ def main() -> int:
     print("PHASE8_BRIDGE_NATIVE_TOOL_CALLING=false")
     print("PHASE8_BRIDGE_PROVIDER_CALLS=0")
     print("PHASE8_BRIDGE_SCIENTIFIC_DISPATCH=0")
-    print("PHASE8_BRIDGE_C8_REAL_OUTPUT_VALIDATION=not-yet-integrated")
+    print("PHASE8_BRIDGE_C8_REAL_OUTPUT_VALIDATION=implemented-pending-Plato-tests")
     print("PHASE8_BRIDGE_OUTCOME_BEARING=false")
     print("PHASE8_BRIDGE_EXECUTION_APPROVED=false")
     print("PHASE8_BRIDGE_OFFLINE_PREFLIGHT_PASS=true")
