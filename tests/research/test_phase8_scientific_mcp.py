@@ -71,7 +71,10 @@ def fake_vision(capability_id, _asset_id, _image_path, output_dir):
         CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID,
         CASE2_POTATO_SEGMENTATION_MODEL_ID,
     }:
-        (output_dir / "ins_seg_results.json").write_text(
+        name = ("leaf_only_sam_results.json"
+                if capability_id == CASE2_POTATO_SEGMENTATION_MODEL_ID
+                else "ins_seg_results.json")
+        (output_dir / name).write_text(
             json.dumps({
                 "images": [{"id": 0, "file_name": "approved_image_1"}],
                 "annotations": [],
@@ -263,3 +266,62 @@ def test_real_mcp_input_schema_exposes_only_capability_and_asset(
     for forbidden in ("image_urls", "file_path", "checkpoint", "device",
                       "output_dir", "batch_size", "scientific_operating_envelope"):
         assert forbidden not in schema["properties"]
+
+
+def test_potato_sam_uses_canonical_leaf_only_sam_output_filename(
+    tmp_path, synthetic_final_record, tiny_asset,
+):
+    server = make_server(tmp_path, synthetic_final_record, tiny_asset, fake_vision)
+
+    async def run():
+        async with McpV2Session(server) as session:
+            return await session.call_structured_tool(
+                "run_scientific_model",
+                {
+                    "capability_id": CASE2_POTATO_SEGMENTATION_MODEL_ID,
+                    "image_asset_id": "approved_image_1",
+                },
+                timeout_seconds=10,
+            )
+
+    result = asyncio.run(run())
+    assert Path(result["artifact_path"]).name == "leaf_only_sam_results.json"
+    assert result["artifact_format"] == "coco_json"
+    assert Path(result["artifact_path"]).is_file()
+
+
+def test_second_different_model_is_still_blocked_within_same_trial(
+    tmp_path, synthetic_final_record, tiny_asset,
+):
+    from phenoassistant_mcp.client_v2 import McpV2ToolError
+    calls = []
+
+    def recording_delegate(model_id, image_id, image_path, output_dir):
+        calls.append(model_id)
+        return fake_vision(model_id, image_id, image_path, output_dir)
+
+    server = make_server(tmp_path, synthetic_final_record, tiny_asset, recording_delegate)
+
+    async def run():
+        async with McpV2Session(server) as session:
+            first = await session.call_structured_tool(
+                "run_scientific_model",
+                {
+                    "capability_id": CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID,
+                    "image_asset_id": "approved_image_1",
+                },
+                timeout_seconds=10,
+            )
+            assert first["tool_executed"] is True
+            with pytest.raises(McpV2ToolError):
+                await session.call_structured_tool(
+                    "run_scientific_model",
+                    {
+                        "capability_id": CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID,
+                        "image_asset_id": "approved_image_1",
+                    },
+                    timeout_seconds=10,
+                )
+
+    asyncio.run(run())
+    assert calls == [CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID]
