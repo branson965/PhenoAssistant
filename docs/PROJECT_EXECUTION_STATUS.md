@@ -871,3 +871,39 @@ final runtime freeze before outcome-bearing experimental runs.
 The frozen Phase 7 v0.2 method is unchanged.
 
 **Scores remain:** overall 51%, Phase 8 20%, 6/9 fully closed.
+
+
+## Phase 8 live MAF/OpenRouter preflight PASS — 2026-11-19
+
+The researcher re-entered the API key securely in the Plato shell and
+executed the bounded, non-scientific MAF echo-tool preflight.
+Its output confirmed all required markers:
+`PHASE8A_LIVE_PREFLIGHT_MODEL=openai/gpt-5.6-luna`,
+`PHASE8A_LIVE_PREFLIGHT_TOOL_CALLS=1`,
+`PHASE8A_LIVE_PREFLIGHT_PROVIDER_PIN=openai`,
+`PHASE8A_LIVE_PREFLIGHT_PROVIDER_FALLBACKS=false`,
+`PHASE8A_LIVE_PREFLIGHT_SEED=2026`,
+`PHASE8A_LIVE_PREFLIGHT_TEMPERATURE_SENT=false`,
+`PHASE8A_LIVE_PREFLIGHT_COMPAT_ADAPTER=enabled`,
+`PHASE8A_LIVE_PREFLIGHT_OUTCOME_BEARING=false`, and
+`PHASE8A_LIVE_OPENROUTER_MAF_PREFLIGHT_PASS=true`.
+`PHASE8A_LIVE_PREFLIGHT_SYSTEM_FINGERPRINT=<none>`.
+
+The live infrastructure gate **passed**, but this is not outcome-bearing
+scientific evidence; no measured API usage was returned. A machine-readable
+record captures the researcher-reported terminal evidence without
+credentials at
+`experiments/ijcai2027/runtime/live_preflight_evidence_20261119.json`.
+
+The October offline runtime candidate and Phase 7 v0.2 scientific method
+remain unchanged. A new pre-outcome runtime-v0.3 candidate preparation
+script and tests were committed with strict evidence, package-lock,
+source-hash and method-hash checks. It cannot silently overwrite
+the October candidate. An attested supervisor-approved provider and
+model route plus preserved verified v0.3 runtime controls and adoption
+of the same compatibility adapter in the *scientific* harness remain
+required before the first outcome-bearing trial.
+
+**Completion scoring still 51% overall, Phase 8 20%, 6/9 fully closed.**
+A live infrastructure success does not by itself justify credit for
+unfinished experimental evaluation.
