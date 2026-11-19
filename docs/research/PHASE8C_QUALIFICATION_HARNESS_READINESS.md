@@ -752,3 +752,100 @@ qualification scenarios, checkpoint/weight integrity for all three
 models, GPU fidelity, measured provider charges and hard budget cap,
 raw append-only scientific execution traces, independent scoring,
 and real domain-shift benchmark. No result claim is permitted yet.
+
+
+## 2026-11-19 Plato: 105/105 output-validation tests passed; independent approval gate corrected
+
+The researcher pulled `e0319ff`, ran the scientific-artifact,
+MAF-to-MCP bridge, scientific MCP, MAF decision and transport tests,
+and obtained **105/105 passed in 5.22 seconds**. The direct bridge
+reported `PHASE8_BRIDGE_OFFLINE_PREFLIGHT_PASS=true`,
+`PHASE8_BRIDGE_REGISTERED_TRIALS=108`,
+`PHASE8_BRIDGE_NATIVE_TOOL_CALLING=false`,
+`PHASE8_BRIDGE_PROVIDER_CALLS=0`,
+`PHASE8_BRIDGE_SCIENTIFIC_DISPATCH=0`,
+`PHASE8_BRIDGE_OUTCOME_BEARING=false`, and
+`PHASE8_BRIDGE_EXECUTION_APPROVED=false`. No working-tree changes
+were reported. Real GPU outputs and real scientific outcomes remain
+**unverified**; all output artifacts in these tests were synthetic.
+
+A security and experimental-authorisation review found a **material
+trust gap** in the staged pre-outcome integration: a caller could
+produce a new JSON document containing
+`scientific_execution_permitted=true` and
+`researcher_attested_supervisor_provider_billing_and_models=true`,
+then pass the SHA-256 of *that same self-created document* to
+`verify_approved_runtime`. File integrity alone establishes that
+the file matched the caller's digest; it does **not** establish that
+the supervisor actually approved the file. The standalone source
+code had not yet introduced an independently controlled final-runtime
+hash pin.
+
+The repository now includes an independent, default-deny
+`TRUSTED_APPROVED_RUNTIME_SHA256 = None` trust anchor in
+`phenoassistant_mcp/scientific_inference_v1.py`. The separate
+`verify_trusted_runtime` checks it against a final runtime digest
+before real canonical GPU inference. Similarly, real-network
+`Phase8MafDecisionClient.create` requires the independent pin.
+The **only** testing exception is a deliberately injected fake vision
+delegate or an in-process `httpx.MockTransport`, which remains
+subject to the structural runtime checks and the test-only fixture
+contract. The unconfigured trust pin is deliberately NOT read
+from CLI arguments, model outputs or environment variables.
+No supervisor approval has been fabricated or asserted.
+
+The default trust pin remains `None` and will remain so until
+actual documented approval of the provider, credential, billing,
+models and independently verified final source-hashed scientific
+runtime. Synthetic test approvals must **never** be copied into
+a production runtime. This is a prerequisite for native scientific
+execution, *not* proof that the whole runner is approved. An operator
+with ability to change or inject arbitrary Python remains outside
+the threat model of a code-level gate; operational supervision and
+the provider key hard spend cap are separately required.
+
+Tests added in
+`tests/research/test_phase8_scientific_mcp.py` and
+`tests/research/test_phase8_maf_decision_v1.py` verify that a
+self-declared 'approved' JSON and its correct hash cannot enable
+the default real GPU delegate or an actual OpenRouter HTTP client.
+Tests using intentionally mocked transport or fake scientific
+inference can still verify the protocol with zero credits.
+
+The standalone bridge status marker has been updated from
+`implemented-pending-Plato-tests` to
+`offline-tests-passed-real-GPU-unverified` to reflect the 105
+observed Plato passes without overstating scientific readiness.
+
+### Next Plato regression gate, no API key
+
+After pulling the experiment branch:
+
+```bash
+cd ~/PhenoAssistant
+unset OPENROUTER_API_KEY
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_scientific_mcp.py \
+  tests/research/test_phase8_maf_decision_v1.py \
+  tests/research/test_phase8_proposal_mcp_bridge_v1.py \
+  tests/research/test_phase8_scientific_artifact_validator.py \
+  tests/research/test_phase8_openrouter_compat.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_proposal_mcp_bridge_v1.py
+git status --short
+```
+
+Do not assume the number of tests until Plato executes them. The
+required real-work outcome is **denial**: unapproved canonical GPU
+inference and real OpenRouter clients must fail before doing any
+work. Test-only fake delegates and in-process fake HTTP may continue
+to validate the integration. No outcome-bearing experimental calls
+are permitted by this change.
+
+**Still outstanding:** complete locked real-image fixture manifest,
+native MAF function-call capture with a no-dispatch proposal boundary,
+real scientific-model/checkpoint integrity and GPU fidelity,
+C4 genuine Critic output measurements, append-only raw attempt
+and per-call provider-billed cost capture, external approval evidence,
+new final runtime lock, hidden-label protection and blinded scoring.
+Progress percentages are unchanged.
