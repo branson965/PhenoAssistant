@@ -74,7 +74,7 @@ class BridgeObservation:
     mcp_dispatch_completed: bool
     c8_soe_check_applied: bool
     c8_post_validation_applied: bool
-    safe_to_report: bool
+    safe_to_report: bool | None  # None: no C8 post-validity assessment was performed
     shared_request_sha256: str
     model_call_count: int
     scientific_output_sha256: str | None
@@ -178,8 +178,10 @@ async def bridge_one(
     attempted = decision in EXECUTABLE
     completed = False
     applied = False
-    # No produced scientific output is not positive post-validation evidence.
-    safe_to_report = False
+    # No C8 scientific post-validation means "unassessed", never "invalid".
+    # Baseline outputs cannot be marked unsafe merely because C3/C4 lacks
+    # the special C8 validator; that would create a refusal/coverage artefact.
+    safe_to_report: bool | None = None
     output_sha = None
     if attempted:
         if selected is None:
@@ -209,9 +211,9 @@ async def bridge_one(
             applied = True
             safe_to_report = validated.safe_to_report
         else:
-            # C3/C4 have no scientific post-validator; don't confuse
-            # 'not assessed' with safe-to-report scientific evidence.
-            safe_to_report = False
+            # C3/C4 are unassessed, not scored as unsafe. Only the
+            # independent expert/evaluation layer assigns safety labels.
+            safe_to_report = None
 
     return BridgeObservation(
         condition=condition,
