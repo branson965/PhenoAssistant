@@ -332,3 +332,33 @@ def test_standalone_script_resolves_repo_imports_and_never_calls_provider():
     assert "PHASE8_MAF_DECISION_REAL_CRITIC_CALLS=0" in output
     assert "PHASE8_MAF_DECISION_SCIENTIFIC_TOOL_CALLS=0" in output
     assert "PHASE8_MAF_DECISION_APPROVED_TO_RUN=false" in output
+
+
+def test_synthetic_self_approval_cannot_initialize_real_openrouter_client(
+    test_only_approved_record,
+):
+    """No actual HTTP transport or billable client may use self-declared approval."""
+    path, digest = test_only_approved_record
+    with pytest.raises(ScientificMcpDispatchError, match="independently approved"):
+        Phase8MafDecisionClient.create(
+            approved_runtime_path=path,
+            approved_runtime_sha256=digest,
+            api_key="sk-or-v1-FAKE-KEY-DO-NOT-SEND",
+            seed=2026,
+            upstream=None,
+        )
+
+
+def test_nonmock_transport_is_not_accepted_as_test_only_approval(
+    test_only_approved_record,
+):
+    """An AsyncHTTPTransport passed explicitly is still production-like."""
+    path, digest = test_only_approved_record
+    with pytest.raises(ScientificMcpDispatchError, match="independently approved"):
+        Phase8MafDecisionClient.create(
+            approved_runtime_path=path,
+            approved_runtime_sha256=digest,
+            api_key="sk-or-v1-NO-REAL-KEY",
+            seed=2026,
+            upstream=httpx.AsyncHTTPTransport(),
+        )
