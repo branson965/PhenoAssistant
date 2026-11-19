@@ -134,7 +134,10 @@ def validate_coco(
         if not _number(ident, integer=True) or ident in annotation_ids:
             return fail("invalid or duplicate annotation ID", "annotations")
         annotation_ids.add(ident)
-        if ann.get("image_id") != image_id or ann.get("category_id") not in category_ids:
+        category_id = ann.get("category_id")
+        if (not _number(category_id, integer=True)
+                or ann.get("image_id") != image_id
+                or category_id not in category_ids):
             return fail("annotation references incorrect image or category", "annotations")
         area, score = ann.get("area"), ann.get("score")
         if not (_number(area) and 0 <= area <= width * height):
