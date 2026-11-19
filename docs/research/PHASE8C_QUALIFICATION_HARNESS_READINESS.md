@@ -492,3 +492,68 @@ real image-fixture bindings, actual C8 post-validation against
 image-appropriate outputs, append-only measured usage/charge evidence,
 approved provider/model route, upstream spend cap and new source-hashed
 final runtime freeze. Do not claim results from simulated tests.
+
+
+## 2026-11-19 Plato MAF SDK test failure and exact two-point repair
+
+The researcher pulled `ed6ada2` and ran the targeted MAF/MCP/condition
+offline suites. **48 tests passed, 1 failed**. The failing test was
+`test_real_maf_manager_critic_wire_roundtrips_are_mock_only`.
+The actual MAF SDK request reached the existing compatibility transport,
+but that transport rejected `tool_choice` missing/None with
+`OpenRouterCompatibilityError: unexpected tool-choice policy`.
+This is a **tool-free proposal request**, whereas the original successful
+live echo preflight had a real advertised tool and explicit
+`tool_choice=required`. The exception occurred before the fake HTTP
+provider and was wrapped as an SDK `APIConnectionError` and MAF
+`ChatClientException`. There was **no paid request**.
+
+A second, independent defect was exposed by running the file directly:
+`ModuleNotFoundError: No module named 'phenoassistant_mcp'`.
+The repository-local MCP import occurred before the script added the
+project root to `sys.path`.
+
+Both are corrected without changing the frozen Phase 7 method:
+- `scripts/research/openrouter_compat.py` allows an omitted
+  `tool_choice` only for a request with no advertised tools,
+  and removes an explicit null choice only in that same case.
+  A tool-enabled request **still requires** one of
+  `required/auto/none`. A no-tool request must not request native
+  tool calling. The earlier OpenAI provider, model, seed, reasoning,
+  temperature and token checks remain unchanged.
+- `scripts/research/phase8_maf_decision_v1.py` now inserts
+  the repository root before importing `phenoassistant_mcp`.
+- `tests/research/test_phase8_openrouter_compat.py` now covers
+  no-tool omission, explicit empty tools, null normalization,
+  tool-enabled invalid/missing tool_choice rejection and no-tool
+  attempts to enable tool calling.
+- `tests/research/test_phase8_maf_decision_v1.py` now invokes
+  the real script in a subprocess without an API key to catch
+  direct-path import regressions.
+
+These corrections are **staged**, not yet verified on Plato. The
+historic v0.3 runtime candidate remains unchanged and still prohibits
+scientific calls. The final approved source-hashed runtime must
+include the updated adapter once full harness qualification is done.
+
+### Plato rerun (offline, no key)
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_maf_decision_v1.py \
+  tests/research/test_phase8_openrouter_compat.py \
+  tests/research/test_phase8_scientific_mcp.py \
+  tests/research/test_phase8_condition_rehearsal.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_maf_decision_v1.py
+git status --short
+```
+
+Do not set `OPENROUTER_API_KEY`. The fixture uses a fake key,
+`httpx.MockTransport`, and synthetic approval isolated to
+`pytest` temporary storage. The standalone CLI invokes no
+model or MCP scientific tool. The expected success marker is
+`PHASE8_MAF_DECISION_OFFLINE_PREFLIGHT_PASS=true`; preserve
+the exact test count as observed rather than predicting it.
