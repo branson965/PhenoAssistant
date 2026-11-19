@@ -784,3 +784,30 @@ The existing provider/model/runtime study settings remain provisional
 pre-outcome; any necessary modification must be versioned explicitly.
 
 **Scores unchanged:** overall 51%; Phase 8 20%; 6/9 closed.
+
+
+## Phase 8 live routing capability inspection — 2026-11-19
+
+Plato fetched the read-only diagnostic and passed 16/16 targeted tests.
+Authenticated endpoint metadata showed that the three OpenAI-tagged
+Luna endpoints (`openai`, `openai/flex`, `openai/fast`) advertise
+`tools`, `tool_choice`, `seed`, `reasoning`, and `max_tokens`,
+but **not** `parallel_tool_calls`. The model-level supported-parameter
+list also omits `parallel_tool_calls`.
+
+Hypothesis, not yet verified: MAF may emit `parallel_tool_calls=false`
+from `allow_multiple_tool_calls=False` and OpenRouter strict parameter
+filtering rejects it. To establish the true request body without paying
+for another inference or exposing credentials, a local
+`httpx.AsyncClient.send` interception with a synthetic key and
+blocked sockets was added:
+
+- `scripts/research/capture_phase8_maf_request_shape.py`
+- `tests/research/test_phase8_request_shape_capture.py`
+
+The next Plato task is to pull the experiment branch, run the offline
+capture regressions, and inspect the safe control-key report. No frozen
+scientific-method file is modified, no further paid echo attempted, and
+no scientific outcome is claimed.
+
+**Scores unchanged:** overall 51%; Phase 8 20%; 6/9 fully closed.
