@@ -720,3 +720,32 @@ supervisor/provider confirmation followed by the already-committed non-scientifi
 OpenRouter/MAF echo-tool preflight. Scientific benchmark execution remains prohibited
 until that live infrastructure preflight passes and the provider/model route is
 confirmed.
+
+
+## Phase 8B access and cost gate opened — 2026-11-19
+
+The researcher reports receiving an OpenRouter API key with $9 credit.
+The key has **not** been pasted into chat or repository, and no credential
+verification or paid run has yet occurred. Credential possession is not
+equivalent to approval of the provider/billing/model route.
+
+Pre-outcome tooling committed without modifying the frozen Phase 7 method:
+
+- `scripts/research/check_phase8_openrouter_budget.py` reads only the key
+  metadata and model catalogue (GET requests, no completion/inference call);
+- `tests/research/test_phase8_budget_preflight.py` covers catalogue ID/price
+  validation, the $9 illustrative budget, overspend refusal, and secret-safe
+  source constraints;
+- `docs/research/PHASE8B_ACCESS_AND_BUDGET_RUNBOOK_20261119.md` contains
+  exact, interactive-secret-safe Plato steps, ending at the single existing
+  non-scientific MAF/OpenRouter echo-tool preflight.
+
+Current model catalogue prices were inspected externally but must be checked
+again via the tool at runtime. Based on 4,000 input and up to 2,048 output
+tokens for each of at most two model roundtrips, the estimated 12-scenario
+Luna qualification and 4-scenario Sol subset is about $6.92, not a measured
+cost or a guarantee. Reserve at least $1, and do not launch the full Sol
+breadth programme on this balance without actual call-cost evidence.
+
+**Evidence-weighted scores unchanged:** overall 51%; Phase 8 20%; 6/9 fully
+closed. No scientific Phase 8 outcome yet exists.
