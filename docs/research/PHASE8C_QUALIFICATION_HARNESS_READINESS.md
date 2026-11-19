@@ -40,11 +40,14 @@ The script is deterministic and refuses to overwrite an existing output.
 Preserve its printed SHA-256, commit only the generated matrix file,
 and push as a separate Git interaction with its SSH passphrase handled.
 
-The prospective single-model call-cost estimate is around $0.70
-for the 108 planned trials **if** each uses at most two model rounds
-with 4,000 input and 2,048 output tokens per round, at the November 19
-catalogue price. This estimate excludes retries and any larger prompt
-or variable reasoning costs. It is not actual spend.
+The prospective Luna **manager-roundtrip-only** call-cost estimate
+is around $0.70 for the 108 planned trials **if** each uses at most
+two model rounds with 4,000 input and 2,048 output tokens per round,
+at the November 19 catalogue price. This is a preliminary planning
+floor, **not a valid all-in budget for C4**: additional generic-Critic
+LLM calls, retries, larger prompts, variable reasoning, and scientific
+tool/GPU costs are not included. Nothing in the offline plan authorises
+model calls or represents measured spending.
 
 ## Separation of benchmark metadata from model prompt
 
