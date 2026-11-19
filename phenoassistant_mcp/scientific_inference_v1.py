@@ -5,8 +5,10 @@ actual callable tool whose production delegate is PhenoAssistant's canonical
 inference functions, imported lazily. The public tool arguments are ONLY an
 approved capability ID and an opaque approved image-asset ID.
 
-This module does not itself run a model. An invocation requires a genuinely
-approved, SHA-pinned final runtime record, trusted image bindings, and a
+This module does not itself run a model. Actual canonical GPU inference
+requires an independently trusted, SHA-pinned final runtime record, never
+only a caller-supplied SHA. Fake-delegate integration tests use a separately
+injected implementation. Real invocation also requires trusted images and a
 single frozen trial ID. No raw paths, checkpoint URIs, HTTP URLs, GPU settings
 or output paths are accepted from an LLM.
 
@@ -44,6 +46,13 @@ TRIAL_RE = re.compile(r"^[a-f0-9]{24}$")
 ASSET_RE = re.compile(r"^[a-zA-Z0-9_][a-zA-Z0-9_.-]{0,95}$")
 IMAGE_SUFFIXES = frozenset((".png", ".jpg", ".jpeg", ".tif", ".tiff"))
 
+# INDEPENDENT TRUST ANCHOR, distinct from a caller-provided file and digest.
+# A reviewed final-runtime SHA may only be pinned here after actual supervisor
+# provider/model/billing approval, source hashes, fixtures, and billing audit.
+# None is deliberately fail-closed. NEVER auto-read this value from a
+# runtime JSON, command-line argument, environment variable or model response.
+TRUSTED_APPROVED_RUNTIME_SHA256: str | None = None
+
 
 class ScientificMcpDispatchError(ValueError):
     """Fail closed at the scientific MCP execution boundary."""
@@ -72,7 +81,11 @@ def file_sha256(path: Path) -> str:
 
 
 def verify_approved_runtime(runtime_file: Path, expected_sha256: str) -> dict:
-    """SHA-bound authorization; the historic v0.3 candidate always fails."""
+    """Check self-consistency of a proposed final runtime, NOT independent approval.
+
+    The expected SHA is caller-supplied. A self-created JSON plus its own hash
+    may pass this shape check; production requires verify_trusted_runtime.
+    """
     if not SHA256_RE.fullmatch(expected_sha256):
         raise ScientificMcpDispatchError("invalid approved-runtime checksum")
     if not runtime_file.is_file() or file_sha256(runtime_file) != expected_sha256:
@@ -104,6 +117,25 @@ def verify_approved_runtime(runtime_file: Path, expected_sha256: str) -> dict:
     ):
         raise ScientificMcpDispatchError("final transport or tool-limit controls differ")
     return record
+
+
+def verify_trusted_runtime(runtime_file: Path, expected_sha256: str) -> dict:
+    """Require an independently code-pinned, reviewed runtime SHA for real work.
+
+    The historical v0.3 candidate and test-created 'approved' JSON must never
+    enable network inference or actual GPU work through their own SHA alone.
+    Pin only a verified final-runtime digest in a *reviewed future commit*
+    once supervisor approval and scientific harness qualification are real.
+    """
+    if TRUSTED_APPROVED_RUNTIME_SHA256 is None:
+        raise ScientificMcpDispatchError(
+            "no independently approved final-runtime SHA is pinned for real execution"
+        )
+    if not SHA256_RE.fullmatch(TRUSTED_APPROVED_RUNTIME_SHA256):
+        raise ScientificMcpDispatchError("trusted final-runtime SHA pin is malformed")
+    if expected_sha256 != TRUSTED_APPROVED_RUNTIME_SHA256:
+        raise ScientificMcpDispatchError("runtime digest differs from independent approval pin")
+    return verify_approved_runtime(runtime_file, expected_sha256)
 
 
 def resolve_image_asset(
@@ -221,7 +253,13 @@ def build_phase8_scientific_mcp_server(
     must be used for C3, C4 and C8. C8 applicability is a SEPARATE policy
     layer that gates whether this tool is invoked.
     """
-    verify_approved_runtime(approved_runtime_file, approved_runtime_sha256)
+    # Real canonical GPU inference is never enabled by a caller-generated
+    # 'approved' JSON plus its own SHA. Synthetic tests may inject a separate
+    # fake delegate but still pass all structural runtime checks.
+    if inference_delegate is None or inference_delegate is canonical_inference:
+        verify_trusted_runtime(approved_runtime_file, approved_runtime_sha256)
+    else:
+        verify_approved_runtime(approved_runtime_file, approved_runtime_sha256)
     if not isinstance(frozen_trial_id, str) or not TRIAL_RE.fullmatch(frozen_trial_id):
         raise ScientificMcpDispatchError("invalid frozen trial ID")
     if not trusted_images:
