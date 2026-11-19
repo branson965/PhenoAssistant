@@ -941,3 +941,29 @@ raw results and hidden evaluation remain to be built and validated.
 See `docs/research/PHASE8C_QUALIFICATION_HARNESS_READINESS.md`.
 
 **Scores unchanged:** 51% overall, Phase 8 20%, 6/9 phases fully closed.
+
+
+## Phase 8 qualification matrix generation verified on Plato — 2026-11-19
+
+Plato pulled the `b511bea` planning code, passed **27/27** offline
+tests, and generated the 12-case / 108-trial C3/C4/C8 × 3-seed
+qualification matrix. Exact output SHA-256:
+`8a9688aa464564bf99121656430ea09fc93bbf2b1d262a73a9b2276944876692`.
+
+The file was **untracked locally at last observation**, not yet
+committed/pushed. An independent verifier and its tests have since
+been added to `experiments/ijcai2027` to pin the reported SHA
+and rederive all entries while prohibiting gold-label leakage and
+false scientific-execution claims.
+
+No scientific trial was run. The $0.7036416 estimate covers only
+assumed Luna manager roundtrips; genuine C4 generic-Critic calls and
+other costs are additional. The existing MCP v2 adapter covers the
+calculator/ANOVA/Tukey parity slice but does not yet constitute the
+real scientific vision-model dispatcher for the full experiment.
+
+The user must pull the verifier, run it on the unchanged generated
+JSON, and commit/push only that file. Subsequent work is building
+isolated C3/C4/C8 execution with matching MCP tool semantics and
+verified scoring/usage capture. Supervisor approval remains
+undocumented. **Scores unchanged: 51% overall; Phase 8 20%; 6/9 closed.**
