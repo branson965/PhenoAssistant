@@ -1193,3 +1193,43 @@ comparisons exist yet. Do not infer biological correctness from
 COCO/CSV structural validation.
 
 **Scores unchanged: 51% overall; Phase 8 20%; 6/9 phases closed.**
+
+
+## Phase 8 scientific output validation PASS; real execution approval hardening (2026-11-19)
+
+Plato pulled `e0319ff` and ran the expanded scientific
+COCO/CSV post-validation, MAF/OpenRouter adapter, real MCP
+fake-inference, and condition-bridge integration tests: **105/105
+passed in 5.22 seconds**. The direct bridge CLI confirmed the
+108 planned trials, zero real provider calls, zero scientific
+dispatch, no native tool calling and scientific execution denied.
+The worktree was clean. No real GPU science or measured model
+performance resulted.
+
+Subsequent source review uncovered an approval trust-boundary gap.
+Previously an arbitrary caller-produced self-attested JSON plus
+its own matching SHA-256 could pass the runtime file verifier,
+because checksum integrity was mistaken for supervisor approval.
+This has been addressed by requiring a **separate pinned final
+runtime digest** for default real OpenRouter and canonical GPU
+entry points; the independent pin is deliberately `None`
+(pending actual supervisor approval). Fake HTTP transport and
+fake vision delegates preserve offline testing but are not
+production authorisation. Negative-path tests were added for
+untrusted synthetic approvals. The bridge CLI's C8 validator
+marker was corrected to
+`offline-tests-passed-real-GPU-unverified`.
+
+The new trust-gate tests are **not yet tested on Plato**. The
+current change does not sign a runtime, establish billing/model
+approval, implement native model tool-call capture, bind real
+per-case images, run GPUs or produce scientific benchmark results.
+The previously committed 108-trial matrix and Phase 7 v0.2
+method digest remain unchanged.
+
+Next: run the updated offline suite and direct bridge CLI on
+Plato, confirm denial of self-declared production approval,
+then continue to native function-call capture, real fixture
+binding, provider-metered append-only trial execution and
+independent scoring. **Scores unchanged: overall 51%,
+Phase 8 20%, 6/9 fully closed.**
