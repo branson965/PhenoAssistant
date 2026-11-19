@@ -166,3 +166,64 @@ scientifically misleading.
 
 A successful planning verifier is **not** approval to spend credits.
 Provider/model approval and final runtime freeze remain separate.
+
+
+## Immutable matrix pushed and science-run ledger gate staged — 2026-11-19
+
+The researcher pulled the independent matrix verifier and ran **18/18
+passing tests**. The verifier re-derived all 108 trial records,
+reported no gold-label reads or provider calls, and reproduced SHA-256
+`8a9688aa464564bf99121656430ea09fc93bbf2b1d262a73a9b2276944876692`.
+They then committed only the matrix as `97c8db2` and pushed
+`experiments/ijcai2027`. The remote branch and matrix were checked
+independently after the push; `git status --short` showed no output.
+
+The next implementation step is not another planning matrix, but
+controlled run-record integrity. Committed:
+- `scripts/research/phase8_attempt_ledger.py`
+- `tests/research/test_phase8_attempt_ledger.py`
+
+The standard-library ledger provides:
+- exact pinned v0.3 candidate and 108-trial matrix checks;
+- a fail-closed scientific-run approval gate, currently **blocked**;
+- append-only JSONL STARTED/terminal records with POSIX locking/fsync;
+- no duplicate trial starts or overlapping trial runs;
+- explicit input/output token counts and provider-reported billable cost;
+- missing metering marked as a terminal error which blocks future calls;
+- conservative next-call software budget reserve checks;
+- no prompts, hidden labels, credential values, tool outputs or raw
+  response content in its narrow accounting events.
+
+These are necessary logging/budget primitives, **not the complete
+scientific execution harness**. The module does not call the model,
+does not dispatch MCP tools, and cannot substantiate scientific
+superiority. Its budget gate can stop a *subsequent* call, but alone
+cannot cap a single in-flight call; an upstream key hard cap and
+per-call worst-case controls remain necessary.
+
+Plato next no-charge validation:
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_attempt_ledger.py \
+  tests/research/test_phase8_qualification_matrix_verify.py \
+  tests/research/test_phase8_preflight.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_attempt_ledger.py --budget-usd 8
+```
+
+Required: tests pass; 108 registered trials; $8 planning
+software ceiling; `PHASE8_LEDGER_APPROVED_TO_RUN=false`;
+`PHASE8_LEDGER_NO_PROVIDER_CALLS=true`;
+`PHASE8_LEDGER_GOLD_LABELS_READ=false`;
+`PHASE8_LEDGER_PREFLIGHT_PASS=true`.
+
+**Before outcome-bearing trials:** obtain genuine supervisor
+provider/billing/model approval; preserve a newly approved final
+runtime that includes the ledger/actual runner source hashes; implement
+the distinct C3, C4, C8 conditions and actual scientific-model MCP
+tool boundary; test and record measured-provider-cost accounting.
+Do not claim the completed planning matrix or ledger tests as
+scientific effectiveness results.
