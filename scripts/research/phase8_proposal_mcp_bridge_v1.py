@@ -24,12 +24,12 @@ from pathlib import Path
 from typing import Any, Awaitable, Callable, Protocol
 
 from mcp.server import MCPServer
-from phenoassistant_mcp.client_v2 import McpV2Session
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from phenoassistant_mcp.client_v2 import McpV2Session  # noqa: E402
 from phenoassistant_mcp.scientific_inference_v1 import verify_approved_runtime  # noqa: E402
 from research.phenoguard.catalogue import resolve_capability_catalogue  # noqa: E402
 from research.phenoguard.contracts import (  # noqa: E402
@@ -178,7 +178,8 @@ async def bridge_one(
     attempted = decision in EXECUTABLE
     completed = False
     applied = False
-    safe_to_report = not attempted
+    # No produced scientific output is not positive post-validation evidence.
+    safe_to_report = False
     output_sha = None
     if attempted:
         if selected is None:
