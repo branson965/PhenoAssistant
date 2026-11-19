@@ -105,6 +105,7 @@ def test_zero_segmentation_predictions_are_valid_not_a_blanket_refusal(tmp_path,
 @pytest.mark.parametrize("change", [
     ("image_id", 99),
     ("category_id", 77),
+    ("category_id", ["malformed"]),
     ("area", -1),
     ("area", 1e9),
     ("score", -0.02),
