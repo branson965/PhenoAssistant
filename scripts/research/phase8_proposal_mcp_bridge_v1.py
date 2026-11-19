@@ -299,7 +299,7 @@ def main() -> int:
     print("PHASE8_BRIDGE_NATIVE_TOOL_CALLING=false")
     print("PHASE8_BRIDGE_PROVIDER_CALLS=0")
     print("PHASE8_BRIDGE_SCIENTIFIC_DISPATCH=0")
-    print("PHASE8_BRIDGE_C8_REAL_OUTPUT_VALIDATION=implemented-pending-Plato-tests")
+    print("PHASE8_BRIDGE_C8_REAL_OUTPUT_VALIDATION=offline-tests-passed-real-GPU-unverified")
     print("PHASE8_BRIDGE_OUTCOME_BEARING=false")
     print("PHASE8_BRIDGE_EXECUTION_APPROVED=false")
     print("PHASE8_BRIDGE_OFFLINE_PREFLIGHT_PASS=true")
