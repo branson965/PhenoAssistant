@@ -163,7 +163,14 @@ def verified_artifact(
     if not isinstance(invocation_message, str) or invocation_message.startswith("Error"):
         raise ScientificMcpDispatchError("canonical inference reported an error")
     if capability_id in SEGMENTATION:
-        artifact = output_dir / "ins_seg_results.json"
+        # The canonical Leaf-only SAM path writes leaf_only_sam_results.json,
+        # unlike the Arabidopsis Mask2Former path's ins_seg_results.json.
+        filename = (
+            "leaf_only_sam_results.json"
+            if capability_id == CASE2_POTATO_SEGMENTATION_MODEL_ID
+            else "ins_seg_results.json"
+        )
+        artifact = output_dir / filename
         kind = "coco_json"
         if not artifact.is_file() or artifact.is_symlink():
             raise ScientificMcpDispatchError("COCO result file missing")
@@ -239,10 +246,16 @@ def build_phase8_scientific_mcp_server(
         call_label = hashlib.sha256(
             (capability_id + "\t" + image_asset_id).encode("utf-8")
         ).hexdigest()[:24]
-        directory = root / frozen_trial_id / call_label
-        if directory.exists():
-            raise ScientificMcpDispatchError("scientific result directory already exists: no re-run")
-        directory.mkdir(parents=True, exist_ok=False)
+        # An atomic trial-directory creation enforces at most ONE tool
+        # execution for the trial across all model/asset combinations.
+        # The previous per-capability directory check could be bypassed by
+        # choosing another capability in the same frozen trial.
+        trial_dir = root / frozen_trial_id
+        if trial_dir.exists():
+            raise ScientificMcpDispatchError("scientific trial already started: no second tool call")
+        trial_dir.mkdir(parents=True, exist_ok=False)
+        directory = trial_dir / call_label
+        directory.mkdir(exist_ok=False)
         message = implement(capability_id, image_asset_id, image_path, directory)
         artifact, kind, count = verified_artifact(capability_id, directory, message)
         return {
