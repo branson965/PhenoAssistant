@@ -146,3 +146,94 @@ def test_integrated_maf_capture_inspects_post_rewrite_request():
     assert controls["provider"]["allow_fallbacks"] is False
     assert controls["provider"]["require_parameters"] is True
     assert "temperature" not in shape["request_body_keys"]
+
+
+def test_tool_free_proposal_with_omitted_choice_is_valid_without_exposing_tools():
+    # MAF 1.11.0 omits tool_choice for tool-free proposal-only requests.
+    # This is permitted only when no executable tool has been supplied.
+    payload = json.loads(build_request().content)
+    payload.pop("tools")
+    payload.pop("tool_choice")
+    request = httpx.Request(
+        "POST", "https://openrouter.ai/api/v1/chat/completions", json=payload
+    )
+    result = json.loads(rewrite_request(request, expected_model=MODEL).content)
+    assert "tools" not in result
+    assert "tool_choice" not in result
+    assert result["max_tokens"] == 512
+    assert "parallel_tool_calls" not in result
+    assert result["provider"] == {
+        "order": ["openai"], "allow_fallbacks": False,
+        "require_parameters": True,
+    }
+
+
+def test_empty_explicit_tool_list_and_none_choice_are_allowed():
+    payload = json.loads(build_request().content)
+    payload["tools"] = []
+    payload["tool_choice"] = "none"
+    request = httpx.Request(
+        "POST", "https://openrouter.ai/api/v1/chat/completions", json=payload
+    )
+    result = json.loads(rewrite_request(request, expected_model=MODEL).content)
+    assert result["tools"] == []
+    assert result["tool_choice"] == "none"
+
+
+def test_explicit_null_choice_is_only_removed_for_tool_free_requests():
+    payload = json.loads(build_request().content)
+    payload["tools"] = []
+    payload["tool_choice"] = None
+    request = httpx.Request(
+        "POST", "https://openrouter.ai/api/v1/chat/completions", json=payload
+    )
+    result = json.loads(rewrite_request(request, expected_model=MODEL).content)
+    assert "tool_choice" not in result
+    assert result["tools"] == []
+
+
+@pytest.mark.parametrize("alteration", [
+    {"tool_choice": None},
+    {"tool_choice": "invalid"},
+    {"tool_choice": "required_if_possible"},
+])
+def test_tool_enabled_request_with_invalid_choice_stays_fail_closed(alteration):
+    payload = json.loads(build_request().content)
+    payload.update(alteration)
+    request = httpx.Request(
+        "POST", "https://openrouter.ai/api/v1/chat/completions", json=payload
+    )
+    with pytest.raises(OpenRouterCompatibilityError):
+        rewrite_request(request, expected_model=MODEL)
+
+
+def test_tool_enabled_request_missing_choice_stays_fail_closed():
+    payload = json.loads(build_request().content)
+    payload.pop("tool_choice")
+    request = httpx.Request(
+        "POST", "https://openrouter.ai/api/v1/chat/completions", json=payload
+    )
+    with pytest.raises(OpenRouterCompatibilityError):
+        rewrite_request(request, expected_model=MODEL)
+
+
+@pytest.mark.parametrize("choice", ["required", "auto", "invalid"])
+def test_tool_free_request_must_not_enable_native_tool_calling(choice):
+    payload = json.loads(build_request().content)
+    payload["tools"] = []
+    payload["tool_choice"] = choice
+    request = httpx.Request(
+        "POST", "https://openrouter.ai/api/v1/chat/completions", json=payload
+    )
+    with pytest.raises(OpenRouterCompatibilityError):
+        rewrite_request(request, expected_model=MODEL)
+
+
+def test_invalid_tool_declaration_is_rejected():
+    payload = json.loads(build_request().content)
+    payload["tools"] = None
+    request = httpx.Request(
+        "POST", "https://openrouter.ai/api/v1/chat/completions", json=payload
+    )
+    with pytest.raises(OpenRouterCompatibilityError):
+        rewrite_request(request, expected_model=MODEL)
