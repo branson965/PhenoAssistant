@@ -907,3 +907,37 @@ required before the first outcome-bearing trial.
 **Completion scoring still 51% overall, Phase 8 20%, 6/9 fully closed.**
 A live infrastructure success does not by itself justify credit for
 unfinished experimental evaluation.
+
+
+## Phase 8 v0.3 candidate pushed; C3/C4/C8 qualification matrix prepared (2026-11-19)
+
+On Plato the researcher verified the generated v0.3 candidate SHA-256
+`e3a8826b8942f2b0951775b557ce3530b2a54ed7666e827e3687443974718c12`,
+committed **only** that generated candidate as commit `09ebaec`,
+and pushed `experiments/ijcai2027`. GitHub independently confirmed
+`09ebaec` as the branch head at the time and verified the file exists.
+The candidate remains **pending supervisor provider/billing/model approval**,
+with `scientific_execution_permitted=false`.
+
+The next offline preparation is now committed as
+`scripts/research/prepare_phase8_qualification_matrix.py` plus
+`tests/research/test_phase8_qualification_matrix.py`. This plans an
+exact **12-case × 3-condition × 3-seed = 108-trial** qualification
+matrix for C3, C4 and C8, using the predeclared Luna model and
+seed schedule. It does not read credentials, open gold labels,
+send inference calls or change the frozen method.
+
+**Leakage safeguard:** `BenchmarkScenario` contains category, shift
+and scenario identifiers that could betray the expected decision.
+The planner computes a separate allowlisted model-visible context
+and permits only scientific request, requested capability ID and
+training readiness. Scenario IDs and split labels are internal-only
+trial metadata; no gold labels are loaded.
+
+This matrix is **harness qualification only**, not a real-shift
+benchmark or a successful scientific pilot. The actual C3/C4/C8
+scientific model/tool runner, condition isolation, measured cost,
+raw results and hidden evaluation remain to be built and validated.
+See `docs/research/PHASE8C_QUALIFICATION_HARNESS_READINESS.md`.
+
+**Scores unchanged:** 51% overall, Phase 8 20%, 6/9 phases fully closed.
