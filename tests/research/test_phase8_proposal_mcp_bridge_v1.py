@@ -64,7 +64,11 @@ def mcp(tmp_path, approval):
     def fake_inference(capability_id, asset_id, image_path, output_dir):
         seen.append((capability_id, asset_id, str(image_path)))
         if capability_id in (CASE1, CASE2):
-            (output_dir / "ins_seg_results.json").write_text(
+            filename = (
+                "leaf_only_sam_results.json" if capability_id == CASE2
+                else "ins_seg_results.json"
+            )
+            (output_dir / filename).write_text(
                 json.dumps({
                     "images": [{"id": 0, "file_name": "bound_image_1"}],
                     "annotations": [],
