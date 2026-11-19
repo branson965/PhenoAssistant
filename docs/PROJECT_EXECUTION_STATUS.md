@@ -1092,3 +1092,32 @@ unconfirmed. Full scientific runner/harness and real protected
 fixtures are still outstanding.
 
 **Scores unchanged:** overall 51%, Phase 8 20%, 6/9 fully closed.
+
+
+## Phase 8 MAF mocked-provider failure isolated and fixed in code (2026-11-19)
+
+Plato pulled `ed6ada2` and ran the no-charge MAF/MCP/condition tests:
+**48 passed, 1 failed**. The failed real MAF SDK mock-provider test
+did not reach its fake OpenRouter transport because the compatibility
+adapter required a tool_choice even for a tool-free Manager/Critic
+proposal. The SDK wrapped the local validation exception into
+`APIConnectionError` / `ChatClientException`. Separately, executing
+the CLI directly exposed a repo import that preceded the project-root
+`sys.path` insertion.
+
+A narrow pre-outcome compatibility update now permits omitted/null
+`tool_choice` only when **no tools are supplied**. Tool-enabled
+requests still require an explicitly allowed choice, and no-tool
+requests cannot enable native tool calls. The direct-script import
+order is repaired. New regression tests cover this distinction and
+run the CLI as an independent subprocess without an API key.
+
+**The corrected tests remain unverified on Plato**. No paid inference
+or scientific results were produced by the failing run; the
+historical 22-file scientific method and v0.3 runtime candidate
+remain unchanged. Next: pull branch, rerun offline MAF SDK, adapter,
+scientific MCP and condition tests; verify direct CLI status. The
+approved final runtime still requires separate source hashing and
+supervisor/provider-route attestation before scientific execution.
+
+**Scores unchanged: 51% overall, Phase 8 20%, 6/9 closed.**
