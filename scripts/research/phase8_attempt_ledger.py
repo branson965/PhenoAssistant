@@ -110,6 +110,7 @@ def verify_events(events: list[dict], matrix: dict) -> Decimal:
     known = {x["trial_id"]: x for x in matrix["trials"]}
     started: set[str] = set()
     ended: set[str] = set()
+    active: set[str] = set()
     billed_total = Decimal("0")
     missing_metering = False
     for index, event in enumerate(events):
@@ -137,6 +138,8 @@ def verify_events(events: list[dict], matrix: dict) -> Decimal:
         if kind == "STARTED":
             if trial_id in started or trial_id in ended:
                 raise LedgerGateError("duplicate or restarted trial")
+            if active:
+                raise LedgerGateError("concurrent trial starts are prohibited")
             if missing_metering:
                 raise LedgerGateError("metering unavailable: further trials prohibited")
             if event["usage"] is not None or event["provider_cost_usd"] is not None:
@@ -144,8 +147,9 @@ def verify_events(events: list[dict], matrix: dict) -> Decimal:
             if event["attempt_trace_sha256"] is not None or event["failure_code"] is not None:
                 raise LedgerGateError("start event includes result fields")
             started.add(trial_id)
+            active.add(trial_id)
         elif kind in VALID_END_STATES:
-            if trial_id not in started or trial_id in ended:
+            if trial_id not in started or trial_id in ended or trial_id not in active:
                 raise LedgerGateError("terminal event without unique start")
             usage = event["usage"]
             if kind == "METERING_MISSING":
@@ -177,6 +181,7 @@ def verify_events(events: list[dict], matrix: dict) -> Decimal:
                 if kind == "METERING_MISSING" and event["failure_code"] != kind:
                     raise LedgerGateError("metering failure code mismatch")
             ended.add(trial_id)
+            active.remove(trial_id)
         else:
             raise LedgerGateError("unknown trial event type")
     return billed_total
@@ -192,6 +197,8 @@ def next_trial_budget_gate(
         raise LedgerGateError("all trials already started")
     if any(e["event"] == "METERING_MISSING" for e in events):
         raise LedgerGateError("unknown provider charges: stop further model calls")
+    if {e["trial_id"] for e in events if e["event"] == "STARTED"} - {e["trial_id"] for e in events if e["event"] in VALID_END_STATES}:
+        raise LedgerGateError("previous trial still in flight: no concurrent paid calls")
     if next_call_reserve_usd <= 0:
         raise LedgerGateError("reserve must be strictly positive")
     if spent + next_call_reserve_usd > budget_usd:
