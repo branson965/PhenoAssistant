@@ -83,6 +83,6 @@ def test_capture_script_never_calls_inference_endpoint_directly():
     with open(module.__file__, encoding="utf-8") as file:
         source = file.read()
     assert "OFFLINE-CAPTURE-NOT-A-REAL-KEY" in source
-    assert "patch.object(httpx.AsyncClient, \"send\"" in source
+    assert "patch.object(httpx.AsyncHTTPTransport, \"handle_async_request\"" in source
     assert "PHASE8_WIRE_SHAPE_PAID_INFERENCE=false" in source
     assert "print(old_key)" not in source
