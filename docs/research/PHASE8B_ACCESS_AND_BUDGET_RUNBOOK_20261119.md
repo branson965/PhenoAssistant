@@ -467,3 +467,62 @@ confirmed, is exactly one paid **non-scientific** MAF/OpenRouter
 `phase8_preflight_echo` using the already implemented preflight
 script. Its result must be inspected before any scientific trial.
 Do not yet mark live preflight passed or runtime controls finally frozen.
+
+
+## Plato authenticated MAF preflight passed — 2026-11-19
+
+The researcher executed the corrected `validate_ijcai_openrouter_preflight.py`
+on Nottingham Plato, with the API key entered through the no-echo shell
+prompt. The observed output was:
+
+```text
+PHASE8A_LIVE_PREFLIGHT_MODEL=openai/gpt-5.6-luna
+PHASE8A_LIVE_PREFLIGHT_SYSTEM_FINGERPRINT=<none>
+PHASE8A_LIVE_PREFLIGHT_TOOL_CALLS=1
+PHASE8A_LIVE_PREFLIGHT_PROVIDER_PIN=openai
+PHASE8A_LIVE_PREFLIGHT_PROVIDER_FALLBACKS=false
+PHASE8A_LIVE_PREFLIGHT_SEED=2026
+PHASE8A_LIVE_PREFLIGHT_TEMPERATURE_SENT=false
+PHASE8A_LIVE_PREFLIGHT_COMPAT_ADAPTER=enabled
+PHASE8A_LIVE_PREFLIGHT_OUTCOME_BEARING=false
+PHASE8A_LIVE_OPENROUTER_MAF_PREFLIGHT_PASS=true
+```
+
+**Live infrastructure acceptance: PASS.** The active Luna model identity,
+single tool invocation, OpenAI upstream pin, no fallback, seed, absent
+temperature, and compatibility adapter were verified in the actual paid
+non-scientific test. The provider returned **no system fingerprint**;
+record null and flag identity drift from future available response fields
+rather than inventing an immutable provider version.
+
+This output does **not** establish:
+- scientific applicability/benchmark performance;
+- Sol endpoint/tool-call behaviour;
+- actual charged token usage or remaining account credit;
+- supervisor approval of the credential owner, billing path, or model choice.
+
+The prior pre-outcome, sealed Phase 7 scientific method remains unchanged.
+The evidence is also captured as a provenance-labelled JSON record:
+`experiments/ijcai2027/runtime/live_preflight_evidence_20261119.json`.
+
+### Runtime-v0.3 freeze transition
+
+`scripts/research/prepare_phase8_runtime_v03.py` performs no API calls,
+preserves and validates the October offline candidate and package lock,
+checks the complete 22-file method freeze, verifies the live evidence,
+recomputes the frozen prompt/tool/task hashes, checks the current runtime
+package lock, and hashes the newly proven compatibility adapter and
+non-scientific preflight sources. It produces **a new file** rather than
+overwriting October's candidate.
+
+Without an explicit `--approved-provider-route` attestation, it produces
+`runtime_controls_candidate_v0.3.json`, still gated on formal supervisor
+approval. The flag is available only if the researcher has already
+received supervisor confirmation of (1) credential ownership, (2) billing
+and provider route, and (3) Luna/Sol model choices, and creates a
+separate `runtime_controls_frozen_v0.3.json`. The attestation must be
+genuine, and even then scientific execution remains prohibited until
+the exact content-addressed artifact is preserved in the experiment
+branch and the evaluation harness is verified to use this same adapter.
+
+No scientific Phase 8 outcome has yet occurred.
