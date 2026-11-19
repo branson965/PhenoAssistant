@@ -320,3 +320,93 @@ Additional offline tests reject gold/shift/category/ID exposure,
 confirm that the user-visible base input cannot be mutated by
 mock components, and exercise the pre/post verification boundaries.
 No measured safety/accuracy results can be derived from these tests.
+
+
+## Plato condition-isolation rehearsal passed; real scientific MCP boundary staged (2026-11-19)
+
+The researcher pulled `ad694f1` and passed **34/34** offline
+regression tests in 0.31s. The isolated C3/C4/C8 mock exercise
+reported the same scenario-derived request SHA-256
+`da9f9cf2696e23f6249e417779792d5dfe9dbe75fe9ddf69cac735df311473c0`,
+three *mock* executions, no actual scientific dispatch, no generic
+LLM Critic, no provider calls, no gold reads, and
+`PHASE8_CONDITION_REHEARSAL_PASS=true`.
+This qualifies branch isolation, **not the paper's empirical claim**.
+
+The next stage now implements the first bounded actual MCP
+**scientific-vision-tool endpoint**, separate from Phase 6's
+calculator/ANOVA/Tukey surface:
+
+- `phenoassistant_mcp/scientific_inference_v1.py` exposes
+  `run_scientific_model(capability_id,image_asset_id)` through
+  `mcp.server.MCPServer`;
+- a per-trial server instance requires a SHA-256-verified, **final**
+  `PRE_OUTCOME_RUNTIME_APPROVED_FROZEN` record that explicitly
+  permits scientific execution and attests supervisor-approved
+  credential/billing/provider/model settings;
+- only three provenance-backed Case 1/2/3 capability IDs are
+  accepted; arbitrary model IDs are rejected;
+- the model cannot supply a filesystem path, checkpoint URI,
+  device, batch size or output directory. Opaque image IDs resolve
+  to human-reviewed, hash-pinned image assets;
+- the production delegate invokes the repository's existing
+  `infer_instance_segmentation` or `infer_image_classification`
+  with fixed batch_size=1, device=cuda, and an isolated
+  never-overwrite per-trial output path;
+- success requires a real COCO or classification-CSV artifact and
+  returns its artifact SHA-256. No scientific fitness policy is
+  enforced in this common MCP executor itself; baseline and
+  PhenoGuard differences must occur in their explicit, audited
+  per-condition orchestration stages;
+- `tests/research/test_phase8_scientific_mcp.py` uses **actual
+  MCP client/server protocol** with a synthetic local approval and
+  a FAKE vision-inference delegate. It tests trusted image hashes,
+  approval gating, duplicate rejection, model allowlist, structured
+  outputs, and the exact two-argument MCP JSON schema.
+
+**Strict interpretation:** the production canonical delegate is
+implemented, but has not yet been run under real scientific GPU
+conditions. The test's synthetic approval is not actual
+supervisor approval and cannot authorise any production call.
+The 12 pilot cases are presently metadata-oriented; they do not
+yet contain a reviewed actual image-asset binding for all trials.
+Those fixtures are a substantive outstanding requirement.
+
+### Plato no-charge MCP integration verification
+
+Pull the experiment branch and complete the SSH passphrase prompt
+before the rest of the commands:
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+```
+
+Then:
+
+```bash
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_scientific_mcp.py \
+  tests/research/test_phase8_condition_rehearsal.py \
+  tests/research/test_phase8_attempt_ledger.py
+
+git status --short
+```
+
+All calls remain within pytest's temporary directories and injected
+fake vision execution. This command does not require an OpenRouter
+key, model invocation, GPU, or access to hidden gold labels.
+
+No outcome-bearing scientific trial is authorized until a
+complete real scientific runner connects:
+- a live, compatible Luna MAF Manager;
+- a genuinely independent Luna generic-Critic LLM for C4;
+- the identical trusted real MCP scientific tool for all conditions;
+- C8's pre/post verifier with real output-type-specific validators;
+- sealed data/fixture binding and hidden-label separation;
+- token usage and **provider-billed** cost accounting and a
+  real upstream key spending limit;
+- an approved hash-pinned final runtime with all source identities.
+
+No progress percentage should increase merely from the staged
+offline MCP adapter or its synthetic tests.
