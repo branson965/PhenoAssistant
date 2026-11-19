@@ -240,3 +240,26 @@ def test_no_credential_read_or_direct_paid_inference():
     assert "build_development_validation_gold" not in source
     assert "image_urls=[str(image_path)]" in source
     assert "checkpoint=capability_id" in source
+
+
+def test_real_mcp_input_schema_exposes_only_capability_and_asset(
+    tmp_path, synthetic_final_record, tiny_asset,
+):
+    from mcp import Client
+    from phenoassistant_mcp.client_v2 import MCP_PROTOCOL_VERSION
+    server = make_server(tmp_path, synthetic_final_record, tiny_asset, fake_vision)
+    async def inspect():
+        async with Client(server, mode=MCP_PROTOCOL_VERSION) as client:
+            listing = await client.list_tools()
+            assert len(listing.tools) == 1
+            tool = listing.tools[0]
+            wire = tool.model_dump(by_alias=True)
+            schema = wire.get("inputSchema", wire.get("input_schema"))
+            assert isinstance(schema, dict)
+            return schema
+    schema = asyncio.run(inspect())
+    assert set(schema["properties"]) == {"capability_id", "image_asset_id"}
+    assert set(schema.get("required", [])) == {"capability_id", "image_asset_id"}
+    for forbidden in ("image_urls", "file_path", "checkpoint", "device",
+                      "output_dir", "batch_size", "scientific_operating_envelope"):
+        assert forbidden not in schema["properties"]
