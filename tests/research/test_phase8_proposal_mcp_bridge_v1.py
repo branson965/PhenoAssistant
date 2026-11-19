@@ -165,7 +165,7 @@ def test_c3_manager_proposal_dispatches_real_mcp_protocol_with_fake_inference(
     assert result.scientific_tool_attempted is True
     assert result.c8_soe_check_applied is False
     assert result.c8_post_validation_applied is False
-    assert result.safe_to_report is False
+    assert result.safe_to_report is None
     assert result.scientific_output_sha256 is not None
     assert result.result_scope == "INTEGRATION_ONLY_NOT_SCIENTIFIC_EVALUATION"
     assert len(seen) == 1
@@ -194,7 +194,7 @@ def test_c4_independent_critic_rejects_before_mcp_dispatch(mcp, approval):
     assert result.critic_decision == "CLARIFY"
     assert result.final_decision == "CLARIFY"
     assert result.scientific_tool_attempted is False
-    assert result.safe_to_report is False
+    assert result.safe_to_report is None
     assert result.model_call_count == 2
     assert agent.calls == [("manager", C4), ("critic", C4)]
     assert seen == []
@@ -380,7 +380,7 @@ def test_end_to_end_real_maf_mock_http_to_real_mcp_fake_vision(
     result = asyncio.run(run())
     assert result.model_call_count == 1
     assert result.mcp_dispatch_completed is True
-    assert result.safe_to_report is False
+    assert result.safe_to_report is None
     assert result.final_decision == "EXECUTE"
     assert len(seen) == 1 and len(sent) == 1
     request = sent[0]
