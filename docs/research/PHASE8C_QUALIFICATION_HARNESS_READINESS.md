@@ -410,3 +410,85 @@ complete real scientific runner connects:
 
 No progress percentage should increase merely from the staged
 offline MCP adapter or its synthetic tests.
+
+
+## Plato scientific MCP protocol passed; real MAF Manager/Critic transport staged (2026-11-19)
+
+The researcher pulled branch `63360dc` and executed the exact
+`tests/research/test_phase8_scientific_mcp.py`,
+`tests/research/test_phase8_condition_rehearsal.py`, and
+`tests/research/test_phase8_attempt_ledger.py` suites on Plato.
+**36/36 passed** in 5.98 seconds; `git status --short` was empty.
+
+This establishes that the real MCP protocol can advertise the
+bounded scientific-model schema, validate approved image identifiers
+and hashes, reject unapproved checkpoint/path/device inputs,
+translate structured tool replies, block duplicate execution, and
+retain C3/C4/C8 condition isolation **with fake vision inference**.
+No real GPU inference, provider-paid calls or scientific outcomes
+were produced.
+
+The next component is now committed as
+`scripts/research/phase8_maf_decision_v1.py`, with corresponding
+`tests/research/test_phase8_maf_decision_v1.py`.
+
+It wires an actual `agent-framework-openai==1.11.0`
+`OpenAIChatCompletionClient` to OpenRouter's exact Luna model via
+the already qualified `OpenRouterCompatTransport`, for a separate
+Manager proposal and genuine *independent* generic-Critic LLM
+roundtrip. The tests use `httpx.MockTransport` with a synthetic API
+key and isolated test-only approval record. No request leaves the
+Plato process when these tests run.
+
+### Information and control boundary
+
+- C3 and C4 Managers receive the **identical** base scientific
+  request, plus the **actual MCP-discovered** tool schema and
+  description. C8 sees the same facts and provenance-backed SOEs.
+- C4 Critic receives the proposal, same request and MCP schema,
+  but never SOEs, case category/shift fields, labels or gold.
+- All responses are parsed as narrow
+  `{decision,capability_id}` JSON proposals, with registered
+  capability checks and model-identity verification.
+- Per model call: pinned Luna model, OpenAI-only provider route,
+  no fallback, medium reasoning, scheduled seed, no temperature,
+  SDK retries disabled, 2048 maximum output tokens, and only
+  adapter-translated `max_tokens` on the final wire.
+- **This is a proposal-only intermediate layer.** It does NOT
+  claim to implement native model tool-call selection, actual
+  scientific tool invocation, C8 post-validation, raw per-call
+  provider-billed cost metering, or a complete experimental runner.
+- The CLI checks the permanently unapproved historical v0.3
+  candidate and makes **zero** model calls. Its offline checks
+  do not set supervisor approval or unblock scientific execution.
+
+### Plato tests for the staged MAF wiring
+
+After a standalone `git pull --ff-only origin experiments/ijcai2027`
+and completed Git SSH passphrase:
+
+```bash
+cd ~/PhenoAssistant
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_maf_decision_v1.py \
+  tests/research/test_phase8_scientific_mcp.py \
+  tests/research/test_phase8_condition_rehearsal.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_maf_decision_v1.py
+git status --short
+```
+
+Expected: all tests pass; zero real outbound requests,
+`PHASE8_MAF_DECISION_OFFLINE_PREFLIGHT_PASS=true`,
+`PHASE8_MAF_DECISION_APPROVED_TO_RUN=false`,
+`PHASE8_MAF_DECISION_REAL_CRITIC_CALLS=0`,
+`PHASE8_MAF_DECISION_SCIENTIFIC_TOOL_CALLS=0`.
+The real SDK calls in tests terminate at a fake HTTP transport.
+
+After this, priority remains the full *scientific* bridge:
+native model tool-call proposal with delayed execution,
+per-condition C4/C8 mediation over the same MCP schema, vetted
+real image-fixture bindings, actual C8 post-validation against
+image-appropriate outputs, append-only measured usage/charge evidence,
+approved provider/model route, upstream spend cap and new source-hashed
+final runtime freeze. Do not claim results from simulated tests.
