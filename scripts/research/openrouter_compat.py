@@ -3,7 +3,9 @@
 MAF 1.11.0 sends max_completion_tokens, and emits parallel_tool_calls=false
 when application-side concurrency is disabled. The pinned OpenAI-routed
 Luna endpoints advertise max_tokens but neither of these API controls.
-This adapter changes only those two wire fields. It never changes a prompt,
+For tool-free proposal calls, it also permits an omitted tool_choice (or
+drops an explicit null tool_choice); tool-enabled requests still require
+an explicit tool-choice policy. It never changes a prompt,
 model, scientific tool, seed, provider pin, reasoning effort or temperature.
 
 This is an HTTP interface compatibility adapter, not an SOE method change.
@@ -65,8 +67,24 @@ def rewrite_request(
         raise OpenRouterCompatibilityError("seed is not in frozen schedule")
     if body.get("stream") is not False:
         raise OpenRouterCompatibilityError("unexpected streaming request")
-    if body.get("tool_choice") not in ("required", "auto", "none"):
-        raise OpenRouterCompatibilityError("unexpected tool-choice policy")
+    # MAF removes tool_choice when no executable tools are supplied in
+    # proposal-only Manager/Critic requests. Never require a tool_choice
+    # in that narrow case; conversely, a tool-enabled request MUST carry
+    # an explicit allowed tool-choice policy.
+    if "tools" in body and not isinstance(body["tools"], list):
+        raise OpenRouterCompatibilityError("tools must be a list when supplied")
+    declared_tools = body.get("tools", [])
+    if declared_tools:
+        if body.get("tool_choice") not in ("required", "auto", "none"):
+            raise OpenRouterCompatibilityError("tool-enabled request must specify tool choice")
+    else:
+        if "tool_choice" in body and body["tool_choice"] not in ("none", None):
+            raise OpenRouterCompatibilityError("tool-free request cannot enable tool calls")
+        # The SDK may serialize None in some MAF versions. Omitting that
+        # null field is semantically identical to tool_choice='none'
+        # when there are no tools, and avoids provider parameter filtering.
+        if body.get("tool_choice") is None:
+            body.pop("tool_choice", None)
     if not isinstance(body.get("messages"), list):
         raise OpenRouterCompatibilityError("messages are missing")
 
