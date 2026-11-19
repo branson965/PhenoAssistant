@@ -55,6 +55,9 @@ def test_exact_trial_matrix_and_no_scientific_execution():
     }
     assert all(row["split_internal_only"] != "hidden" for row in plan["trials"])
     assert Decimal(plan["cost_forecast"]["usd"]) == Decimal("0.7036416")
+    assert plan["cost_forecast"]["additional_generic_critic_calls_not_included"] is True
+    assert plan["cost_forecast"]["forecast_not_measured"] is True
+    assert plan["cost_forecast"]["not_a_spending_authorization"] is True
 
 
 def test_narrow_model_visible_allowlist_prevents_label_and_id_leakage():
