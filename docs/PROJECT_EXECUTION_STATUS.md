@@ -1155,3 +1155,41 @@ paid trials. Supervisor credential/billing/model approval remains
 unverified; the 108 planned scientific trials remain unexecuted.
 
 **Scores remain 51% overall, Phase 8 20%, six of nine phases closed.**
+
+
+## Phase 8: 87/87 MAF/MCP bridge tests passed, output-specific C8 checks staged (2026-11-19)
+
+Plato passed **87/87** offline MAF-to-MCP bridge tests after pulling
+`726cefe`. The CLI confirmed 108 planned trial identities, zero
+real provider calls, zero scientific dispatch from the CLI, no native
+model tool calling, and `PHASE8_BRIDGE_OFFLINE_PREFLIGHT_PASS=true`.
+The working tree was clean. These are infrastructure results only.
+
+Canonical source review exposed an important potato-branch mismatch:
+`functions/leaf_only_sam.py` emits
+`leaf_only_sam_results.json` whereas the new common MCP dispatcher
+had wrongly expected `ins_seg_results.json`. The dispatcher now
+selects the correct canonical file per capability. Its first tool
+invocation also atomically claims the trial directory, prohibiting
+a second model/image invocation within the same trial even if the
+capability differs.
+
+New output-specific validation in
+`scripts/research/phase8_scientific_artifact_validator.py`
+and tests check real COCO/CSV artifact contracts, scientific file
+binding and checksum, pixel-area/confidence ranges, class scope,
+trusted source-image identity, and derivation of leaf count and
+predicted area for the existing frozen Phase 7 phenotype invariants.
+C8 can now receive this real file-based post-validator via
+`bridge_one_with_real_artifact_check`. C3/C4 remain unassessed
+by C8-specific validation. All source files and tests are committed
+but the **new tests have not yet run on Plato**.
+
+Remaining critical gate: this mediated JSON proposal path is not
+native model tool calling; no actual reviewed image data, GPU
+scientific inference, measured billing, independently trustworthy
+supervisor approval, final runtime seal or outcome-bearing
+comparisons exist yet. Do not infer biological correctness from
+COCO/CSV structural validation.
+
+**Scores unchanged: 51% overall; Phase 8 20%; 6/9 phases closed.**
