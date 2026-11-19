@@ -557,3 +557,98 @@ Do not set `OPENROUTER_API_KEY`. The fixture uses a fake key,
 model or MCP scientific tool. The expected success marker is
 `PHASE8_MAF_DECISION_OFFLINE_PREFLIGHT_PASS=true`; preserve
 the exact test count as observed rather than predicting it.
+
+
+## Plato MAF/compatibility repair passed: mediated MAF-to-MCP bridge staged (2026-11-19)
+
+The researcher pulled `277c320` on Plato and ran the comprehensive
+MAF SDK, compatibility, scientific MCP, and condition-isolation suites.
+**77/77 passed in 3.72 seconds**, with
+`PHASE8_MAF_DECISION_OFFLINE_PREFLIGHT_PASS=true`,
+`PHASE8_MAF_DECISION_ACTUAL_REQUESTS=0`,
+`PHASE8_MAF_DECISION_REAL_CRITIC_CALLS=0`,
+`PHASE8_MAF_DECISION_SCIENTIFIC_TOOL_CALLS=0`,
+`PHASE8_MAF_DECISION_APPROVED_TO_RUN=false`, and a clean worktree.
+
+This closes the prior tool-free MAF routing and direct-script import
+regressions. It is **not** a scientific run.
+
+A new integrated, offline-testable bridge is staged:
+- `scripts/research/phase8_proposal_mcp_bridge_v1.py`
+- `tests/research/test_phase8_proposal_mcp_bridge_v1.py`
+
+For a separately approved and hash-pinned final runtime, the bridge
+discovers the actual MCP tool schema, requests a typed Manager
+proposal from the MAF decision client, invokes an independent generic
+Critic **only for C4**, applies the frozen SOE catalogue resolver
+**only for C8**, and conditionally calls **the same** bounded MCP
+`run_scientific_model` implementation with the application's
+trusted image-asset binding. Only C8 may receive an output-specific
+post-validator.
+
+Tests exercise this path using actual MAF/OpenAI SDK request
+translation to `httpx.MockTransport` plus a real MCP client/server
+protocol connected to **fake** scientific-inference delegates.
+Synthetic approvals are created inside test temporary directories,
+not stored in the experiment branch. The CLI is explicitly offline
+and refuses to treat the historic v0.3 candidate as approved.
+
+This is **not** native model tool calling: it is an intermediary
+JSON proposal followed by deterministic, mediated MCP dispatch.
+It must not be presented as the final tool-calling protocol or
+the basis for experimental effectiveness results without a
+prospective protocol-equivalence review. The 108 scientific trials
+remain unexecuted, and the real output-specific C8 validator is
+still unimplemented.
+
+### Baseline fairness fix
+
+C3/C4 have **no C8-specific post-validator**, so their outputs
+receive `safe_to_report=null` (not assessed) in the integration
+record. A null value is not a failed scientific validity check.
+For C8, `safe_to_report` is the actual typed post-validator result
+where one is available. An independent scorer must evaluate
+baseline safety from the same expert/gold reference, not from
+whether PhenoGuard's privileged validator was present.
+This prevents artificial C8 gains through a baseline
+coverage/refusal scoring artefact.
+
+### Next Plato gate: offline integration of actual SDK to MCP boundary
+
+Run the commands separately to handle Git SSH authentication:
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+```
+
+```bash
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_proposal_mcp_bridge_v1.py \
+  tests/research/test_phase8_maf_decision_v1.py \
+  tests/research/test_phase8_scientific_mcp.py \
+  tests/research/test_phase8_condition_rehearsal.py \
+  tests/research/test_phase8_openrouter_compat.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_proposal_mcp_bridge_v1.py
+git status --short
+```
+
+Do not supply `OPENROUTER_API_KEY`. Tests use only temporary synthetic
+approvals and fake inference; the test harness must not send paid calls.
+Required: all tests pass and
+`PHASE8_BRIDGE_OFFLINE_PREFLIGHT_PASS=true`,
+`PHASE8_BRIDGE_PROVIDER_CALLS=0`,
+`PHASE8_BRIDGE_SCIENTIFIC_DISPATCH=0`,
+`PHASE8_BRIDGE_NATIVE_TOOL_CALLING=false`,
+`PHASE8_BRIDGE_EXECUTION_APPROVED=false`.
+
+**Critical open work, not to be hidden behind integration test passes:**
+(1) native tool-proposal capture versus text-JSON proposals,
+(2) final independently trustworthy supervisor/credential/billing
+attestation, not merely a caller-supplied JSON SHA,
+(3) actual verified per-case image assets and GPU inference,
+(4) independently audited scientific output-specific C8 validators,
+(5) append-only raw attempts and exact per-call provider billing
+metering plus upstream hard cap, and
+(6) source-hashed final runtime approval before any outcome trial.
