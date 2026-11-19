@@ -652,3 +652,103 @@ attestation, not merely a caller-supplied JSON SHA,
 (5) append-only raw attempts and exact per-call provider billing
 metering plus upstream hard cap, and
 (6) source-hashed final runtime approval before any outcome trial.
+
+
+## Plato 87/87 end-to-end offline gate passed; canonical artifact audit (2026-11-19)
+
+The researcher pulled `726cefe` and passed **87/87** targeted
+mock-HTTP MAF-to-real-MCP protocol and regression tests in 4.97 seconds.
+The standalone bridge reported 108 registered trials and
+`PHASE8_BRIDGE_OFFLINE_PREFLIGHT_PASS=true` with
+`PHASE8_BRIDGE_NATIVE_TOOL_CALLING=false`,
+`PHASE8_BRIDGE_PROVIDER_CALLS=0`,
+`PHASE8_BRIDGE_SCIENTIFIC_DISPATCH=0`,
+`PHASE8_BRIDGE_OUTCOME_BEARING=false`, and
+`PHASE8_BRIDGE_EXECUTION_APPROVED=false`.
+The working tree remained clean. All synthetic executions were within
+tests; no scientific inference or paid provider calls were performed.
+
+### Audit of actual repository inference source revealed two corrections
+
+The existing MCP scientific dispatcher assumed that all segmentation
+models emit `ins_seg_results.json`. Inspection of the canonical
+`functions/leaf_only_sam.py::infer_leaf_only_sam` established that
+the *potato* Leaf-only SAM model instead writes
+`leaf_only_sam_results.json`. In
+`phenoassistant_mcp/scientific_inference_v1.py`, the artifact
+filename is now selected by exact scientific capability, while Case 1
+Arabidopsis Mask2Former still expects `ins_seg_results.json`.
+
+The previous output directory was keyed by both trial ID and
+capability/asset selection. That permitted two different model choices
+to each receive a distinct output folder in the same trial. The MCP
+server now atomically claims the **trial directory** on the first
+invocation, forbidding a second tool call even if the model or image
+ID changes. Separate tests exercise the duplicate-with-different-model
+case and pin the actual potato naming convention from source.
+
+### True output-format-specific C8 post-execution invariants
+
+New `scripts/research/phase8_scientific_artifact_validator.py`
+reads and checks the actual scientific artifacts that the
+canonical functions produce:
+
+- For C1/C2 segmentation COCO JSON: exact trusted input-image path,
+  one image with positive pixel dimensions, valid category/annotation
+  image references, unique annotation IDs, non-negative individual
+  mask area within image bounds, finite confidence within [0,1],
+  and COCO-RLE declared size consistent with image dimensions. A
+  zero-prediction image is allowed. The predicted leaf count and
+  summed mask area are derived from annotations and checked using
+  frozen `research/phenoguard/post_validation.py` phenotype
+  invariants, without changing Phase 7 source.
+- For C3 winter-wheat classification CSV: one bound input image,
+  required output columns, an integer class ID within the declared
+  seven-class scope, a nonblank label, and finite confidence in
+  [0,1]. The class label-to-ID mapping is not yet independently
+  pinned and is **not fabricated** here.
+- For both: matching MCP result identity and expected capability,
+  SHA-256 equality between returned result and actual artifact,
+  confined output-root layout, no symlinks, and a conservative
+  file-size bound. A mismatch produces a typed hard validation result.
+
+The actual output-bound callback is available through
+`make_c8_artifact_validator` and the mediated bridge's
+`bridge_one_with_real_artifact_check`, which deliberately
+runs C8-only post-validation and leaves C3/C4 baseline outputs
+`safe_to_report=null` (not assessed, rather than unsafe).
+
+These tests use **synthetic artifact files** and actual MCP protocol
+with fake vision inference. They do not establish model accuracy,
+mask geometric correctness beyond declared invariants, confidence
+calibration, a full scientific benchmark, or an approved runtime.
+
+### Next Plato offline verification (not yet executed)
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_scientific_artifact_validator.py \
+  tests/research/test_phase8_proposal_mcp_bridge_v1.py \
+  tests/research/test_phase8_scientific_mcp.py \
+  tests/research/test_phase8_maf_decision_v1.py \
+  tests/research/test_phase8_openrouter_compat.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_proposal_mcp_bridge_v1.py
+git status --short
+```
+
+No API key is needed. The only intended outputs are passing offline
+tests and the bridge's fail-closed `EXECUTION_APPROVED=false`
+status. The new integration and validator code must be included in a
+new approved final-runtime source hash **after** scientific harness,
+credential/provider/model and cost controls are genuinely verified.
+
+**Current paper-validity gaps:** native tool-call proposal capture
+(the bridge still uses text-JSON proposals), unalterable trusted
+supervisor approval, approved real image fixtures for the 12
+qualification scenarios, checkpoint/weight integrity for all three
+models, GPU fidelity, measured provider charges and hard budget cap,
+raw append-only scientific execution traces, independent scoring,
+and real domain-shift benchmark. No result claim is permitted yet.
