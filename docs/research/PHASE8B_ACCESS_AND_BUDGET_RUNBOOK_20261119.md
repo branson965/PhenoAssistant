@@ -301,3 +301,41 @@ request/endpoint comparison before making a change.
 Do not retry the paid live preflight or execute any scientific task until
 the dry capture evidence validates the remedy. No Phase 8 scientific
 outcome is claimed and completion percentages are unchanged.
+
+
+## SDK source cross-check: two candidate option translations
+
+The published Microsoft Agent Framework
+`agent_framework_openai/_chat_completion_client.py` contains an
+`OPTION_TRANSLATIONS` mapping of:
+
+```python
+"allow_multiple_tool_calls": "parallel_tool_calls"
+"max_tokens": "max_completion_tokens"
+```
+
+The installed package is pinned to `agent-framework-openai==1.11.0`.
+The published main-branch mapping is a strong diagnostic lead but **is
+not a substitute for capturing this exact installed runtime**.
+
+This raises two simultaneous routing suspects:
+
+1. `parallel_tool_calls=false`: absent from the advertised OpenAI
+   endpoint parameter sets;
+2. `max_completion_tokens=512`: absent from the advertised
+   `openai`/ `openai/fast`/`openai/flex` endpoint parameter sets,
+   which instead list `max_tokens`.
+
+The payload capture must check **both** fields. Changing only the
+parallel-tools option may leave the request unroutable due to
+`max_completion_tokens`.
+
+The eventual pre-outcome compatibility remedy should preserve:
+- exact Luna model and provider `openai` pin, no fallbacks;
+- strict required-parameter routing;
+- original token ceiling;
+- one tool execution as an application-side hard limit;
+- full recorded request-shape and newly frozen final runtime controls.
+
+Do not submit further paid calls until the installed runtime's actual
+request confirms the set of unsupported parameters.
