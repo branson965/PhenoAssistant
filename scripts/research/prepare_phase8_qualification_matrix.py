@@ -214,6 +214,10 @@ def build_matrix(*, candidate: dict, runtime: dict, protocol: dict, prompt_contr
             "max_rounds_per_trial": rounds,
             "provider_retry_and_token_drift_not_included": True,
             "forecast_not_measured": True,
+            "forecast_scope": "planned Luna manager/model roundtrips only",
+            "additional_generic_critic_calls_not_included": True,
+            "scientific_tool_execution_or_gpu_cost_not_included": True,
+            "not_a_spending_authorization": True,
         },
         "required_before_paid_scientific_trials": [
             "supervisor-approved credential/provider/billing/model route recorded",
