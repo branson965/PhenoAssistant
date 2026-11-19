@@ -102,3 +102,67 @@ remain required for a defensible full submission.
 Do not increase the paper progress percentage just because the planning
 matrix was generated. Scientific evaluation evidence is the critical
 outstanding contribution.
+
+
+## Plato matrix generation passed — 2026-11-19
+
+The researcher pulled commit `b511bea`, executed the three targeted
+offline suites, and received **27/27 passed**. The qualification
+planner emitted exactly 12 development/validation cases and 108
+planned C3/C4/C8 × three-seed trials:
+
+```text
+PHASE8_QUALIFICATION_MATRIX=experiments/ijcai2027/runtime/phase8_c3_c4_c8_qualification_matrix_v0.1.json
+PHASE8_QUALIFICATION_MATRIX_SHA256=8a9688aa464564bf99121656430ea09fc93bbf2b1d262a73a9b2276944876692
+PHASE8_QUALIFICATION_CASE_COUNT=12
+PHASE8_QUALIFICATION_TRIAL_COUNT=108
+PHASE8_QUALIFICATION_ESTIMATED_USD=0.7036416
+PHASE8_QUALIFICATION_SCIENTIFIC_EXECUTION_PERMITTED=false
+PHASE8_QUALIFICATION_API_KEY_READ=false
+PHASE8_QUALIFICATION_OUTCOME_BEARING=false
+PHASE8_QUALIFICATION_PLAN_PASS=true
+```
+
+The matrix was still untracked in the user's local worktree when the
+output was reported. It must be committed *as is*, without
+regeneration, and pushed. This is not evidence of scientific
+effectiveness.
+
+The independent verifier is now committed as
+`scripts/research/verify_phase8_qualification_matrix.py`,
+with `tests/research/test_phase8_qualification_matrix_verify.py`.
+It pins the exact reported SHA-256 and re-derives every planned
+trial and controlled setting from frozen inputs, rejecting altered
+trial status, leaked labels, fake outputs and drifting seeds.
+
+After pulling the updated experiment branch, run the offline
+verification before committing the generated matrix:
+
+```bash
+cd ~/PhenoAssistant
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_qualification_matrix_verify.py \
+  tests/research/test_phase8_qualification_matrix.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/verify_phase8_qualification_matrix.py
+sha256sum experiments/ijcai2027/runtime/phase8_c3_c4_c8_qualification_matrix_v0.1.json
+git status --short
+```
+
+Only if the verifier prints `PHASE8_QUALIFICATION_VERIFY_PASS=true`,
+commit and push that **single** generated JSON file. No other
+experiment outcome or method file is to be added to that commit.
+
+### Scientific-runner implementation gap
+
+The current `phenoassistant_mcp/maf_bridge_v2.py` proves parity for
+calculator, ANOVA and Tukey tools; it is not itself the complete
+capability-selection / scientific-vision-model MCP dispatcher tested
+by this paper. The full C3 schemas, C4 genuine generic LLM critic,
+and C8 SOE pre/post execution policies need their own isolated,
+matched pilot implementations. Until that is true, running paid
+messages and calling them the C3/C4/C8 paper comparison would be
+scientifically misleading.
+
+A successful planning verifier is **not** approval to spend credits.
+Provider/model approval and final runtime freeze remain separate.
