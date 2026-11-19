@@ -755,3 +755,32 @@ breadth programme on this balance without actual call-cost evidence.
 
 **Evidence-weighted scores unchanged:** overall 51%; Phase 8 20%; 6/9 fully
 closed. No scientific Phase 8 outcome yet exists.
+
+
+## Phase 8 live echo first attempt — parameter routing failure (2026-11-19)
+
+The first paid-capable but **non-scientific** MAF/OpenRouter echo
+preflight was attempted on Plato using the existing strict provider
+configuration and returned HTTP 404, `failed_routing_step=Filter by
+Parameters`. OpenRouter reported 8 initial endpoints, reduced to 5
+after region filtering and 3 after tier filtering, then no endpoint
+supported the request's full parameter set. Exact offending
+parameter is not yet known. No successful echo result or scientific
+outcome exists; do not count this as a passed preflight.
+
+To avoid guessing or weakening `require_parameters=true`, a
+read-only capability diagnostic and its offline regression tests
+were added:
+
+- `scripts/research/diagnose_phase8_openrouter_routing.py`
+- `tests/research/test_phase8_routing_diagnostic.py`
+
+The diagnostic inspects authenticated model catalogue parameters
+and per-provider endpoint capability metadata where the key has
+permission. It performs no paid generation, changes no frozen
+method file, and prints no credential. Preserve the failed attempt
+and inspect the diagnostic results before any new paid call.
+The existing provider/model/runtime study settings remain provisional
+pre-outcome; any necessary modification must be versioned explicitly.
+
+**Scores unchanged:** overall 51%; Phase 8 20%; 6/9 closed.
