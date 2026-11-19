@@ -239,3 +239,65 @@ been identified and the approved provider route is retained.
 
 **Status:** LIVE_ECHO_FAILED_PARAMETER_ROUTING; diagnostic pending.
 **Progress:** unchanged (overall 51%, Phase 8 20%, 6/9 fully closed).
+
+
+## Endpoint capability inspection passed, wire shape remains to prove — 2026-11-19
+
+Plato fast-forwarded from `24ba5f1` to `013e549`; the targeted
+diagnostic suite passed **16/16**. The authenticated OpenRouter catalogue
+reported Luna model-level support for `tools`, `tool_choice`, `seed`,
+`reasoning`, `max_tokens`, and `max_completion_tokens`, but **did not
+advertise** `parallel_tool_calls`. Five individual endpoints were returned,
+including `openai`, `openai/flex` and `openai/fast`. All three listed
+OpenAI endpoints support the former controls and none advertises
+`parallel_tool_calls`. Azure lists `max_completion_tokens` rather than
+`max_tokens`, which is another reason not to bypass the provider pin.
+
+The first error's endpoint counts are dynamic filters and need not equal
+the five endpoints exposed in the detail query.
+
+**Leading hypothesis:** MAF's `allow_multiple_tool_calls=False` may be
+translated into a transmitted `parallel_tool_calls=false`, triggering the
+strict parameter filter. This is *not yet proven*. A fully qualified
+pre-outcome change requires seeing the actual wire-level JSON control names,
+not guessing from the MAF options or endpoint catalogue.
+
+New no-network, no-charge capture script:
+`scripts/research/capture_phase8_maf_request_shape.py`.
+It runs the exact existing preflight with a dummy credential, intercepts
+`httpx.AsyncClient.send` before transmission, blocks socket connect,
+prints only safe allowed parameter control metadata and payload key names,
+and does not reveal prompts, schemas, messages or headers. It never
+uses or transmits the user's real key.
+
+Plato next gate:
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+```
+
+Then, after completing any interactive Git SSH passphrase prompt:
+
+```bash
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_request_shape_capture.py \
+  tests/research/test_phase8_preflight.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/capture_phase8_maf_request_shape.py
+```
+
+Inspect `PHASE8_WIRE_SHAPE` and required
+`PHASE8_WIRE_SHAPE_CAPTURE_PASS=true`,
+`PHASE8_WIRE_SHAPE_PAID_INFERENCE=false`.
+If `parallel_tool_calls` appears and is false, prepare a documented
+wire-compatibility change which omits the unsupported API parameter
+**while retaining application-side single-tool execution limits**,
+then recapture and reverify the outgoing request. Do not weaken
+`provider.require_parameters` or allow other providers silently.
+If not present, diagnose the remaining control fields with exact
+request/endpoint comparison before making a change.
+
+Do not retry the paid live preflight or execute any scientific task until
+the dry capture evidence validates the remedy. No Phase 8 scientific
+outcome is claimed and completion percentages are unchanged.
