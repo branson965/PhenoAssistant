@@ -196,3 +196,63 @@ def test_offline_script_has_no_openrouter_or_gold_access():
     assert "PHASE8_CONDITION_REHEARSAL_PROVIDER_CALLS=0" in source
     assert "PHASE8_CONDITION_REHEARSAL_REAL_GENERIC_LLM_CRITIC=false" in source
     assert "PHASE8_CONDITION_REHEARSAL_REAL_SCIENTIFIC_DISPATCH=false" in source
+
+
+def test_soe_exposure_only_in_c8_manager_input():
+    scenario = cases()[0]
+    view = model_visible_view(scenario)
+    seen = {}
+
+    async def manager3(received):
+        seen["c3"] = received
+        return await fake_manager(received)
+
+    async def manager4(received):
+        seen["c4"] = received
+        return await fake_manager(received)
+
+    async def manager8(received):
+        seen["c8"] = received
+        return await fake_manager(received)
+
+    async def critic(received, proposal):
+        assert "scientific_operating_envelopes" not in received
+        return proposal
+
+    async def run():
+        for condition, manager in ((C3, manager3), (C4, manager4), (C8, manager8)):
+            await rehearse_one(
+                condition=condition,
+                visible_view=view,
+                manager=manager,
+                critic=critic if condition == C4 else None,
+                mock_executor=fake_executor,
+                post_validator=good_post_validator if condition == C8 else None,
+            )
+    asyncio.run(run())
+    assert "scientific_operating_envelopes" not in seen["c3"]
+    assert "scientific_operating_envelopes" not in seen["c4"]
+    assert len(seen["c8"]["scientific_operating_envelopes"]) == 3
+    assert seen["c3"] == seen["c4"]
+    for key in ("expected_decision", "category", "shift_dimension", "scenario_id"):
+        assert key not in json.dumps(seen["c8"])
+
+
+def test_c8_manager_cannot_mutate_original_shared_request():
+    visible = model_visible_view(cases()[0])
+    unchanged = json.dumps(visible, sort_keys=True)
+    async def manager(received):
+        received["scientific_request"]["species"] = "edited"
+        return Proposal(
+            decision=ApplicabilityDecision.EXECUTE,
+            capability_id=visible["requested_capability_id"],
+        )
+    async def run():
+        return await rehearse_one(
+            condition=C8, visible_view=visible, manager=manager,
+            critic=None, mock_executor=fake_executor,
+            post_validator=good_post_validator,
+        )
+    result = asyncio.run(run())
+    assert result.decision == ApplicabilityDecision.EXECUTE
+    assert json.dumps(visible, sort_keys=True) == unchanged
