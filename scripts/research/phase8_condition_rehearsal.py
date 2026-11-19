@@ -117,10 +117,20 @@ async def rehearse_one(
     # Fresh deep copy prevents one mocked component from modifying a
     # shared request used by another experimental condition.
     view = json.loads(json.dumps(visible_view))
-    proposal = await manager(json.loads(json.dumps(view)))
+    original_visible_hash = _sha(view)
+    envelopes = build_default_provenance_catalogue() if condition == C8 else ()
+    manager_input = json.loads(json.dumps(view))
+    if condition == C8:
+        # The frozen C8 exposure contract includes both MCP schemas and
+        # Scientific Operating Envelopes. The schema binding itself is
+        # still a separate unimplemented live-MCP boundary, but the SOE
+        # exposure is real and never appears in C3 or C4.
+        manager_input["scientific_operating_envelopes"] = [
+            envelope.model_dump(mode="json") for envelope in envelopes
+        ]
+    proposal = await manager(manager_input)
     if not isinstance(proposal, Proposal):
         raise ValueError("manager did not produce a typed proposal")
-    original_visible_hash = _sha(view)
 
     if condition == C4:
         assert critic is not None
@@ -144,7 +154,7 @@ async def rehearse_one(
         # the manager's proposed capability as its execution candidate.
         requested = view["requested_capability_id"] or proposal.capability_id
         resolution = resolve_capability_catalogue(
-            build_default_provenance_catalogue(),
+            envelopes,
             request,
             requested_capability_id=requested,
             training_readiness=training,
