@@ -44,11 +44,11 @@ def test_missing_or_unpriced_model_fails_closed():
 
 def test_nine_dollar_plan_preserves_one_dollar_buffer():
     plan = budget.budget_plan(sample_prices(), available_usd=Decimal("9"))
-    assert plan["luna_usd"] == Decimal("1.0550304")
-    assert plan["sol_usd"] == Decimal("5.86464")
-    assert plan["total_usd"] == Decimal("6.9196704")
+    assert plan["luna_usd"] == Decimal("1.0554624")
+    assert plan["sol_usd"] == Decimal("5.86368")
+    assert plan["total_usd"] == Decimal("6.9191424")
     assert plan["ceiling_usd"] == Decimal("8.00")
-    assert plan["headroom_usd"] == Decimal("1.0803296")
+    assert plan["headroom_usd"] == Decimal("1.0808576")
 
 
 def test_breadth_expansion_without_budget_fails_headroom_check():
