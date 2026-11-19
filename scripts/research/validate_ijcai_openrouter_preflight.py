@@ -12,14 +12,22 @@ import inspect
 import json
 import os
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
+import httpx
+from openai import AsyncOpenAI
 from agent_framework import Message, tool
 from agent_framework.openai import OpenAIChatCompletionClient
 
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.research.openrouter_compat import OpenRouterCompatTransport  # noqa: E402
+
 EXPERIMENT_DIR = ROOT / "experiments" / "ijcai2027"
 
 
@@ -180,14 +188,27 @@ async def main() -> None:
         )
         return token
 
+    # Inject a pre-outcome, fail-closed wire-compatibility transport. Its
+    # only transformations replace the unsupported max_completion_tokens
+    # name with max_tokens, and omit parallel_tool_calls only when false.
+    # No provider, model, seed, message, tool or reasoning setting changes.
+    http_client = httpx.AsyncClient(
+        transport=OpenRouterCompatTransport(
+            expected_model=primary["model_id"],
+            token_ceiling=int(sampling["max_output_tokens"]),
+        ),
+    )
+    sdk_client = AsyncOpenAI(
+        api_key=api_key,
+        base_url="https://openrouter.ai/api/v1",
+        http_client=http_client,
+        max_retries=0,  # do not spend credits on an automatic preflight retry
+    )
     client = OpenAIChatCompletionClient(
         model=primary[
             "model_id"
         ],
-        api_key=api_key,
-        base_url=(
-            "https://openrouter.ai/api/v1"
-        ),
+        async_client=sdk_client,
         function_invocation_configuration={
             "max_iterations": int(
                 tool_loop[
@@ -323,6 +344,10 @@ async def main() -> None:
         )
 
         print(
+            "PHASE8A_LIVE_PREFLIGHT_COMPAT_ADAPTER=enabled"
+        )
+
+        print(
             "PHASE8A_LIVE_PREFLIGHT_OUTCOME_BEARING=false"
         )
 
@@ -338,6 +363,8 @@ async def main() -> None:
         await close_client(
             client
         )
+        await sdk_client.close()
+        await http_client.aclose()
 
 
 if __name__ == "__main__":
