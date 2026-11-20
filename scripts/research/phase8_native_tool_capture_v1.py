@@ -82,6 +82,7 @@ class NativeToolProposal:
     response_model: str
     prompt_sha256: str
     response_text_sha256: str | None
+    raw_wire_function_call_count: int = 0
     scientific_mcp_calls: int = 0
     gpu_inference_calls: int = 0
     provider_cost_measured: None = None
@@ -110,6 +111,11 @@ async def capture_one_native_manager_proposal(
     view = validate_view(visible_view)
     mcp_schema = check_native_schema(discovered_tool)
     _, base_user = manager_prompt(condition, view, mcp_schema)
+    raw_guard = client.raw_tool_guard
+    if raw_guard is None:
+        raise Phase8ProposalError("native capture requires a raw provider-response guard")
+    if raw_guard.native_tool_calls != 0 or raw_guard.provider_replies_checked != 0:
+        raise Phase8ProposalError("native capture requires a fresh per-trial MAF client")
     calls: list[tuple[str, str]] = []
     invalid_attempts: list[str] = []
 
@@ -157,6 +163,10 @@ async def capture_one_native_manager_proposal(
         raise Phase8ProposalError(
             "native tool callback rejected model proposal: " + invalid_attempts[0]
         )
+    if raw_guard.native_tool_calls != len(calls):
+        raise Phase8ProposalError(
+            "MAF callback count differs from raw provider native tool-call count"
+        )
     response_model = getattr(response, "model", None)
     if response_model != MODEL:
         raise Phase8ProposalError("native proposal response model identity drift")
@@ -192,6 +202,7 @@ async def capture_one_native_manager_proposal(
         response_model=response_model,
         prompt_sha256=_sha(NATIVE_INSTRUCTIONS + "\n" + base_user),
         response_text_sha256=_sha(text) if isinstance(text, str) else None,
+        raw_wire_function_call_count=raw_guard.native_tool_calls,
     )
 
 
