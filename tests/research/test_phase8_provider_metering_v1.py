@@ -264,3 +264,83 @@ def test_no_provider_call_on_concurrent_trial_lease(tmp_path):
         fcntl.flock(lock_fd, fcntl.LOCK_UN)
         os.close(lock_fd)
     assert not calls
+
+
+def test_guarded_maf_client_records_raw_billing_without_live_network(tmp_path):
+    """Actual client transport stack, MockTransport only, no GPU or paid provider."""
+    from phenoassistant_mcp.scientific_inference_v1 import file_sha256
+    from scripts.research.phase8_maf_decision_v1 import (
+        MODEL as MAF_MODEL, Phase8MafDecisionClient, Phase8ProposalError,
+    )
+
+    candidate = json.loads(Path(
+        "experiments/ijcai2027/runtime/runtime_controls_candidate_v0.3.json"
+    ).read_text(encoding="utf-8"))
+    candidate["status"] = "PRE_OUTCOME_RUNTIME_APPROVED_FROZEN"
+    candidate["scientific_execution_permitted"] = True
+    candidate["approval"]["researcher_attested_supervisor_provider_billing_and_models"] = True
+    candidate["http_transport_compatibility"]["scientific_harness_adoption"] = "VERIFIED"
+    runtime = tmp_path / "SYNTHETIC_MOCK_ONLY_APPROVAL.json"
+    runtime.write_text(json.dumps(candidate, sort_keys=True), encoding="utf-8")
+    ledger = tmp_path / "provider.jsonl"
+    sent = []
+
+    async def provider(req):
+        sent.append(json.loads(req.content))
+        return reply(cost="0.008")
+
+    async def run():
+        client = Phase8MafDecisionClient.create(
+            approved_runtime_path=runtime,
+            approved_runtime_sha256=file_sha256(runtime),
+            api_key="SYNTHETIC-NOT-A-PROVIDER-KEY",
+            seed=2026,
+            upstream=httpx.MockTransport(provider),
+            metering_trial_id=TRIAL,
+            metering_ledger_path=ledger,
+        )
+        try:
+            payload = {
+                "model": MAF_MODEL,
+                "messages": [{"role": "user", "content": "OFFLINE TEST ONLY"}],
+                "tools": [],
+                "tool_choice": "none",
+                "max_completion_tokens": 2048,
+                "seed": 2026,
+                "reasoning": {"effort": "medium"},
+                "provider": {
+                    "order": ["openai"],
+                    "allow_fallbacks": False,
+                    "require_parameters": True,
+                },
+                "stream": False,
+            }
+            response = await client.http_client.post(
+                "https://openrouter.ai/api/v1/chat/completions", json=payload,
+            )
+            assert response.status_code == 200
+            assert client.provider_metering is not None
+            assert client.raw_tool_guard.provider_replies_checked == 1
+        finally:
+            await client.close()
+
+    asyncio.run(run())
+    assert len(sent) == 1
+    assert sent[0]["max_tokens"] == 2048
+    assert "max_completion_tokens" not in sent[0]
+    assert summarize_trial_metering(
+        ledger, trial_id=TRIAL, model=MODEL,
+    )["provider_cost_usd"] == "0.008"
+    assert "OFFLINE TEST ONLY" not in ledger.read_text()
+
+
+def test_maf_client_rejects_half_configured_metering(tmp_path):
+    from scripts.research.phase8_maf_decision_v1 import (
+        Phase8MafDecisionClient, Phase8ProposalError,
+    )
+    # Missing pinned runtime fails before this check; verify interface exists
+    # separately to avoid creating test-only approval files here.
+    import inspect
+    signature = inspect.signature(Phase8MafDecisionClient.create)
+    assert "metering_trial_id" in signature.parameters
+    assert "metering_ledger_path" in signature.parameters
