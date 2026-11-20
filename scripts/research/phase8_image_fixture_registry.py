@@ -32,8 +32,10 @@ from scripts.research.phase8_attempt_ledger import load_verified_controls  # noq
 from scripts.research.prepare_phase8_qualification_matrix import model_visible_view, sha256_value  # noqa: E402
 
 SCHEMA = "phase8-image-fixture-registry-v0.1"
+# This is intentionally under data/_staging/, already ignored in .gitignore.
+# Real filesystem paths and access/reviewer records MUST NOT be committed.
 DEFAULT_TEMPLATE = (
-    ROOT / "experiments" / "ijcai2027" / "runtime"
+    ROOT / "data" / "_staging"
     / "phase8_image_fixture_binding_template_v0.1.json"
 )
 MAX_IMAGE_BYTES = 64 * 1024 * 1024
@@ -216,6 +218,7 @@ def main() -> int:
         if args.write_template:
             if DEFAULT_TEMPLATE.exists():
                 raise FixtureGateError("template exists; refuse overwrite")
+            DEFAULT_TEMPLATE.parent.mkdir(parents=True, exist_ok=True)
             DEFAULT_TEMPLATE.write_text(
                 json.dumps(template, sort_keys=True, indent=2) + "\n",
                 encoding="utf-8",
