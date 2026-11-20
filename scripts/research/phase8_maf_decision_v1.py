@@ -44,6 +44,7 @@ from phenoassistant_mcp.scientific_inference_v1 import (  # noqa: E402
 from research.phenoguard.contracts import ApplicabilityDecision, ScientificRequestContext, TrainingReadinessContext  # noqa: E402
 from research.phenoguard.provenance import build_default_provenance_catalogue  # noqa: E402
 from scripts.research.openrouter_compat import OpenRouterCompatTransport  # noqa: E402
+from scripts.research.phase8_raw_tool_reply_guard import RawNativeToolReplyGuardTransport  # noqa: E402
 from scripts.research.phase8_condition_rehearsal import C3, C4, C8, Proposal  # noqa: E402
 from scripts.research.phase8_attempt_ledger import load_verified_controls, scientific_gate, LedgerGateError  # noqa: E402
 
@@ -276,12 +277,16 @@ class Phase8MafDecisionClient:
     """Real MAF service; model calls occur ONLY through explicit methods."""
 
     def __init__(self, *, chat: OpenAIChatCompletionClient, sdk: AsyncOpenAI,
-                 http_client: httpx.AsyncClient, seed: int) -> None:
+                 http_client: httpx.AsyncClient, seed: int,
+                 raw_tool_guard: RawNativeToolReplyGuardTransport | None = None) -> None:
         if seed not in SEEDS or isinstance(seed, bool):
             raise Phase8ProposalError("seed schedule changed")
         self.chat = chat
         self.sdk = sdk
         self.http_client = http_client
+        # Guard is bound to one client/trial. Never reuse an active client
+        # across two paid qualification trials or reset the counter mid-trial.
+        self.raw_tool_guard = raw_tool_guard
         self.seed = seed
 
     @classmethod
@@ -306,8 +311,12 @@ class Phase8MafDecisionClient:
             raise Phase8ProposalError("approved runtime requires an explicit key")
         if type(seed) is not int or seed not in SEEDS:
             raise Phase8ProposalError("unapproved seed")
+        raw_guard = RawNativeToolReplyGuardTransport(
+            upstream=(upstream if upstream is not None else httpx.AsyncHTTPTransport()),
+            expected_model=MODEL,
+        )
         transport = OpenRouterCompatTransport(
-            expected_model=MODEL, token_ceiling=OUTPUT_TOKENS, upstream=upstream,
+            expected_model=MODEL, token_ceiling=OUTPUT_TOKENS, upstream=raw_guard,
         )
         http_client = httpx.AsyncClient(transport=transport)
         sdk = AsyncOpenAI(
@@ -324,7 +333,10 @@ class Phase8MafDecisionClient:
                 "terminate_on_unknown_calls": True,
             },
         )
-        return cls(chat=chat, sdk=sdk, http_client=http_client, seed=seed)
+        return cls(
+            chat=chat, sdk=sdk, http_client=http_client,
+            seed=seed, raw_tool_guard=raw_guard,
+        )
 
     def _options(self) -> dict[str, Any]:
         return {
