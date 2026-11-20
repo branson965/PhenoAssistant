@@ -849,3 +849,83 @@ C4 genuine Critic output measurements, append-only raw attempt
 and per-call provider-billed cost capture, external approval evidence,
 new final runtime lock, hidden-label protection and blinded scoring.
 Progress percentages are unchanged.
+
+
+## 2026-11-19: 109/109 Plato tests passed; private real-image binding gate staged
+
+The researcher pulled `067e69f` on Plato and passed **109/109**
+offline regression tests in 5.14 seconds. The direct bridge confirmed
+108 registered qualification trials; the C3/C4/C8 mediated path,
+output-aware C8 validation and independently pinned trust gate passed
+their intended offline checks. Exact markers:
+`PHASE8_BRIDGE_PROVIDER_CALLS=0`,
+`PHASE8_BRIDGE_SCIENTIFIC_DISPATCH=0`,
+`PHASE8_BRIDGE_NATIVE_TOOL_CALLING=false`,
+`PHASE8_BRIDGE_C8_REAL_OUTPUT_VALIDATION=offline-tests-passed-real-GPU-unverified`,
+`PHASE8_BRIDGE_OUTCOME_BEARING=false`, and
+`PHASE8_BRIDGE_EXECUTION_APPROVED=false`.
+The worktree was clean. **No scientific outcome or real GPU result** exists.
+
+New pre-outcome source:
+`scripts/research/phase8_image_fixture_registry.py`
+and `tests/research/test_phase8_image_fixture_registry.py`.
+
+The existing 12-case qualification manifest has **zero approved
+physical image bindings**, even though the Manager and Critic can
+propose models. Without those bindings, a real experimental executor
+cannot legitimately attempt the intended scientific inference.
+This module generates one private, unbound slot for each frozen
+scenario, verified against the preserved 108-trial matrix and the
+exact paired model-visible request hash. The slot is the same for
+all three conditions and frozen seeds; it is *not* passed to the
+Manager or Critic.
+
+The eventual manually reviewed bindings must include:
+- opaque image asset ID, absolute image path restricted to a trusted
+  image root, source-image SHA-256, decodable image data;
+- source dataset and source image ID, reviewed biological species,
+  data-use/access evidence and separate reviewer evidence ID;
+- exact 12-scenario coverage with no duplicates, conflicting asset
+  identities, path escape or symlink traversal, and species/request
+  contradictions rejected when scientific species is declared;
+- **no case ID, dataset review, image path, reviewer data or fixture
+  identifier in model-visible scientific requests.**
+
+The incomplete template is written under `data/_staging/`, which
+is already Git-ignored. Do not commit file paths or private image
+review evidence into the repository. The existing
+`TRUSTED_REVIEWED_FIXTURE_REGISTRY_SHA256` is deliberately `None`.
+Even a structurally valid self-attested registry is **not approved**
+to execute real science until independent provenance review and a
+subsequent source-hashed final runtime approval. The module never
+opens gold labels, contacts OpenRouter or runs a GPU model.
+
+### Plato offline verification
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+
+unset OPENROUTER_API_KEY
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_image_fixture_registry.py \
+  tests/research/test_phase8_scientific_mcp.py \
+  tests/research/test_phase8_proposal_mcp_bridge_v1.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_image_fixture_registry.py --write-template
+git status --short
+```
+
+Expected outputs: 12 frozen fixture slots; zero real images bound;
+private source metadata model-visible=false; independent review
+approved=false; zero provider calls, zero scientific execution;
+`PHASE8_FIXTURE_PREFLIGHT_PASS=true`.
+**The new tests have not yet been run on Plato**. The generated
+template is unapproved and ignored by Git. The CLI refuses to
+overwrite an existing template. No paid model calls are authorised.
+
+Next major task remains to qualify *native* MAF function-call
+capture, after which real image fixture evidence, checkpoint
+integrity, provider-billed attempt logging and supervisor approval
+must be reviewed before final trial-runtime freeze. The current
+mediation via JSON proposal is explicitly not native tool calling.
