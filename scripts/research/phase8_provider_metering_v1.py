@@ -145,6 +145,11 @@ def _read_locked(handle: Any, *, trial_id: str, model: str) -> list[dict]:
             if entry["failure_code"] is not None or entry["http_status"] != 200:
                 raise Phase8MeteringError("invalid successful metering event")
             _validate_measured_entry(entry)
+            if any(
+                old["provider_response_id"] == entry["provider_response_id"]
+                for old in events if old["event"] == "METERED"
+            ):
+                raise Phase8MeteringError("duplicate provider generation ID")
         elif entry["event"] == "METERING_MISSING":
             if entry["failure_code"] not in {
                 "TRANSPORT_ERROR", "HTTP_ERROR", "INVALID_USAGE"
