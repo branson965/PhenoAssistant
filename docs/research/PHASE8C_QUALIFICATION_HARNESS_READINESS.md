@@ -1135,3 +1135,32 @@ usage **and provider-billed cost**, a provider-side hard spending
 cap, source-hashed final-runtime seal, blinded outcome scoring
 and an actual real-domain-shift benchmark. The scripted 12 cases
 still qualify engineering, not scientific effectiveness.
+
+
+### C8 decision-label integrity clarification (2026-11-20, pre-Plato verification)
+
+One subtle ambiguity was identified in the staged native C8
+mediator. The frozen SOE catalogue resolver's EXECUTE/RESELECT
+decision is relative to the **capability supplied to that
+resolver**. We correctly supply the Manager's actual native
+proposed capability for the scientific validity check. However,
+the benchmark's final EXECUTE/RESELECT action is adjudicated
+relative to the **originally requested capability** supplied by
+the user. These must not be conflated.
+
+The native mediator therefore leaves the catalogue's scientific
+selection unchanged, then classifies the **final** action as
+EXECUTE if the verified selected capability matches the original
+request, or RESELECT if it differs. No-model/clarify/abstain/training
+decisions are not converted into execution. Added tests cover
+both a model-proposed wrong capability corrected back to the
+original requested model, and a model-proposed compatible
+alternative that must still count as RESELECT relative to the
+original request. This does not change frozen Phase 7 code or
+consult gold labels.
+
+**Still only offline engineering evidence:** native Critic model
+calls, raw reply limits and this C8 label mapping remain to be
+tested on Plato. Any remaining live provider, raw usage,
+model/checkpoint and provenance drift must be resolved before
+scientific execution is authorised.
