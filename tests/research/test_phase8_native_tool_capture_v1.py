@@ -354,3 +354,55 @@ def test_native_cli_uses_only_no_network_static_controls():
     assert "phase8_preflight_echo" not in source
     assert "TRUSTED_APPROVED_RUNTIME_SHA256 = " not in source
     assert "PHASE8_NATIVE_CAPTURE_OUTCOME_BEARING=false" in source
+
+
+def test_native_tool_uses_real_discovered_scientific_mcp_schema_without_dispatch(
+    tmp_path, approved_test_runtime, view,
+):
+    from phenoassistant_mcp.scientific_inference_v1 import (
+        ImageAsset, build_phase8_scientific_mcp_server,
+    )
+    from scripts.research.phase8_maf_decision_v1 import discover_real_mcp_tool
+
+    path, digest = approved_test_runtime
+    image = tmp_path / "synthetic-image.png"
+    image.write_bytes(b"NOT_USED_FOR_VISION_ONLY_SCHEMA_DISCOVERY")
+    assets = {"opaque_test_image": ImageAsset(image, file_sha256(image))}
+
+    def no_vision_execution(*args, **kwargs):
+        raise AssertionError("native capture must not invoke real scientific MCP tool")
+
+    server = build_phase8_scientific_mcp_server(
+        approved_runtime_file=path,
+        approved_runtime_sha256=digest,
+        frozen_trial_id="a" * 24,
+        trusted_images=assets,
+        output_root=tmp_path / "must-remain-absent",
+        inference_delegate=no_vision_execution,
+    )
+
+    async def run():
+        actual_schema = await discover_real_mcp_tool(server)
+        assert actual_schema["name"] == "run_scientific_model"
+        assert set(actual_schema["input_schema"]["properties"]) == {
+            "capability_id", "image_asset_id",
+        }
+        return await run_capture(
+            runtime=approved_test_runtime, visible=view,
+            schema=actual_schema, condition=C3,
+            responses=[
+                response(
+                    calls={
+                        "capability_id": CASE1,
+                        "image_asset_id": IMAGE_ARGUMENT_PLACEHOLDER,
+                    },
+                    finished="tool_calls",
+                ),
+                response(text="captured"),
+            ],
+        )
+    result, sent = asyncio.run(run())
+    assert result.captured_function_call_count == 1
+    assert result.scientific_mcp_calls == 0
+    assert len(sent) == 2
+    assert not (tmp_path / "must-remain-absent").exists()
