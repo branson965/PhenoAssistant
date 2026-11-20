@@ -145,6 +145,7 @@ def test_private_paths_source_review_species_and_case_ids_never_go_to_llm(comple
     for internal in (
         "scenario_id_internal_only", "source_dataset", "reviewer_evidence_id",
         "image_asset_id_internal_only", "reviewed_species",
+        "image_asset_id", "fixture_refs", "image_path",
     ):
         with pytest.raises(registry.FixtureGateError, match="leaked"):
             registry.model_visible_fields_must_exclude_fixture_data({"private": {internal: "secret"}})
@@ -158,3 +159,12 @@ def test_template_cli_is_no_network_no_real_image_no_approval(capsys):
     assert "PHASE8_FIXTURE_PROVIDER_CALLS=0" in source
     assert "PHASE8_FIXTURE_REAL_IMAGES_BOUND=0" in source
     assert "TRUSTED_REVIEWED_FIXTURE_REGISTRY_SHA256: str | None = None" in source
+
+
+def test_template_location_is_already_git_ignored_and_never_a_public_runtime_artifact():
+    ignore_text = Path(".gitignore").read_text(encoding="utf-8")
+    assert "data/_staging/" in ignore_text
+    assert registry.DEFAULT_TEMPLATE.relative_to(registry.ROOT).parts[:2] == (
+        "data", "_staging"
+    )
+    assert registry.DEFAULT_TEMPLATE.name.endswith("_template_v0.1.json")
