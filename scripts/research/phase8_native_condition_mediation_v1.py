@@ -62,6 +62,7 @@ class NativeMediationObservation:
     manager_decision: ApplicabilityDecision
     manager_selected_capability_id: str | None
     native_tool_calls_captured: int
+    raw_provider_native_tool_calls: int
     critic_called: bool
     critic_decision: ApplicabilityDecision | None
     critic_selected_capability_id: str | None
@@ -100,6 +101,12 @@ def verify_native_capture(captured: NativeToolProposal) -> None:
         raise Phase8ProposalError("native capture must not invent measured billing")
     if not isinstance(captured.decision, Proposal):
         raise Phase8ProposalError("Manager decision must be typed")
+    if (
+        type(captured.captured_function_call_count) is not int
+        or type(captured.raw_wire_function_call_count) is not int
+        or captured.raw_wire_function_call_count != captured.captured_function_call_count
+    ):
+        raise Phase8ProposalError("raw provider tool calls do not match native callback evidence")
     if captured.captured_function_call_count == 1:
         if captured.application_bound_asset_placeholder != IMAGE_ARGUMENT_PLACEHOLDER:
             raise Phase8ProposalError("native call did not use the public image placeholder")
@@ -207,6 +214,7 @@ async def mediate_one_native_condition(
         manager_decision=captured.decision.decision,
         manager_selected_capability_id=captured.decision.capability_id,
         native_tool_calls_captured=captured.captured_function_call_count,
+        raw_provider_native_tool_calls=captured.raw_wire_function_call_count,
         critic_called=critic is not None,
         critic_decision=(critic.proposal.decision if critic is not None else None),
         critic_selected_capability_id=(
