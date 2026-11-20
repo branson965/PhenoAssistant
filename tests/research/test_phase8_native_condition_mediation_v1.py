@@ -157,6 +157,7 @@ def test_c4_real_maf_native_tool_then_generic_critic_veto(
     assert obs.manager_decision is Action.EXECUTE
     assert obs.manager_selected_capability_id == CASE1
     assert obs.native_tool_calls_captured == 1
+    assert obs.raw_provider_native_tool_calls == 1
     assert obs.critic_called is True
     assert obs.critic_decision is Action.ABSTAIN
     assert obs.final_decision is Action.ABSTAIN
@@ -254,6 +255,7 @@ def test_c8_no_native_call_cannot_start_model(runtime, schema):
     assert obs.final_decision is Action.CLARIFY
     assert obs.final_selected_capability_id is None
     assert obs.native_tool_calls_captured == 0
+    assert obs.raw_provider_native_tool_calls == 0
     assert obs.c8_precheck_applied is False
     assert len(sent) == 1
 
@@ -339,6 +341,7 @@ def test_native_mediation_rejects_critic_in_c8_or_c3():
         captured_function_call_count=1,
         application_bound_asset_placeholder=IMAGE_ARGUMENT_PLACEHOLDER,
         response_model=MODEL,
+        raw_wire_function_call_count=1,
         prompt_sha256="a" * 64,
         response_text_sha256="b" * 64,
     )
