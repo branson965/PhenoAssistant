@@ -78,7 +78,9 @@ def view(index=0):
 
 def fake_reply(*, tool=None, decision=None):
     message = {"role": "assistant", "content": (
-        json.dumps(decision) if decision is not None else None
+        json.dumps(decision) if decision is not None else (
+            None if tool is not None else "native selection recorded"
+        )
     )}
     if tool is not None:
         message["tool_calls"] = [{
