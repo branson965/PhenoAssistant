@@ -929,3 +929,102 @@ capture, after which real image fixture evidence, checkpoint
 integrity, provider-billed attempt logging and supervisor approval
 must be reviewed before final trial-runtime freeze. The current
 mediation via JSON proposal is explicitly not native tool calling.
+
+
+## Plato 48/48 private fixture gate PASS; native MAF call capture staged (2026-11-20)
+
+The researcher pulled `b7511f0` onto Plato and ran the targeted
+fixture / scientific MCP / mediated-bridge regression suites:
+**48/48 passed in 6.81 seconds**. The default-deny private
+template was then generated under the Git-ignored
+`data/_staging/phase8_image_fixture_binding_template_v0.1.json`;
+its SHA-256 was
+`53d8fff45a4a6054f1cbff00cdf4e3ab56b1c3202ecf09916e527dd04b9617ca`.
+The CLI reported 12 slots, **0 real images bound**, independent
+fixture review false, 0 provider and scientific calls, and
+`PHASE8_FIXTURE_PREFLIGHT_PASS=true`. Git status was clean.
+
+### New native function-call proposal capture, no scientific execution
+
+Two new files have been committed to `experiments/ijcai2027`:
+
+- `scripts/research/phase8_native_tool_capture_v1.py`
+- `tests/research/test_phase8_native_tool_capture_v1.py`
+
+Unlike the historical mediated text-JSON bridge, the new path
+provides the pinned real MAF `OpenAIChatCompletionClient` a
+**native** `@tool(name="run_scientific_model")` matching the
+actual MCP-discovered tool name, description, and two core
+argument names (`capability_id`, `image_asset_id`).
+The application callback merely captures the proposed
+capability, rejecting unregistered checkpoints, unapproved image
+arguments and duplicate callback invocations. It does **not**
+dispatch to MCP/GPU or return scientific measurements.
+
+A public non-path `application_bound_image` token is the
+only valid model-supplied image argument. The confidential real
+image ID is bound **later** by the application after separate
+approval and policy checks. This placeholder is an explicit
+mediated design constraint, not yet a validated equivalence to
+the original end-to-end native MCP scientific-tool protocol.
+
+C3 and C4 Manager native-call requests have the same base scientific
+message and same MAF tool definition. C8 additionally sees frozen
+SOEs. An observed call of the originally requested registered
+capability maps to EXECUTE, and a different registered capability
+maps to RESELECT, without consulting gold labels. A no-tool
+response may only express CLARIFY, ABSTAIN or RECOMMEND_TRAINING
+in the frozen typed JSON shape. Native tool callback errors
+are fail-closed even if MAF wraps them in a tool-result envelope.
+
+The regression tests use **real MAF SDK calls terminating at
+httpx.MockTransport**, with synthetic local approval only.
+They check provider pin, seed, reasoning, token ceiling,
+unmodified tool-call arguments, tool schema exposure,
+one captured function call, C3/C4 equality, C8 SOE isolation,
+valid no-tool abstention, invalid/missing image inputs, gold-label
+nonexposure, actual MCP schema discovery, zero scientific dispatch,
+and denial under the unapproved historic runtime.
+
+**Limitations:** the new tests have not yet run on Plato; the
+current native capture is a proposal-only adapter, not the final
+real scientific harness. C4 Critic decision mediation still needs
+to be composed with the captured Manager call. Whether MAF
+or its provider returns multiple raw tool calls needs separate
+wire-level evidence; do not infer full tool-budget compliance
+from mocked one-call examples alone. Real images, GPU/checkpoint
+verification, usage/billing evidence and supervisor approval
+remain pending. The 108 scientific trials have **not run**.
+
+### Next Plato qualification gate
+
+First pull the new branch through the Git SSH prompt:
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+```
+
+Then run with no OpenRouter key:
+
+```bash
+unset OPENROUTER_API_KEY
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_native_tool_capture_v1.py \
+  tests/research/test_phase8_maf_decision_v1.py \
+  tests/research/test_phase8_openrouter_compat.py \
+  tests/research/test_phase8_image_fixture_registry.py \
+  tests/research/test_phase8_scientific_mcp.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_native_tool_capture_v1.py
+git status --short
+```
+
+Do not infer a passing test count before the Plato run. Required:
+`PHASE8_NATIVE_CAPTURE_OFFLINE_PREFLIGHT_PASS=true`,
+`PHASE8_NATIVE_CAPTURE_REAL_MCP_DISPATCH=0`,
+`PHASE8_NATIVE_CAPTURE_REAL_PROVIDER_CALLS=0`,
+`PHASE8_NATIVE_CAPTURE_GPU_EXECUTIONS=0`,
+`PHASE8_NATIVE_CAPTURE_SCIENTIFIC_EXECUTION_APPROVED=false`.
+The test provider is fake. Do not supply a real key. Preserve the
+current unapproved runtime and methodological freeze.
