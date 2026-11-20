@@ -165,8 +165,16 @@ async def capture_one_native_manager_proposal(
         # The actual native function call, not the assistant's summary text,
         # is the ONLY source of the proposed capability. No extra native call
         # is possible without the callback rejecting it.
+        # RESELECT is an observable fact when the native call selects a
+        # different registered capability from the explicitly requested one.
+        # This classification does not consult scientific gold or SOE data.
+        requested = view["requested_capability_id"]
         action = Proposal(
-            decision=ApplicabilityDecision.EXECUTE,
+            decision=(
+                ApplicabilityDecision.RESELECT
+                if requested is not None and calls[0][0] != requested
+                else ApplicabilityDecision.EXECUTE
+            ),
             capability_id=calls[0][0],
         )
     else:
