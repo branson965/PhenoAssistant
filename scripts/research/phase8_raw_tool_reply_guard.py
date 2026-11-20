@@ -87,8 +87,10 @@ def inspect_native_reply(
         if (
             not isinstance(tools, list)
             or len(tools) != 1
+            or not isinstance(tools[0], dict)
             or tools[0].get("type") != "function"
-            or tools[0].get("function", {}).get("name") != TOOL_NAME
+            or not isinstance(tools[0].get("function"), dict)
+            or tools[0]["function"].get("name") != TOOL_NAME
             or outgoing.get("tool_choice") not in ("auto", "required")
         ):
             raise Phase8RawToolReplyError("provider used a tool not advertised for this turn")
