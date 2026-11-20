@@ -1342,3 +1342,17 @@ implementation thereafter is append-only per-call native model
 and Critic usage/billing evidence attached to the final trial
 runner. **Scores unchanged: 51% overall, Phase 8 20%, 6/9
 phases complete.**
+
+
+### C8 original-request decision integrity (2026-11-20, pre-Plato)
+
+The native C8 mediator's SOE resolver now evaluates the **actual
+Manager-proposed capability** rather than the originally
+requested one, but the final EXECUTE/RESELECT classification
+is explicitly relative to the **original user-requested
+capability**, as required by the frozen benchmark labels.
+This avoids spurious correction gains or losses when a Manager
+already proposed the scientifically compatible alternative.
+Two negative/paired tests were added. They have not yet run
+on Plato; no outcomes were generated and no scientific freeze
+was modified.
