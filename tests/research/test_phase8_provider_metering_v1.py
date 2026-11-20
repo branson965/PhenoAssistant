@@ -379,4 +379,9 @@ def test_duplicate_provider_generation_cannot_be_double_counted(tmp_path):
         finally:
             await transport.aclose()
     asyncio.run(run())
-    assert len(read_verified_metering(ledger, trial_id=TRIAL, model=MODEL)) == 1
+    records = read_verified_metering(ledger, trial_id=TRIAL, model=MODEL)
+    assert len(records) == 2
+    assert records[0]["event"] == "METERED"
+    assert records[1]["event"] == "METERING_MISSING"
+    with pytest.raises(Phase8MeteringError, match="incomplete"):
+        summarize_trial_metering(ledger, trial_id=TRIAL, model=MODEL)
