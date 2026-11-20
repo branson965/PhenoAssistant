@@ -176,6 +176,21 @@ def mediate_native_proposal(
         requested_capability_id=manager_proposal.capability_id,
         training_readiness=training,
     )
+    # SOE resolution's EXECUTE/RESELECT refers to the assessed MANAGER
+    # proposal. The frozen benchmark's EXECUTE/RESELECT refers to the
+    # ORIGINAL user-requested capability. Record that final distinction
+    # without changing or bypassing the catalogue's safety decision.
+    if resolution.decision in EXECUTABLE:
+        chosen = resolution.selected_capability_id
+        if chosen is None:
+            raise Phase8ProposalError("SOE reported executable action without selected model")
+        original_requested = view["requested_capability_id"]
+        final_action = (
+            ApplicabilityDecision.RESELECT
+            if original_requested is not None and chosen != original_requested
+            else ApplicabilityDecision.EXECUTE
+        )
+        return final_action, chosen, True
     return resolution.decision, resolution.selected_capability_id, True
 
 
