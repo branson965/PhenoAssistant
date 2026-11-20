@@ -173,7 +173,10 @@ def test_c4_real_maf_native_tool_then_generic_critic_veto(
     assert sent[2].get("tools") in (None, [])
     assert sent[2].get("tool_choice") in (None, "none")
     assert "run_scientific_model" in json.dumps(sent[2])
-    assert "ABSTAIN" not in json.dumps(sent[0])
+    assert all(
+        message.get("role") != "tool"
+        for message in sent[0].get("messages", [])
+    )
 
 
 def test_c4_critic_cannot_fabricate_tool_execution_after_manager_no_call(
