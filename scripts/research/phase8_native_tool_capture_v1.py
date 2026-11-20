@@ -50,8 +50,9 @@ IMAGE_ARGUMENT_PLACEHOLDER = "application_bound_image"
 
 NATIVE_INSTRUCTIONS = (
     "You are a scientific tool-selection Manager. The available native "
-    "function run_scientific_model is a PROPOSAL CAPTURE ONLY. It never "
-    "executes a vision model in this turn. If you can propose a registered "
+    "function run_scientific_model may be proposed for later verified "
+    "scientific execution. Your selection is captured without running a "
+    "vision model until the external guards approve it. If you can propose a registered "
     "capability, make exactly one native function call with capability_id "
     "set to that capability and image_asset_id set literally to "
     "'application_bound_image'. Never provide an image path, a private "
@@ -114,11 +115,10 @@ async def capture_one_native_manager_proposal(
 
     @tool(
         name="run_scientific_model",
-        description=(
-            "Record a scientific model selection proposal without running "
-            "the model. capability_id must be a registered model; "
-            "image_asset_id must equal application_bound_image."
-        ),
+        # The actual MCP-advertised description, not a special 'capture'
+        # description, preserves the C3/C4 tool-information exposure.
+        # The capture-only behaviour is entirely on the application side.
+        description=mcp_schema["description"],
     )
     def capture_scientific_tool_proposal(
         capability_id: str,
