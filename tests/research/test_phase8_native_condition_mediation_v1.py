@@ -237,7 +237,9 @@ def test_c8_verifies_manager_selected_model_not_original_requested_model(
     assert obs.manager_selected_capability_id == CASE2
     assert obs.manager_decision is Action.RESELECT
     assert obs.c8_precheck_applied is True
-    assert obs.final_decision is Action.RESELECT
+    # SOE rejects the model's potato proposal, restores the original
+    # Arabidopsis capability, so final action is EXECUTE relative to user.
+    assert obs.final_decision is Action.EXECUTE
     assert obs.final_selected_capability_id == CASE1
     assert obs.reviewer_changed_selection is True
     assert obs.native_tool_calls_captured == 1
@@ -390,3 +392,43 @@ def test_native_mediation_has_no_gold_or_outcome_bearing_runner():
     assert "OPENROUTER_API_KEY" not in source
     assert "McpV2Session" not in source
     assert "run_scientific_model" not in source
+
+
+def test_c8_reselect_final_action_relative_original_request_even_if_manager_already_corrected(
+    runtime, schema,
+):
+    # The frozen shifted-species qualification case requests potato but
+    # originally names the Arabidopsis checkpoint. Native Manager already
+    # proposes the scientifically compatible potato model. SOE verifies
+    # that model as executable, but the final benchmark action remains
+    # RESELECT relative to the user's original requested capability.
+    scenario = view(1)
+    assert scenario["requested_capability_id"] == CASE1
+    assert scenario["scientific_request"]["species"] == "potato"
+    observation, sent = asyncio.run(run_condition(
+        runtime=runtime, condition=C8, scenario=scenario, schema=schema,
+        replies=[fake_reply(tool=CASE2), fake_reply(decision=None)],
+    ))
+    assert observation.native_tool_calls_captured == 1
+    assert observation.raw_provider_native_tool_calls == 1
+    assert observation.manager_decision is Action.RESELECT
+    assert observation.manager_selected_capability_id == CASE2
+    assert observation.c8_precheck_applied is True
+    assert observation.final_decision is Action.RESELECT
+    assert observation.final_selected_capability_id == CASE2
+    assert observation.reviewer_changed_selection is False
+    assert observation.mcp_calls == 0 and observation.gpu_calls == 0
+    assert len(sent) == 2
+
+
+def test_c8_original_model_accepted_without_unnecessary_reselection(
+    runtime, schema,
+):
+    observation, _ = asyncio.run(run_condition(
+        runtime=runtime, condition=C8, scenario=view(0), schema=schema,
+        replies=[fake_reply(tool=CASE1), fake_reply(decision=None)],
+    ))
+    assert observation.final_decision is Action.EXECUTE
+    assert observation.final_selected_capability_id == CASE1
+    assert observation.c8_precheck_applied is True
+    assert observation.reviewer_changed_selection is False
