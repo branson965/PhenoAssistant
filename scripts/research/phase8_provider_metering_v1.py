@@ -303,43 +303,55 @@ class Phase8ProviderMeteringTransport(httpx.AsyncBaseTransport):
                 os.close(lease_fd)
 
     async def _request_under_lease(self, request: httpx.Request) -> httpx.Response:
+        try:
+            response = await self.upstream.handle_async_request(request)
+        except Exception as exc:
+            self._poisoned = True
+            self._append(
+                event="METERING_MISSING", failure_code="TRANSPORT_ERROR",
+                status=None, measurement=None,
+            )
+            raise Phase8MeteringError("provider transport failed; billing unknown") from exc
+        payload = None
+        try:
+            if response.status_code != 200:
+                raise Phase8MeteringError("non-200 response; charge cannot be verified")
+            payload = await response.aread()
+            measurement = extract_provider_metering(
+                payload, expected_model=self.expected_model,
+            )
+        except Exception as exc:
+            self._poisoned = True
+            self._append(
+                event="METERING_MISSING",
+                failure_code="HTTP_ERROR" if response.status_code != 200 else "INVALID_USAGE",
+                status=response.status_code, measurement=None,
+                response_sha256=hashlib.sha256(payload).hexdigest() if payload is not None else None,
+            )
+            await response.aclose()
+            raise Phase8MeteringError("provider metering unavailable; session blocked") from exc
+        try:
+            self._append(
+                event="METERED", failure_code=None,
+                status=200, measurement=measurement,
+            )
+        except Exception:
+            self._poisoned = True
+            # Preserve an unknown-charge receipt when validation rejected
+            # an otherwise billed response (e.g. duplicate generation ID).
             try:
-                response = await self.upstream.handle_async_request(request)
-            except Exception as exc:
-                self._poisoned = True
                 self._append(
-                    event="METERING_MISSING", failure_code="TRANSPORT_ERROR",
-                    status=None, measurement=None,
-                )
-                raise Phase8MeteringError("provider transport failed; billing unknown") from exc
-            payload = None
-            try:
-                if response.status_code != 200:
-                    raise Phase8MeteringError("non-200 response; charge cannot be verified")
-                payload = await response.aread()
-                measurement = extract_provider_metering(
-                    payload, expected_model=self.expected_model,
-                )
-            except Exception as exc:
-                self._poisoned = True
-                self._append(
-                    event="METERING_MISSING",
-                    failure_code="HTTP_ERROR" if response.status_code != 200 else "INVALID_USAGE",
-                    status=response.status_code, measurement=None,
-                    response_sha256=hashlib.sha256(payload).hexdigest() if payload is not None else None,
-                )
-                await response.aclose()
-                raise Phase8MeteringError("provider metering unavailable; session blocked") from exc
-            try:
-                self._append(
-                    event="METERED", failure_code=None,
-                    status=200, measurement=measurement,
+                    event="METERING_MISSING", failure_code="INVALID_USAGE",
+                    status=200, measurement=None,
+                    response_sha256=measurement["response_sha256"],
                 )
             except Exception:
-                self._poisoned = True
-                await response.aclose()
-                raise
-            return response
+                # Persisted evidence may itself be corrupt or unwritable.
+                # Never recover by making another provider request.
+                pass
+            await response.aclose()
+            raise
+        return response
 
     async def aclose(self) -> None:
         await self.upstream.aclose()
