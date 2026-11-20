@@ -1265,3 +1265,37 @@ provider/billing/model approval and final source-hashed runtime
 are still incomplete.
 
 **Scores unchanged: overall 51%, Phase 8 20%, 6/9 phases closed.**
+
+
+## Phase 8: 48 fixture tests passed, native MAF call capture staged (2026-11-20)
+
+The researcher pulled `b7511f0`, obtained **48/48 passing**
+offline tests in 6.81s, and created the unapproved 12-case private
+fixture template at `data/_staging/phase8_image_fixture_binding_template_v0.1.json`
+(SHA-256
+`53d8fff45a4a6054f1cbff00cdf4e3ab56b1c3202ecf09916e527dd04b9617ca`).
+No real images, reviewer approvals, provider calls or GPU outcomes
+exist. The worktree is clean.
+
+New source and tests for `phase8_native_tool_capture_v1.py`
+are committed. Unlike earlier text-JSON proposals, this captures
+MAF's *native* tool call via a safe local `@tool` callback,
+advertising the actual MCP tool name/description and expected two
+argument names. The callback never calls MCP/GPU; it enforces one
+captured registered checkpoint and a public, non-path placeholder
+instead of leaking the independently approved image ID. C3/C4
+Manager prompts remain identical and only C8 may see SOEs.
+No-tool abstentions are typed and execution without a native call
+is rejected. All provider responses in the new tests are faked
+through `httpx.MockTransport` and use temporary synthetic
+approval; the new suite **has not yet been run on Plato**.
+
+Remaining: verify this native capture with the pinned real MAF
+version on Plato, compose the independent C4 Critic with captured
+calls, prove raw tool-call budget controls, bind reviewed actual
+images without metadata leakage, establish model/checkpoint
+integrity and real GPU fidelity, integrate measured billed usage
+and durable trial log, and obtain the final supervisor-approved
+runtime and upstream spend cap. The fixed 108 qualification trials
+remain unexecuted. **Scores unchanged: 51% overall,
+Phase 8 20%, 6/9 phases closed.**
