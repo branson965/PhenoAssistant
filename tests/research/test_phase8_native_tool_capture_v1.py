@@ -162,6 +162,7 @@ def test_native_function_call_capture_is_real_maf_and_no_scientific_execution(
     assert len(first["tools"]) == 1
     function = first["tools"][0]["function"]
     assert function["name"] == "run_scientific_model"
+    assert function["description"] == schema["description"]
     assert set(function["parameters"]["properties"]) == {
         "capability_id", "image_asset_id",
     }
@@ -298,3 +299,58 @@ def test_offline_direct_cli_is_not_paid_or_scientific():
     assert "PHASE8_NATIVE_CAPTURE_REAL_PROVIDER_CALLS=0" in run.stdout
     assert "PHASE8_NATIVE_CAPTURE_GPU_EXECUTIONS=0" in run.stdout
     assert "PHASE8_NATIVE_CAPTURE_SCIENTIFIC_EXECUTION_APPROVED=false" in run.stdout
+
+
+def test_native_different_registered_checkpoint_is_recorded_as_reselect(
+    approved_test_runtime, view, schema,
+):
+    from research.phenoguard.provenance import (
+        CASE2_POTATO_SEGMENTATION_MODEL_ID as CASE2,
+    )
+    responses = [
+        response(
+            calls={"capability_id": CASE2,
+                   "image_asset_id": IMAGE_ARGUMENT_PLACEHOLDER},
+            finished="tool_calls",
+        ),
+        response(text="selection captured"),
+    ]
+    observation, sent = asyncio.run(run_capture(
+        runtime=approved_test_runtime, visible=view, schema=schema,
+        condition=C3, responses=responses,
+    ))
+    assert view["requested_capability_id"] == CASE1
+    assert observation.decision.decision is ApplicabilityDecision.RESELECT
+    assert observation.decision.capability_id == CASE2
+    assert observation.captured_function_call_count == 1
+    assert observation.scientific_mcp_calls == 0
+    assert len(sent) == 2
+
+
+def test_native_unregistered_condition_and_hidden_case_labels_rejected(
+    approved_test_runtime, view, schema,
+):
+    with pytest.raises(Phase8ProposalError, match="unknown frozen condition"):
+        asyncio.run(run_capture(
+            runtime=approved_test_runtime, visible=view, schema=schema,
+            condition="C1_MANAGER_TOOL_NAMES",
+            responses=[],
+        ))
+    tampered = dict(view)
+    tampered["scenario_id"] = "internal-valid-shift"
+    with pytest.raises(Phase8ProposalError):
+        asyncio.run(run_capture(
+            runtime=approved_test_runtime, visible=tampered, schema=schema,
+            condition=C3, responses=[],
+        ))
+
+
+def test_native_cli_uses_only_no_network_static_controls():
+    source = Path("scripts/research/phase8_native_tool_capture_v1.py").read_text(
+        encoding="utf-8"
+    )
+    assert "OPENROUTER_API_KEY" not in source
+    assert "build_development_validation_gold" not in source
+    assert "phase8_preflight_echo" not in source
+    assert "TRUSTED_APPROVED_RUNTIME_SHA256 = " not in source
+    assert "PHASE8_NATIVE_CAPTURE_OUTCOME_BEARING=false" in source
