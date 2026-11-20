@@ -163,6 +163,8 @@ async def capture_one_native_manager_proposal(
         raise Phase8ProposalError(
             "native tool callback rejected model proposal: " + invalid_attempts[0]
         )
+    if raw_guard.provider_replies_checked == 0:
+        raise Phase8ProposalError("native MAF response bypassed raw HTTP response guard")
     if raw_guard.native_tool_calls != len(calls):
         raise Phase8ProposalError(
             "MAF callback count differs from raw provider native tool-call count"
@@ -218,7 +220,8 @@ def main() -> int:
     print("PHASE8_NATIVE_CAPTURE_TRIALS=" + str(matrix["trial_count"]))
     print("PHASE8_NATIVE_CAPTURE_CONDITIONS=C3,C4,C8")
     print("PHASE8_NATIVE_CAPTURE_TOOL_NAME=run_scientific_model")
-    print("PHASE8_NATIVE_CAPTURE_REAL_MAF_SDK_WIRING=present-not-yet-Plato-qualified")
+    print("PHASE8_NATIVE_CAPTURE_RAW_TOOL_REPLY_GUARD=implemented-awaiting-Plato-tests")
+    print("PHASE8_NATIVE_CAPTURE_REAL_MAF_SDK_WIRING=offline-tested-104-passes")
     print("PHASE8_NATIVE_CAPTURE_REAL_MCP_DISPATCH=0")
     print("PHASE8_NATIVE_CAPTURE_REAL_PROVIDER_CALLS=0")
     print("PHASE8_NATIVE_CAPTURE_GPU_EXECUTIONS=0")
