@@ -139,6 +139,7 @@ def test_native_function_call_capture_is_real_maf_and_no_scientific_execution(
     assert output.decision.decision == ApplicabilityDecision.EXECUTE
     assert output.decision.capability_id == CASE1
     assert output.captured_function_call_count == 1
+    assert output.raw_wire_function_call_count == 1
     assert output.application_bound_asset_placeholder == IMAGE_ARGUMENT_PLACEHOLDER
     assert output.scientific_mcp_calls == 0
     assert output.gpu_inference_calls == 0
@@ -406,3 +407,47 @@ def test_native_tool_uses_real_discovered_scientific_mcp_schema_without_dispatch
     assert result.scientific_mcp_calls == 0
     assert len(sent) == 2
     assert not (tmp_path / "must-remain-absent").exists()
+
+
+def test_multiple_raw_native_tool_calls_fail_before_any_maf_proposal_is_returned(
+    approved_test_runtime, view, schema,
+):
+    """Raw response budget is independent of application callback counting."""
+    first = response(calls={
+        "capability_id": CASE1,
+        "image_asset_id": IMAGE_ARGUMENT_PLACEHOLDER,
+    }, finished="tool_calls").json()
+    first["choices"][0]["message"]["tool_calls"].append({
+        "id": "call_native_extra_002",
+        "type": "function",
+        "function": {
+            "name": "run_scientific_model",
+            "arguments": json.dumps({
+                "capability_id": CASE1,
+                "image_asset_id": IMAGE_ARGUMENT_PLACEHOLDER,
+            }),
+        },
+    })
+    with pytest.raises(Exception):
+        asyncio.run(run_capture(
+            runtime=approved_test_runtime, visible=view, schema=schema,
+            condition=C3, responses=[httpx.Response(200, json=first)],
+        ))
+
+
+def test_second_native_tool_call_on_maf_followup_fails_across_rounds(
+    approved_test_runtime, view, schema,
+):
+    one = response(calls={
+        "capability_id": CASE1,
+        "image_asset_id": IMAGE_ARGUMENT_PLACEHOLDER,
+    }, finished="tool_calls")
+    two = response(calls={
+        "capability_id": CASE1,
+        "image_asset_id": IMAGE_ARGUMENT_PLACEHOLDER,
+    }, finished="tool_calls")
+    with pytest.raises(Exception):
+        asyncio.run(run_capture(
+            runtime=approved_test_runtime, visible=view, schema=schema,
+            condition=C4, responses=[one, two],
+        ))
