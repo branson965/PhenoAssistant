@@ -47,7 +47,12 @@ FIELDS = {
     "image_sha256", "source_dataset", "source_image_id",
     "reviewed_species", "license_or_access_evidence", "reviewer_evidence_id",
 }
-LEAKAGE_FIELDS = frozenset(FIELDS - {"model_visible_view_sha256"})
+# Only apply this scan to scenario-derived context, not to the MCP tool
+# schema itself (which legitimately advertises an image_asset_id parameter).
+LEAKAGE_FIELDS = frozenset(FIELDS - {"model_visible_view_sha256"}) | {
+    "image_asset_id", "image_path", "fixture_refs", "image_species",
+    "dataset_source", "dataset_license", "reviewer_identity",
+}
 
 
 class FixtureGateError(ValueError):
