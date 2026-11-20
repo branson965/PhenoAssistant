@@ -84,6 +84,10 @@ def test_two_calls_write_private_chained_append_only_records(tmp_path):
     def sink(req):
         calls.append(req)
         answer = reply(cost="0.0025" if len(calls) == 2 else "0.001234")
+        if len(calls) == 2:
+            body = json.loads(answer.content)
+            body["id"] = "gen-offline-0002"
+            return httpx.Response(200, json=body)
         return answer
 
     ledger = tmp_path / "metering.jsonl"
@@ -335,12 +339,44 @@ def test_guarded_maf_client_records_raw_billing_without_live_network(tmp_path):
 
 
 def test_maf_client_rejects_half_configured_metering(tmp_path):
+    from phenoassistant_mcp.scientific_inference_v1 import file_sha256
     from scripts.research.phase8_maf_decision_v1 import (
         Phase8MafDecisionClient, Phase8ProposalError,
     )
-    # Missing pinned runtime fails before this check; verify interface exists
-    # separately to avoid creating test-only approval files here.
-    import inspect
-    signature = inspect.signature(Phase8MafDecisionClient.create)
-    assert "metering_trial_id" in signature.parameters
-    assert "metering_ledger_path" in signature.parameters
+
+    candidate = json.loads(Path(
+        "experiments/ijcai2027/runtime/runtime_controls_candidate_v0.3.json"
+    ).read_text(encoding="utf-8"))
+    candidate["status"] = "PRE_OUTCOME_RUNTIME_APPROVED_FROZEN"
+    candidate["scientific_execution_permitted"] = True
+    candidate["approval"]["researcher_attested_supervisor_provider_billing_and_models"] = True
+    candidate["http_transport_compatibility"]["scientific_harness_adoption"] = "VERIFIED"
+    runtime = tmp_path / "MOCK_ONLY_RUNTIME.json"
+    runtime.write_text(json.dumps(candidate, sort_keys=True), encoding="utf-8")
+
+    with pytest.raises(Phase8ProposalError, match="supplied together"):
+        Phase8MafDecisionClient.create(
+            approved_runtime_path=runtime,
+            approved_runtime_sha256=file_sha256(runtime),
+            api_key="SYNTHETIC-NOT-A-PROVIDER-KEY",
+            seed=2026,
+            upstream=httpx.MockTransport(lambda req: reply()),
+            metering_ledger_path=tmp_path / "missing-trial.jsonl",
+        )
+
+def test_duplicate_provider_generation_cannot_be_double_counted(tmp_path):
+    ledger = tmp_path / "duplicate.jsonl"
+    transport = Phase8ProviderMeteringTransport(
+        upstream=httpx.MockTransport(lambda req: reply()),
+        expected_model=MODEL, trial_id=TRIAL, ledger_path=ledger,
+    )
+    async def run():
+        try:
+            first = await transport.handle_async_request(request())
+            assert first.status_code == 200
+            with pytest.raises(Phase8MeteringError, match="duplicate provider generation"):
+                await transport.handle_async_request(request())
+        finally:
+            await transport.aclose()
+    asyncio.run(run())
+    assert len(read_verified_metering(ledger, trial_id=TRIAL, model=MODEL)) == 1
