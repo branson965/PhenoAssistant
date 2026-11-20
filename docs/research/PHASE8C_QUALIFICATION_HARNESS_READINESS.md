@@ -1028,3 +1028,110 @@ Do not infer a passing test count before the Plato run. Required:
 `PHASE8_NATIVE_CAPTURE_SCIENTIFIC_EXECUTION_APPROVED=false`.
 The test provider is fake. Do not supply a real key. Preserve the
 current unapproved runtime and methodological freeze.
+
+
+## 2026-11-20: native-call capture PASS 104/104; real C4 Critic and raw-wire budget guard staged
+
+The researcher pulled `bd877de` onto Plato and ran the
+native-tool-capture, MAF decision, OpenRouter compatibility, private
+fixture and scientific MCP regression suites. **104/104 passed in
+5.14s**, with a clean Git working tree. The native capture CLI
+reported 108 planned qualification trials, its MAF SDK implementation
+present, **0 real OpenRouter calls**, **0 MCP dispatch**, **0 GPU
+executions**, scientific execution approval false, and
+`PHASE8_NATIVE_CAPTURE_OFFLINE_PREFLIGHT_PASS=true`.
+
+This validates native MAF function-calling **through fake HTTP** and
+a capture-only callback. It is not an outcome-bearing result and does
+not prove live provider response semantics or scientific efficacy.
+The 12 private image slots still contain **zero approved real images**.
+
+Two next-stage offline components have been committed:
+
+1. `scripts/research/phase8_native_condition_mediation_v1.py`
+   with `tests/research/test_phase8_native_condition_mediation_v1.py`.
+   This composes the actual Manager native-call proposal with an
+   independent generic LLM Critic in **C4 only**. The Critic sees
+   the same base request and discovered MCP tool schema, plus the
+   recorded Manager proposal, **never** scientific operating
+   envelopes or benchmark labels. A Critic cannot originate an
+   executable decision unless the Manager already supplied a native
+   tool-call proposal. A Critic may change a model selection after
+   that proposal, but that change is explicitly recorded as
+   Critic-derived and **not** claimed as a second native function
+   call. C3 remains unreviewed by a Critic. C8 applies the frozen
+   SOE catalogue resolver to the Manager's **actual captured
+   candidate**, not automatically to the original requested
+   capability; C8 cannot fabricate a call after a no-tool response.
+   The mediator deliberately does **not** dispatch MCP, run GPUs,
+   read gold or compute model performance.
+2. `scripts/research/phase8_raw_tool_reply_guard.py`
+   with `tests/research/test_phase8_raw_tool_reply_guard.py`.
+   The real MAF/OpenAI client now wraps upstream HTTP responses
+   with a raw response guard (after request compatibility rewrite,
+   before MAF parses or invokes any callback). It rejects multiple
+   tool calls within one provider reply, a second tool call in
+   any later reply on the same trial client, unadvertised tools,
+   malformed argument payloads, legacy function calling, malformed
+   or multi-choice responses and model identity drift. The native
+   capture now requires **a fresh per-trial MAF client** and checks
+   that its observed callback count equals the independent raw
+   provider tool-call count. This is important because the routed
+   provider does not accept `parallel_tool_calls=false` on the
+   wire, even though the application prohibits concurrency.
+   The raw guard never measures billed cost or stores prompts.
+
+All new tests use `httpx.MockTransport` and test-only synthetic
+runtime approval files, so they require no API credentials and
+cannot contact OpenRouter. The historical method v0.2, sealed
+runtime v0.3 candidate, 108-trial matrix and unconfigured independent
+runtime-approval SHA remain unchanged. All actual scientific calls
+remain **blocked**.
+
+### Plato verification, no paid model calls
+
+First pull through Git SSH authentication:
+
+```bash
+cd ~/PhenoAssistant
+git pull --ff-only origin experiments/ijcai2027
+```
+
+Then:
+
+```bash
+unset OPENROUTER_API_KEY
+~/.local/envs/phenoassistant-phase6-mcp/bin/python -m pytest -q \
+  tests/research/test_phase8_native_condition_mediation_v1.py \
+  tests/research/test_phase8_raw_tool_reply_guard.py \
+  tests/research/test_phase8_native_tool_capture_v1.py \
+  tests/research/test_phase8_maf_decision_v1.py \
+  tests/research/test_phase8_openrouter_compat.py \
+  tests/research/test_phase8_scientific_mcp.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_native_condition_mediation_v1.py
+~/.local/envs/phenoassistant-phase6-mcp/bin/python \
+  scripts/research/phase8_native_tool_capture_v1.py
+git status --short
+```
+
+Required: all tests pass,
+`PHASE8_NATIVE_MEDIATION_OFFLINE_PREFLIGHT_PASS=true`,
+`PHASE8_NATIVE_MEDIATION_C4_CRITIC_IMPLEMENTED=true`,
+`PHASE8_NATIVE_MEDIATION_MCP_CALLS=0`,
+`PHASE8_NATIVE_MEDIATION_PROVIDER_CALLS=0`,
+`PHASE8_NATIVE_MEDIATION_GPU_CALLS=0`,
+`PHASE8_NATIVE_MEDIATION_EXECUTION_APPROVED=false`,
+and `PHASE8_NATIVE_CAPTURE_OFFLINE_PREFLIGHT_PASS=true`.
+The new suite is **not yet Plato-qualified**; do not predict its
+test count or claim its results before running.
+
+**Remaining paper-critical gates:** verified native-call semantics
+against a truly approved live provider, independently reviewed
+real image/checkpoint identities, C8 post-conditions on actual
+GPU output, genuine approval of credential/billing/model route,
+one-trial-per-client and per-attempt append-only measured token
+usage **and provider-billed cost**, a provider-side hard spending
+cap, source-hashed final-runtime seal, blinded outcome scoring
+and an actual real-domain-shift benchmark. The scripted 12 cases
+still qualify engineering, not scientific effectiveness.
