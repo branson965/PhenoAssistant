@@ -57,9 +57,9 @@ NATIVE_INSTRUCTIONS = (
     "'application_bound_image'. Never provide an image path, a private "
     "asset identifier, or any made-up model measurement. If a safe tool "
     "selection cannot be made, do NOT call a function and instead emit "
-    "exactly one JSON object: {\\\"decision\\\":\\\"CLARIFY\\\","
-    "\\\"capability_id\\\":null}, or the same shape with decision ABSTAIN "
-    "or RECOMMEND_TRAINING. C3/C4 lack scientific operating envelopes "
+    "exactly one JSON object with decision CLARIFY, ABSTAIN or "
+    "RECOMMEND_TRAINING and capability_id null. C3/C4 lack scientific "
+    "operating envelopes "
     "and must not assume unseen provenance. Do not include explanations."
 )
 
@@ -110,6 +110,7 @@ async def capture_one_native_manager_proposal(
     mcp_schema = check_native_schema(discovered_tool)
     _, base_user = manager_prompt(condition, view, mcp_schema)
     calls: list[tuple[str, str]] = []
+    invalid_attempts: list[str] = []
 
     @tool(
         name="run_scientific_model",
@@ -127,10 +128,13 @@ async def capture_one_native_manager_proposal(
         # calls the scientific MCP server; it records the model's choice.
         # Guard before side effects. Two calls in a turn are always invalid.
         if calls:
+            invalid_attempts.append("duplicate-native-call")
             raise Phase8ProposalError("more than one native tool call requested")
         if capability_id not in REGISTERED_IDS:
+            invalid_attempts.append("unknown-capability")
             raise Phase8ProposalError("native tool proposal references unknown checkpoint")
         if image_asset_id != IMAGE_ARGUMENT_PLACEHOLDER:
+            invalid_attempts.append("unbound-image-argument")
             raise Phase8ProposalError("native tool proposal used unbound image argument")
         calls.append((capability_id, image_asset_id))
         return "PROPOSAL_CAPTURED_NO_SCIENTIFIC_EXECUTION"
@@ -147,6 +151,12 @@ async def capture_one_native_manager_proposal(
         ],
         options=options,
     )
+    # Some MAF versions convert tool callback exceptions into tool-result
+    # messages. Such a rejection cannot be treated as a valid model proposal.
+    if invalid_attempts:
+        raise Phase8ProposalError(
+            "native tool callback rejected model proposal: " + invalid_attempts[0]
+        )
     response_model = getattr(response, "model", None)
     if response_model != MODEL:
         raise Phase8ProposalError("native proposal response model identity drift")
