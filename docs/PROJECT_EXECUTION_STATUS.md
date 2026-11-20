@@ -1299,3 +1299,46 @@ and durable trial log, and obtain the final supervisor-approved
 runtime and upstream spend cap. The fixed 108 qualification trials
 remain unexecuted. **Scores unchanged: 51% overall,
 Phase 8 20%, 6/9 phases closed.**
+
+
+## Phase 8: native MAF capture PASS 104/104, native C4 Critic and raw response budget staged (2026-11-20)
+
+Plato pulled `bd877de`, passed **104/104** native
+function-call/MAF, compatibility, private-fixture and scientific
+MCP offline tests in 5.14 seconds. The direct native-capture CLI
+confirmed 108 planned trials, no outbound provider calls, no MCP/GPU
+dispatch, and execution approval false; Git reported no changes.
+
+New `scripts/research/phase8_native_condition_mediation_v1.py`
+and associated tests integrate the real pinned MAF SDK native
+function-call proposal with a second, independently prompted
+generic Critic LLM (C4 only) and the frozen SOE resolver (C8 only).
+An executable C4 Critic revision requires prior genuine native
+Manager tool-call evidence. C8 checks the actual Manager-proposed
+model rather than silently defaulting to the user's originally
+requested model. All outcome labels and real MCP tool execution
+remain excluded from this intermediate path.
+
+A new raw HTTP response validator, now attached inside
+`Phase8MafDecisionClient.create`, ensures a provider cannot
+return two native function calls in one response or a second
+function call in a later response within one trial's client
+session. A fresh client is required for each native trial;
+application callback evidence is cross-checked against raw wire
+tool-call counts. Added offline tests cover parallel calls, wrong
+tool names/arguments, model drift and Critic/tool isolation.
+
+**These newly committed integration and raw-wire regression tests
+have not yet been run on Plato.** Their HTTP providers are synthetic
+`httpx.MockTransport`, not billable inference. The historical
+method/runtime/matrix and independent approval pin remain
+unaltered. There are still no approved real image fixtures, real
+GPU trial outcomes, independently verified provider-billed charges,
+approved final runtime or scientific effectiveness results.
+
+Next: pull and execute the new no-key tests; address any failures
+without unfreezing the scientific method. Next substantive
+implementation thereafter is append-only per-call native model
+and Critic usage/billing evidence attached to the final trial
+runner. **Scores unchanged: 51% overall, Phase 8 20%, 6/9
+phases complete.**
