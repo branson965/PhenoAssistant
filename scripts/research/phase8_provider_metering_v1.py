@@ -260,10 +260,44 @@ class Phase8ProviderMeteringTransport(httpx.AsyncBaseTransport):
             finally:
                 fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
+    def _preflight_existing_ledger(self) -> None:
+        if not self.ledger_path.exists():
+            return
+        with self.ledger_path.open("r", encoding="utf-8") as handle:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_SH)
+            try:
+                prior = _read_locked(
+                    handle, trial_id=self.trial_id, model=self.expected_model,
+                )
+                if len(prior) != self._sequence or any(
+                    event["event"] != "METERED" for event in prior
+                ):
+                    raise Phase8MeteringError(
+                        "previous call evidence missing or ledger already used by another session"
+                    )
+            finally:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
     async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
         async with self._lock:
             if self._poisoned:
                 raise Phase8MeteringError("session blocked after missing metering")
+            self.ledger_path.parent.mkdir(parents=True, exist_ok=True)
+            # Separate nonblocking session lease rejects concurrent paid calls
+            # against one ledger, even from independent Python processes.
+            lease_path = self.ledger_path.with_suffix(self.ledger_path.suffix + ".lock")
+            lease_fd = os.open(lease_path, os.O_CREAT | os.O_RDWR, 0o600)
+            try:
+                try:
+                    fcntl.flock(lease_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError as exc:
+                    raise Phase8MeteringError("another provider call owns the trial ledger") from exc
+                self._preflight_existing_ledger()
+                return await self._request_under_lease(request)
+            finally:
+                os.close(lease_fd)
+
+    async def _request_under_lease(self, request: httpx.Request) -> httpx.Response:
             try:
                 response = await self.upstream.handle_async_request(request)
             except Exception as exc:
