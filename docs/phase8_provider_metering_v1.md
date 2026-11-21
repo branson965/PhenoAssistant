@@ -87,3 +87,40 @@ OpenRouter documentation:
 - https://openrouter.ai/docs/api/api-reference/generations/get-generation
 - https://openrouter.ai/support
 - https://openrouter.ai/blog/announcements/smarter-charts-inline-svgs-and-live-usage-accounting/
+
+## Trial-level terminal reconciliation v0.1 (added after first Plato pass)
+
+`phase8_trial_metering_reconciliation_v1.reconcile_metered_terminal`
+is a read-only, no-network bridge from the raw per-call JSONL to an existing
+`phase8-qualification-attempt-v0.1` terminal event. It checks:
+
+- The exact frozen trial ID, condition, seed and model are registered in the
+  108-trial matrix.
+- The terminal record is structurally valid under the original attempt-ledger
+  state machine. A synthetic STARTED event used for grammar validation is
+  **never persisted** and is not proof that any real attempt was authorised.
+- All raw provider responses are internally verified and no metering-failure
+  event exists.
+- Input/output token totals and Decimal-billed USD charges **exactly equal**
+  those asserted by the terminal record, without an estimated-price fallback.
+- The independent per-trial provider session lease is free, so there is no
+  compatible in-flight provider request during the local snapshot.
+
+The returned privacy-minimised local reconciliation receipt binds the terminal
+record hash, provider-ledger file hash, last provider-entry hash and call count.
+It says `locally_reconciled=true` but explicitly
+`independent_provider_billing_reconciled=false` and
+`scientific_execution_approved=false`.
+
+This bridge **does not yet attach itself to a production scientific runner**.
+It does not seal a trial against subsequent requests, enforce a provider-key
+hard cap, sign evidence with an independent witness, append a terminal event
+automatically, or independently crosscheck OpenRouter invoices. Those remain
+mandatory gates before live research use.
+
+Run the additional offline module with the same isolated environment:
+
+```bash
+env -u OPENROUTER_API_KEY "$PY" -m pytest -q \
+  tests/research/test_phase8_trial_metering_reconciliation_v1.py
+```
