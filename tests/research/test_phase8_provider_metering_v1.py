@@ -366,22 +366,34 @@ def test_maf_client_rejects_half_configured_metering(tmp_path):
 
 def test_duplicate_provider_generation_cannot_be_double_counted(tmp_path):
     ledger = tmp_path / "duplicate.jsonl"
+    provider_requests = []
+
+    def sink(req):
+        provider_requests.append(1)
+        return reply()  # deliberately reuses the same generation ID
+
     transport = Phase8ProviderMeteringTransport(
-        upstream=httpx.MockTransport(lambda req: reply()),
+        upstream=httpx.MockTransport(sink),
         expected_model=MODEL, trial_id=TRIAL, ledger_path=ledger,
     )
+
     async def run():
         try:
             first = await transport.handle_async_request(request())
             assert first.status_code == 200
             with pytest.raises(Phase8MeteringError, match="duplicate provider generation"):
                 await transport.handle_async_request(request())
+            with pytest.raises(Phase8MeteringError, match="session blocked"):
+                await transport.handle_async_request(request())
         finally:
             await transport.aclose()
+
     asyncio.run(run())
+    assert len(provider_requests) == 2  # never send a third call
     records = read_verified_metering(ledger, trial_id=TRIAL, model=MODEL)
     assert len(records) == 2
     assert records[0]["event"] == "METERED"
     assert records[1]["event"] == "METERING_MISSING"
+    assert records[1]["provider_cost_usd"] is None
     with pytest.raises(Phase8MeteringError, match="incomplete"):
         summarize_trial_metering(ledger, trial_id=TRIAL, model=MODEL)
