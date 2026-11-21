@@ -45,6 +45,7 @@ from research.phenoguard.contracts import ApplicabilityDecision, ScientificReque
 from research.phenoguard.provenance import build_default_provenance_catalogue  # noqa: E402
 from scripts.research.openrouter_compat import OpenRouterCompatTransport  # noqa: E402
 from scripts.research.phase8_raw_tool_reply_guard import RawNativeToolReplyGuardTransport  # noqa: E402
+from scripts.research.phase8_provider_metering_v1 import Phase8ProviderMeteringTransport  # noqa: E402
 from scripts.research.phase8_condition_rehearsal import C3, C4, C8, Proposal  # noqa: E402
 from scripts.research.phase8_attempt_ledger import load_verified_controls, scientific_gate, LedgerGateError  # noqa: E402
 
@@ -278,7 +279,8 @@ class Phase8MafDecisionClient:
 
     def __init__(self, *, chat: OpenAIChatCompletionClient, sdk: AsyncOpenAI,
                  http_client: httpx.AsyncClient, seed: int,
-                 raw_tool_guard: RawNativeToolReplyGuardTransport | None = None) -> None:
+                 raw_tool_guard: RawNativeToolReplyGuardTransport | None = None,
+                 provider_metering: Phase8ProviderMeteringTransport | None = None) -> None:
         if seed not in SEEDS or isinstance(seed, bool):
             raise Phase8ProposalError("seed schedule changed")
         self.chat = chat
@@ -287,6 +289,7 @@ class Phase8MafDecisionClient:
         # Guard is bound to one client/trial. Never reuse an active client
         # across two paid qualification trials or reset the counter mid-trial.
         self.raw_tool_guard = raw_tool_guard
+        self.provider_metering = provider_metering
         self.seed = seed
 
     @classmethod
@@ -297,6 +300,8 @@ class Phase8MafDecisionClient:
         api_key: str,
         seed: int,
         upstream: httpx.AsyncBaseTransport | None = None,
+        metering_ledger_path: Path | None = None,
+        metering_trial_id: str | None = None,
     ) -> "Phase8MafDecisionClient":
         # A caller-supplied JSON plus its own SHA is NOT authorization
         # to spend real credits. The independent final-runtime digest pin
@@ -311,8 +316,20 @@ class Phase8MafDecisionClient:
             raise Phase8ProposalError("approved runtime requires an explicit key")
         if type(seed) is not int or seed not in SEEDS:
             raise Phase8ProposalError("unapproved seed")
+        if (metering_ledger_path is None) != (metering_trial_id is None):
+            raise Phase8ProposalError("metering ledger and trial ID must be supplied together")
+        if not isinstance(upstream, httpx.MockTransport) and metering_ledger_path is None:
+            raise Phase8ProposalError("live transport requires per-call provider metering")
+        base_transport = upstream if upstream is not None else httpx.AsyncHTTPTransport()
+        provider_metering = (
+            Phase8ProviderMeteringTransport(
+                upstream=base_transport, expected_model=MODEL,
+                trial_id=metering_trial_id, ledger_path=metering_ledger_path,
+            )
+            if metering_ledger_path is not None else None
+        )
         raw_guard = RawNativeToolReplyGuardTransport(
-            upstream=(upstream if upstream is not None else httpx.AsyncHTTPTransport()),
+            upstream=provider_metering if provider_metering is not None else base_transport,
             expected_model=MODEL,
         )
         transport = OpenRouterCompatTransport(
@@ -336,6 +353,7 @@ class Phase8MafDecisionClient:
         return cls(
             chat=chat, sdk=sdk, http_client=http_client,
             seed=seed, raw_tool_guard=raw_guard,
+            provider_metering=provider_metering,
         )
 
     def _options(self) -> dict[str, Any]:
