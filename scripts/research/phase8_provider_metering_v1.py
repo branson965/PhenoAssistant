@@ -241,6 +241,15 @@ class Phase8ProviderMeteringTransport(httpx.AsyncBaseTransport):
                     prior and prior[-1]["event"] == "METERING_MISSING"
                 ):
                     raise Phase8MeteringError("ledger is stale or previous metering failed")
+                # Validate a new receipt BEFORE persisting it. The reader also
+                # rejects duplicate generations, but inspecting prior records
+                # alone would detect a duplicate only on the *next* call.
+                if event == "METERED" and any(
+                    previous["event"] == "METERED"
+                    and previous["provider_response_id"] == measurement["provider_response_id"]
+                    for previous in prior
+                ):
+                    raise Phase8MeteringError("duplicate provider generation ID")
                 entry = {
                     "schema": SCHEMA,
                     "trial_id": self.trial_id,
