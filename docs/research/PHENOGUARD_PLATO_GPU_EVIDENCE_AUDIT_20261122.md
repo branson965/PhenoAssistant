@@ -44,30 +44,44 @@ segmentation model accuracy.
 **Action:** retain compatibility evidence. Resolve actual dataset/provenance
 only if the final experiment needs wheat images; no immediate repeat needed.
 
-## Case 2, potato Leaf-only SAM
+## Case 2, potato Leaf-only SAM (22 November Plato smoke)
 
-- Source images found under `data/PotatoLeaf`.
-- The canonical inference code expects
-  `models/sam_vit_h_4b8939.pth` (SAM 1, ViT-H).
-- Checkpoint search under user's home (7 levels deep) found no file.
-- The official Meta project publishes the same checkpoint filename at:
-  `https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth`.
-- Two independent hosted copies list content SHA-256
-  `a7bf3b02f3ebf1267aba913ff637d9a2d5c33d3173bb679e46d9f338c26f262e`.
-- File size approximately 2.56 GB. Institutional download and storage
-  permissions must be verified, and the file checked before loading it.
+- The source image `data/PotatoLeaf/IMG_8064.JPG` passed an explicit
+  dry-run preflight with image SHA-256
+  `9ceeae5973237712727240469a3bbb98d66a87265cbafcc2bc2b90449a4dca8e`.
+- The local Meta SAM ViT-H checkpoint was present and verified with
+  SHA-256 `a7bf3b02f3ebf1267aba913ff637d9a2d5c33d3173bb679e46d9f338c26f262e`.
+  A subsequent `--download` did not download again because the existing
+  file matched its pinned hash.
+- Slurm job `63134`, `standard/core`, `amp16`, `dart`,
+  GPU **NVIDIA RTX A4000**, started **2026-11-22 11:43:01 UTC** and
+  completed **11:56:19 UTC** (`COMPLETED`, exit `0:0`, 13m19s).
+- Runner printed `ENGINEERING_SMOKE_OK` and `record_count: 13`
+  for one potato image. **13 are predicted instance masks, not
+  expert-labelled leaves or accuracy measurements.**
+- Researcher-reported output path:
+  `results/phase8_gpu_engineering_smoke/potato/20261122T114432Z_447299/engineering_evidence.json`.
+- Warning-only library messages included Albumentations version check,
+  FLAML optional features and `torch.load(weights_only=False)`
+  unpickling semantics for the Meta SAM checkpoint.
+- The completion statement confirms model execution and initial artifact
+  shape checks by the engineering runner. **The full output SHA-256
+  recomputation and PhenoGuard C8 COCO post-validator have not yet been
+  re-run against the resulting file**.
 
-**Action:** verify user storage quota and network policy; then optionally
-run the new explicit download helper. A short one-image CUDA engineering
-smoke should follow only on an appropriately resourced, permitted Slurm GPU
-allocation. Avoid submitting the task when user memory QOS is saturated.
+**Action:** request the one-command follow-up on the generated file: compare
+recorded artifact SHA to real bytes, verify 13 image annotations, and run
+`validate_coco` using the explicitly bound source image. If valid,
+close GPU engineering-smoke workstream; do not rerun for paper novelty.
 
 ## Resource situation
 
 Observed on Plato: partitions `amp16`, `amp20`, `amp48`,
 `ada24`, `cs`, `general` and `cpu`, but **partition visibility is
-not authorisation**. User's queue showed other pending GPU jobs blocked
-by `QOSMaxMemoryPerUser`, as well as a running job.
+not authorisation**. Earlier user queue showed `QOSMaxMemoryPerUser` delays. An
+`amp48` submission was rejected for account/partition mismatch. Using
+`--partition=amp16 --account=standard` worked immediately, and the
+resulting Case 2 smoke job completed successfully.
 
 ## Frozen science boundary
 
@@ -76,7 +90,7 @@ by `QOSMaxMemoryPerUser`, as well as a running job.
 - Scientific Phase 8 execution is explicitly prohibited by the historical
   runtime candidate until independent review, model/provider/billing approval,
   complete asset registration, and controlled harness sign-off.
-- None of the existing Case 1/3 GPU files measure the novelty of
+- None of the existing Case 1/2/3 GPU files measure the novelty of
   PhenoGuard versus C3/C4. The 108-trial C3/C4/C8 comparison remains
   outstanding, as do final held-out generalisation and expert review.
 
