@@ -16,6 +16,7 @@ import argparse
 import csv
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -66,7 +67,43 @@ def source_entry(raw: str, dataset: str) -> dict[str, str]:
     }
 
 
-def load_sources() -> dict[str, dict[str, str]]:
+def maize_source_ids(maize_root: Path) -> dict[str, tuple[str, str]]:
+    """Pick two original PlantDoc images, never a guessed maize label."""
+    resolved = maize_root.expanduser().resolve(strict=True)
+    if not resolved.is_relative_to(DATA_ROOT.resolve(strict=True)):
+        raise ValueError("maize dataset must be under private data staging")
+    if not (resolved / ".git").exists():
+        raise ValueError("maize source lacks its Git provenance")
+    commit = subprocess.run(
+        ["git", "-C", str(resolved), "rev-parse", "--verify", "HEAD"],
+        capture_output=True, text=True, check=True,
+    ).stdout.strip()
+    if not (len(commit) == 40 and all(c in "0123456789abcdef" for c in commit)):
+        raise ValueError("maize dataset git revision missing")
+    source = (
+        "Original PlantDoc-Dataset, "
+        "https://github.com/pratikkayal/PlantDoc-Dataset @ " + commit
+    )
+    def candidate(folder: str) -> str:
+        directory = resolved / "train" / folder
+        if not directory.is_dir():
+            raise ValueError("PlantDoc maize category missing: " + folder)
+        paths = sorted(x for x in directory.iterdir() if x.is_file()
+                       and x.suffix.lower() in {".jpg", ".jpeg", ".png"})
+        if not paths:
+            raise ValueError("No image in PlantDoc maize category: " + folder)
+        return "./" + str(paths[0].relative_to(ROOT))
+    maize_shift = candidate("Corn leaf blight")
+    maize_training = candidate("Corn Gray leaf spot")
+    # Hold image fixed across training-ready/missing-data stress contexts.
+    return {
+        "dev-p003-species-maize": (source, maize_shift),
+        "dev-training-ready": (source, maize_training),
+        "dev-training-missing-data": (source, maize_training),
+    }
+
+
+def load_sources(maize_root: Path | None = None) -> dict[str, dict[str, str]]:
     ara = json.loads(ARA_META.read_text(encoding="utf-8"))
     ara_images = ara.get("file_name")
     if not isinstance(ara_images, list):
@@ -113,15 +150,23 @@ def load_sources() -> dict[str, dict[str, str]]:
         "ara": "Local PhenoAssistant AraCrop metadata: data/aracrop_metadata.json",
         "potato": "Local PhenoAssistant potato metadata: data/potato_metadata.csv",
     }
-    return {
+    bound = {
         scenario_id: source_entry(raw, names[dataset])
         for scenario_id, (dataset, raw) in selected.items()
     }
+    if maize_root is not None:
+        for scenario_id, (source, raw) in maize_source_ids(maize_root).items():
+            bound[scenario_id] = source_entry(raw, source)
+    return bound
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write-candidate", action="store_true")
+    parser.add_argument(
+        "--maize-root", type=Path, default=None,
+        help="Existing privately staged ORIGINAL PlantDoc Git checkout",
+    )
     args = parser.parse_args()
     if CANDIDATE.exists() or CANDIDATE.is_symlink():
         raise FileExistsError("private candidate already exists: refuse overwrite")
@@ -133,7 +178,7 @@ def main() -> int:
         raise ValueError("private source template was modified; refuse automated prefill")
     if source.get("schema") != SCHEMA:
         raise ValueError("fixture schema drift")
-    bound = load_sources()
+    bound = load_sources(args.maize_root)
     rows = source["entries"]
     if len(rows) != 12:
         raise ValueError("frozen 12-case count changed")
