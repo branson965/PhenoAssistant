@@ -50,6 +50,41 @@ Frozen Phase 8 C3/C4/C8 qualification:
   independent hidden benchmark.** Even a perfect 108-trial result would not,
   by itself, demonstrate distribution-shift generalisation.
 
+## Private fixture candidate preparation, 22 November
+
+The researcher confirmed **12/12 blank private entries**, with all eight
+source/reviewer fields missing and no maize directory under `data`.
+To remove avoidable manual transcription without inventing approval,
+`scripts/research/phase8_prefill_local_fixture_candidate.py` now
+selects source-referenced real images from the existing AraCrop JSON and
+potato CSV metadata. The two missing-species cases reuse the exact
+same image as their corresponding valid pair. No hidden labels are read.
+
+The optional `--maize-root` parameter supports an **original, Git
+revision-identified PlantDoc checkout** staged privately under `data/_staging`.
+It proposes two maize images for three maize scenarios, reusing one
+across the training-ready/missing-data contrast to isolate metadata
+variation. **This does not verify maize species or imaging comparability.**
+PlantDoc contains cropped disease-classification imagery, whereas the
+potato segmentation examples use a different acquisition setup. A
+species-shift result would be confounded by those visual differences
+unless the reviewer approves the specific pairing. Prefer view- and
+acquisition-matched maize phenotyping imagery for final analysis.
+
+The helper writes a **new**, ignored candidate file, never overwrites
+the private source template or frozen method. It leaves all
+`reviewed_species`, `license_or_access_evidence`, and
+`reviewer_evidence_id` fields blank and reports the real prefill count.
+
+The original PlantDoc repository advertises CC BY 4.0, but its authors
+also report internet-scraped source material. Reviewer verification
+of asset-specific access/rights is necessary; no automatic license
+or reviewer attestation is recorded.
+
+No candidate file, including a structurally complete one, can activate
+an execution gate until independent review and the final reviewed SHA
+are recorded in the approved runtime process.
+
 ## Immediate go/no-go gates
 
 | Prerequisite | Current evidence | Needed to proceed |
