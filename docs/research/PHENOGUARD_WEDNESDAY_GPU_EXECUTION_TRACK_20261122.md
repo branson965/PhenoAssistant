@@ -137,3 +137,57 @@ CUDA/PyTorch and elapsed time. This is a technical provenance record only.
 
 **Never** use a synthetic test-only approved runtime, or fill in a trusted
 SHA pin just to make the Phase 8 execution gate return true.
+
+## Updated status after researcher evidence audit, 22 November
+
+See `docs/research/PHENOGUARD_PLATO_GPU_EVIDENCE_AUDIT_20261122.md`.
+
+**Stop treating all three capabilities as untested.** The full Case 1
+1,248-image run already exists with matching output hashes and matching
+scientific conclusion comparisons. Case 3's pinned full-FT checkpoint and
+official montage compatibility results have matching hashes. Neither is
+the paper's C3/C4/C8 agent-comparison result. The immediate engineering
+blocker is Case 2's missing SAM ViT-H file.
+
+The optional explicit checkpoint acquisition helper is
+`scripts/gpu/phase8_acquire_sam_checkpoint.py`.
+
+From the PhenoAssistant directory, **without requesting a GPU**:
+
+```bash
+df -h .
+quota -s 2>/dev/null || true
+python scripts/gpu/phase8_acquire_sam_checkpoint.py
+```
+
+A missing file returns status 2 by design. If (and only if) institutional
+network access, storage allowance and dataset/model usage are permitted,
+and at least 3 GB of quota is available:
+
+```bash
+python scripts/gpu/phase8_acquire_sam_checkpoint.py --download
+```
+
+Source: the original Meta SAM ViT-H release. On download, the helper
+compares the actual file to a pinned SHA-256 independently reported
+by two public mirrors. It will not install a hash-mismatched checkpoint.
+Verify-only without `--download` never uses the network. The checkpoint
+and partial downloads are ignored by Git.
+
+A potato smoke may be memory demanding on the current SAM ViT-H
+configuration. Before submitting, inspect Slurm memory QOS and confirm
+an account-authorised GPU allocation. Prefer an available sufficiently
+large GPU partition, but do not assume `amp48` is accessible just because
+it appears in `sinfo`. Run an authorised one-image dry-run first:
+
+```bash
+GPU_PY="$HOME/.local/envs/phenoassistant-phase5-gpu/bin/python"
+"$GPU_PY" -m py_compile scripts/gpu/phase8_gpu_engineering_smoke.py
+"$GPU_PY" scripts/gpu/phase8_gpu_engineering_smoke.py \
+  --case potato --image "$PWD/data/PotatoLeaf/IMG_8064.JPG" --dry-run
+```
+
+This establishes file/checkpoint readiness only. Running inference
+requires an actual Slurm GPU job under the verified environment and
+local dataset usage permission. Do not promote engineering output to
+the frozen Phase 8 qualification ledger.
