@@ -91,6 +91,25 @@ mark v0.3 approved, switch off guards or run unmetered paid scientific calls.
    time/cost and paired comparisons. Do not substitute offline fake-agent
    tests for this step.
 
+## Direct private-fixture assessment (read-only)
+
+The older `phase8_image_fixture_registry.py` preflight emits a fixed
+`PHASE8_FIXTURE_REAL_IMAGES_BOUND=0` line: it does not inspect existing
+private registry bindings. To establish real completeness, run:
+
+```bash
+PY="$HOME/.local/envs/phenoassistant-phase6-mcp/bin/python"
+env -u OPENROUTER_API_KEY "$PY" \
+  scripts/research/phase8_private_fixture_readiness.py
+```
+
+The helper shows all 12 frozen case IDs, declared species, missing private
+source/reviewer fields and whether the *existing* structural audit can run.
+It prints no private image paths and reads no hidden benchmark gold. A
+fully populated local file is still **not independently approved** until
+the reviewer checks the truth of the dataset/source/species evidence and
+pins the frozen registry SHA.
+
 ## No-cost commands that can run on Plato now
 
 From `~/PhenoAssistant`:
