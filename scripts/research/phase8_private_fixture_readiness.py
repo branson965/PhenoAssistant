@@ -86,7 +86,7 @@ def main() -> int:
             unexpected += 1
             continue
         ident = row.get("scenario_id_internal_only")
-        if ident not in expected_by_id or ident in by_id:
+        if not isinstance(ident, str) or ident not in expected_by_id or ident in by_id:
             unexpected += 1
             continue
         by_id[ident] = row
