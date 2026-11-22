@@ -41,7 +41,7 @@ PY="$HOME/.local/envs/phenoassistant-phase6-mcp/bin/python"
     echo "=== DATASET ROOTS ==="
     du -sh data/AraCropData data/PotatoLeaf data/winter-wheat_nutri-defi-identify_dndww20 2>&1 || true
     echo "=== GPU PYTHON ENVIRONMENTS ==="
-    find "$HOME/.local/envs" -maxdepth 3 -name python -type f 2>/dev/null | head -30
+    find "$HOME/.local/envs" -maxdepth 3 -name python 2>/dev/null | head -30
     echo "=== HISTORICAL GPU EVIDENCE ==="
     find results -maxdepth 4 -name gpu_execution_evidence.json -print 2>/dev/null | head -30
     echo "=== INDEPENDENT PHASE 8 SCIENCE APPROVAL ==="
