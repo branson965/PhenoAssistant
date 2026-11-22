@@ -65,14 +65,24 @@ only if the final experiment needs wheat images; no immediate repeat needed.
   FLAML optional features and `torch.load(weights_only=False)`
   unpickling semantics for the Meta SAM checkpoint.
 - The completion statement confirms model execution and initial artifact
-  shape checks by the engineering runner. **The full output SHA-256
-  recomputation and PhenoGuard C8 COCO post-validator have not yet been
-  re-run against the resulting file**.
+  shape checks by the engineering runner.
+- **Follow-up validation (researcher-reported Plato output):**
+  `ARTIFACT_HASH_MATCH=true`;
+  `PREDICTED_INSTANCES=13`;
+  artifact SHA-256
+  `5f4aaa3c68e0c0f1035e15bbd79c70a80b84cd998339e6ae448609f62f846180`.
+- Real `validate_coco` returned
+  `validator_id=phase8-actual-scientific-artifact-invariants-v0.1`,
+  `safe_to_report=true`, `issues=[]`, with
+  `C8_STRUCTURAL_VALIDATION_PASS=true`.
+  This means **output structure and checked provenance/invariants passed**,
+  not that 13 leaves are visually correct, scientifically calibrated,
+  biologically accurate, or appropriate under domain shift.
 
-**Action:** request the one-command follow-up on the generated file: compare
-recorded artifact SHA to real bytes, verify 13 image annotations, and run
-`validate_coco` using the explicitly bound source image. If valid,
-close GPU engineering-smoke workstream; do not rerun for paper novelty.
+**Action:** close the one-image GPU engineering compatibility workstream.
+Retain the unmodified local evidence and artifact in place. Do **not**
+rerun Case 2 merely to improve the paper's claimed novelty or count this
+as a registered scientific C8 trial.
 
 ## Resource situation
 
