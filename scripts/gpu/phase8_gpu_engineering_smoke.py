@@ -118,10 +118,34 @@ def main() -> int:
     output_dir = args.output_root.expanduser().resolve() / args.case / run_id
     output_dir.mkdir(parents=True, exist_ok=False)
     started = time.perf_counter()
+    wheat_checkpoint_provenance = None
     if args.case == "wheat":
+        # The published repository may contain PEFT sidecar files alongside
+        # full fine-tuned weights. Reuse the previously audited pinned snapshot,
+        # not bare from_pretrained(repo_id) which can auto-detect an adapter.
+        from huggingface_hub import snapshot_download
+        from scripts.gpu.phase5_case3_official_sample_smoke import (
+            CHECKPOINT_REVISION,
+            FULL_WEIGHT_SHA256,
+            _prepare_clean_fullft_snapshot,
+        )
         from functions.image_classification import infer_image_classification
+        snapshot = Path(snapshot_download(
+            repo_id=CASE_MODELS["wheat"],
+            revision=CHECKPOINT_REVISION,
+            local_files_only=True,
+        ))
+        clean_checkpoint = _prepare_clean_fullft_snapshot(snapshot)
+        full_weight = clean_checkpoint / "model.safetensors"
+        if sha256(full_weight) != FULL_WEIGHT_SHA256:
+            raise RuntimeError("wheat full fine-tuned weight digest drift")
+        wheat_checkpoint_provenance = {
+            "revision": CHECKPOINT_REVISION,
+            "full_weight_sha256": FULL_WEIGHT_SHA256,
+            "peft_autodetection_avoided": True,
+        }
         outcome = infer_image_classification(
-            image_urls=[str(image)], checkpoint=CASE_MODELS[args.case],
+            image_urls=[str(image)], checkpoint=str(clean_checkpoint),
             batch_size=1, device="cuda", output_dir=str(output_dir),
         )
     else:
@@ -153,6 +177,7 @@ def main() -> int:
         "artifact_sha256": sha256(artifact),
         "record_count": count,
         "checkpoint_sha256": sha256(SAM_CHECKPOINT) if args.case == "potato" else None,
+        "wheat_checkpoint_provenance": wheat_checkpoint_provenance,
         "source_sha256": sha256(Path(__file__)),
         "generated_utc": datetime.now(timezone.utc).isoformat(),
     }
