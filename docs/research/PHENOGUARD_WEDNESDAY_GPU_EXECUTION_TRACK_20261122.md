@@ -62,6 +62,7 @@ reviewed image (`--image`) and a fixed `--case`:
 - `arabidopsis`: Mask2Former, COCO `ins_seg_results.json`
 - `potato`: Leaf-only SAM, COCO `leaf_only_sam_results.json`
 - `wheat`: DINOv2 classification, `img_classification_results.csv`
+  - Wheat uses the already audited, pinned full fine-tuned checkpoint revision and excludes PEFT sidecar autodetection. The model snapshot must be in the local Hugging Face cache; no checkpoint retrieval is attempted.
 
 Case 2 requires `models/sam_vit_h_4b8939.pth`; the script fails before GPU
 allocation if it is missing.
