@@ -13,11 +13,15 @@ import hashlib
 import json
 import os
 import subprocess
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 CASE_MODELS = {
     "arabidopsis": "fengchen025/arabidopsis_leaf-instance-segmentation_cvppp2017-a1a4_m2fb_fullft",
     "potato": "potato_leaf-instance-segmentation_leaf-only-sam",
