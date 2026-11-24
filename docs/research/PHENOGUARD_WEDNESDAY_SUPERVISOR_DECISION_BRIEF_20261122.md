@@ -172,6 +172,32 @@ prospectively reviewed final runtime/provider/billing approval. Do not
 reiterate the same GPU and fixture integrity commands as if they were
 scientific results.
 
+## Reviewer packet preparation, 24 November
+
+A separate no-network utility creates **two owner-only local CSVs** (the
+files are ignored by Git) after re-running the technical candidate audit:
+
+```bash
+PY="$HOME/.local/envs/phenoassistant-phase6-mcp/bin/python"
+env -u OPENROUTER_API_KEY "$PY" \
+  scripts/research/phase8_prepare_private_review_worksheet.py
+```
+
+- `data/_staging/phase8_private_image_review_9unique_v0.1.csv`:
+  9 distinct source images, hash, local path, original metadata,
+  dimensions and scenario usage, with blank observed-species,
+  imaging/shift-confound, source-rights and reviewer fields.
+- `data/_staging/phase8_private_scenario_review_12cases_v0.1.csv`:
+  12 case contexts, model-visible request species and pair IDs, source
+  image hash, blank independent case-specific review fields.
+
+These are **human-review worksheets only**, not a final registry and not
+a substitute for inspecting original images and access rights. The script
+does not write into the frozen candidate, invent attestations, or switch
+on the scientific execution gate. Outputs are private and must not be
+committed to GitHub. The researcher should bring these to the 25 Nov
+supervisor meeting with unresolved PlantDoc image comparability flagged.
+
 ## Immediate go/no-go gates
 
 | Prerequisite | Current evidence | Needed to proceed |
