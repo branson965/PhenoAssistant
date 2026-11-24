@@ -85,6 +85,69 @@ No candidate file, including a structurally complete one, can activate
 an execution gate until independent review and the final reviewed SHA
 are recorded in the approved runtime process.
 
+## Updated Plato asset status for Wednesday (researcher terminal evidence)
+
+The researcher has now produced the private candidate file
+`data/_staging/phase8_image_fixture_candidate_v0.1.json`, SHA-256
+`152c8c929c3da07b3a43743b4afe438ab2ccc0eaea65073600d501787c08755c`.
+
+- **12/12** source records populated with path, image digest, asset ID,
+  metadata source and source image ID; **0/12** independently reviewed.
+- **36 human review fields still missing**: `reviewed_species`,
+  `license_or_access_evidence`, `reviewer_evidence_id` on each case.
+- Local PlantDoc repository source commit:
+  `5467f6012d78d1c446145d5f582da6096f852ae8`, 244 images observed
+  in the two sparse-checkout maize-class directories. This is **source
+  revision provenance**, not an independent biological taxonomy review.
+- The `phase8_private_fixture_readiness.py` output reports
+  `PHASE8_FIXTURE_STRUCTURAL_AUDIT=NOT_RUN_INCOMPLETE`, correctly,
+  because missing review attestations cannot be filled by software.
+- Clean `git status` confirms the private assets stayed ignored.
+- This user terminal evidence has been recorded in GitHub documentation,
+  not independently inspected from the Plato filesystem.
+
+### Offline data integrity check
+
+Run the read-only script on Plato:
+
+```bash
+PY="$HOME/.local/envs/phenoassistant-phase6-mcp/bin/python"
+env -u OPENROUTER_API_KEY "$PY" \
+  scripts/research/phase8_audit_private_fixture_candidate.py
+```
+
+It checks source memberships, decoded images, actual digests, PlantDoc
+revision and three metadata-only same-image pairs. It does not print
+private paths or touch gold labels. If all checks pass, the data are
+*technically consistent*, not independently reviewed.
+
+### Human review protocol for the existing candidate
+
+An independent reviewer must inspect actual image bytes and original
+metadata for each of the 12 cases and record:
+
+1. **Taxonomic identification:** specific `reviewed_species` for the
+   *actual image*. For missing-species prompt cases, this is still the
+   image's biological species, not the literal string "UNSPECIFIED".
+2. **Access/provenance:** credible evidence identifying original dataset,
+   relevant permission/licence and image provenance; do not equate a
+   GitHub repository licence with verified third-party source rights.
+3. **Review evidence ID:** reference to the actual recorded reviewer
+   decision and date, not a generated dummy ID.
+
+For the three maize scenarios, visually assess whether cropped leaf
+disease images introduce view/background/disease confounds relative to
+whole-plant potato examples. If they do, explicitly reject them for a
+claim of *species-isolated visual shift* and choose appropriate
+matched-acquisition images. This is a real design decision rather than
+a request to fill the JSON mechanically.
+
+After an independent reviewer signs off, preserve the reviewed private
+registry and its SHA-256 in a prospective final runtime record.
+**Do not edit the historical v0.3 candidate or frozen Phase 7 method
+to bypass that signoff**. Actual paid qualification remains blocked
+until provider/billing/harness approval is independently evidenced.
+
 ## Immediate go/no-go gates
 
 | Prerequisite | Current evidence | Needed to proceed |
