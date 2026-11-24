@@ -19,6 +19,74 @@ these results demonstrates an improvement in unsafe scientific execution
 versus the baselines.** The decisive C3/C4/C8 comparison has **0/108
 outcome-bearing qualification trials** observed in this research record.
 
+## Preliminary measured component results (24 November 2026)
+
+Source: researcher-supplied Plato terminal output from runner commit
+`e6eb78d`, completed successfully, with the 22-file Phase 7 freeze
+verified at aggregate SHA-256
+`25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`.
+Local report: `data/_staging/meeting_component_results_lGyfu3.txt`.
+No provider calls, GPU calls, hidden gold access or registered agent trials
+were made by this component evaluation.
+
+### A. Deterministic scientific applicability
+
+| Metric | Naive requested-tool passthrough | Frozen PhenoGuard resolver |
+| --- | ---: | ---: |
+| Exact action and capability correctness | 6/12 (50%) | 12/12 (100%) |
+| Correct model on executable cases | 5/7 | 7/7 |
+| Wrong model on executable cases | 2 | 0 |
+| Execution proposed on non-execution cases | 3 | 0 |
+| Total execution proposals | 10/12 | 7/12 |
+| Inappropriate execution proposals (wrong capability or non-execution case) | 5/10 | 0/7 |
+| Unnecessary abstentions | 0 | 0 |
+
+The six corrected scenarios comprise two species-triggered reselections,
+two missing-species clarifications, one unsupported-maize abstention and
+one training-readiness recommendation. The frozen resolver was run on
+all 12 development/validation cases; the comparison reference executes the
+requested tool whenever one is supplied, otherwise asks for clarification.
+It is **not** the live C3 Manager or C4 generic Critic. The mechanical
+labels are deliberately aligned with the contract under test; this is a
+component-level correctness demonstration, not independent generalisation
+or a measured agent-safety effect. "Execution proposed" is not actual tool
+dispatch. No significance or population-level safety claim is justified.
+
+### B. Scientific output fault detection
+
+The preserved genuine potato GPU artifact (13 predicted instances) and
+its input were hash-verified before and after this test. The original
+passed both JSON parsing and PhenoGuard COCO structural validation.
+Nine one-at-a-time, JSON-valid injected faults were rejected by the
+validator, whereas none were rejected by ordinary JSON parsing.
+
+| Test set | JSON parser | PhenoGuard COCO validator |
+| --- | ---: | ---: |
+| Unmodified artifact accepted | 1/1 | 1/1 |
+| Targeted invariant faults rejected | 0/9 | 9/9 |
+| All injected variants including RLE limitation probe rejected | 0/10 | 9/10 |
+
+Targeted faults: incorrect filename, negative area, area exceeding image
+size, confidence outside range, wrong image reference, unknown category,
+duplicate annotation ID, inconsistent RLE dimensions and empty RLE counts.
+**Negative result:** the additional nonempty RLE string probe was accepted
+by the validator. The implementation checks shape and nonemptiness, not
+mask decoding. Do not conceal this probe or report universal 100% fault
+detection. These are targeted synthetic faults of one real artifact, not
+mask accuracy or an independent corruption benchmark.
+
+### Meeting conclusion and remaining experiment
+
+The two component demonstrations support the plausibility of pre-execution
+applicability checks and post-execution output checks. They do not establish
+that PhenoGuard improves on a real LLM Manager or Critic. The frozen 108-trial
+live qualification remains **0/108**; independent fixture review remains
+**0/12**. The private 9-image and 12-scenario review worksheets were
+successfully generated on Plato on 24 November with owner-only permissions,
+and the candidate's technical audit passed. The next scientific decision is
+to authorise the reviewed runtime and fixtures, then execute the real
+comparative protocol without changing the frozen method.
+
 ## Evidence available now
 
 | Tool | Actual evidence | What it does not establish |
