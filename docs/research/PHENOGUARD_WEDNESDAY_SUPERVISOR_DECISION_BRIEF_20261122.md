@@ -148,6 +148,30 @@ registry and its SHA-256 in a prospective final runtime record.
 to bypass that signoff**. Actual paid qualification remains blocked
 until provider/billing/harness approval is independently evidenced.
 
+## Technical fixture audit passed on Plato (24 November 2026)
+
+Researcher-provided Plato output now confirms
+`PHASE8_CANDIDATE_TECHNICAL_AUDIT_PASS=true` with:
+
+- 12/12 image bindings checked; **9 unique image contents**.
+- Source type counts, by scenario: `ara=4`, `potato=5`, `maize=3`.
+- All 12 content SHA-256s rechecked, AraCrop/potato metadata
+  membership checked, original PlantDoc commit validated, and 3/3
+  deliberately identical-image metadata pairs verified.
+- Private candidate SHA-256 remained
+  `152c8c929c3da07b3a43743b4afe438ab2ccc0eaea65073600d501787c08755c`.
+- No provider or GPU calls, and the Git worktree was clean.
+- **No biological species review, source-rights review or reviewer ID
+  has been recorded.** Technically valid file bindings do not make the
+  actual image scientifically appropriate or authorised for trials.
+- **0/108** C3/C4/C8 qualification trials executed.
+
+The remaining urgent work before experiment execution is **human review
+of the 9 distinct image files and their 12 case contexts**, plus a
+prospectively reviewed final runtime/provider/billing approval. Do not
+reiterate the same GPU and fixture integrity commands as if they were
+scientific results.
+
 ## Immediate go/no-go gates
 
 | Prerequisite | Current evidence | Needed to proceed |
