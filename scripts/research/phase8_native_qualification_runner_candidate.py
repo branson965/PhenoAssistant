@@ -126,6 +126,7 @@ def read_live_controls(runtime, fixture):
         "matrix_sha256": MATRIX_SHA,
         "fixture_registry_sha256": file_sha256(fixture),
         "runner_sha256": file_sha256(Path(__file__)),
+        "qualification_scorer_sha256": file_sha256(Path(__file__).with_name("phase8_score_qualification_v1.py")),
         "method_freeze_sha256": method,
     }
     if any(cfg.get(k) != v for k, v in expected.items()):
