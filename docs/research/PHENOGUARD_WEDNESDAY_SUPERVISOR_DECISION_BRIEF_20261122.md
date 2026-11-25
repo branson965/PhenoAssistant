@@ -434,6 +434,30 @@ reviewed fixture cases.
   policy in the prospective final runtime, with independent pins.
   A code commit or passing test is not an approval.
 
+## Checkpoint routing verification (25 November 2026, 15:33 GMT)
+
+Researcher-supplied Plato terminal output at `3163a3b`, using
+`phenoassistant-phase8-qualification`: all three targeted canonical
+checkpoint routing regressions passed (0.88s). The 22-file Phase 7
+method freeze again verified with unchanged aggregate SHA-256
+`25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`.
+The local-only Arabidopsis snapshot resolved at frozen revision
+`a75bc3d595148ebc62afad7c9800908279e7aea8`; the four required
+configuration/label files existed. The actual potato SAM weight file
+returned the expected SHA-256
+`a7bf3b02f3ebf1267aba913ff637d9a2d5c33d3173bb679e46d9f338c26f262e`.
+No new GPU inference or paid qualification execution is established
+by these tests. The prior 159-test regression at `a9d2e88` and these
+three targeted tests are distinct runs, not 162 unique tests.
+
+Stop routine preflight expansion. The qualification release remains
+blocked on genuine independent review of the 12 image bindings and
+final runtime/provider/billing approval, the prospective native no-call
+interpretation, and binding the reviewed source/environment identities
+in the final runtime. No supervisor approval or independent fixture
+review has been supplied in the evidence to date. Do not infer approval
+from engineering success. Registered live qualification remains 0/108.
+
 ## Immediate go/no-go gates
 
 | Prerequisite | Current evidence | Needed to proceed |
