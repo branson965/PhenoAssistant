@@ -375,3 +375,47 @@ def test_canonical_delegate_explicitly_injected_cannot_bypass_trust(
             output_root=tmp_path / "blocked-real-output",
             inference_delegate=canonical_inference,
         )
+
+
+def test_canonical_wheat_route_uses_local_pinned_fullft_snapshot(tmp_path, monkeypatch):
+    """Routing regression only; no real checkpoint load or GPU inference."""
+    import sys
+    from types import SimpleNamespace
+
+    weight = tmp_path / "model.safetensors"
+    weight.write_bytes(b"synthetic-routing-test-only")
+    digest = file_sha256(weight)
+    revision = "89d6b3ca17dba118d7d25c7b8a87ff205dc6235e"
+    calls = []
+    def snapshot_download(**kwargs):
+        calls.append(("snapshot", kwargs))
+        return str(tmp_path)
+    def clean_snapshot(path):
+        calls.append(("clean", path))
+        return tmp_path
+    def classify(**kwargs):
+        calls.append(("classify", kwargs))
+        return "synthetic routing test"
+    monkeypatch.setitem(sys.modules, "huggingface_hub",
+                        SimpleNamespace(snapshot_download=snapshot_download))
+    monkeypatch.setitem(sys.modules, "scripts.gpu.phase5_case3_official_sample_smoke",
+                        SimpleNamespace(CHECKPOINT_REVISION=revision, FULL_WEIGHT_SHA256=digest,
+                                        _prepare_clean_fullft_snapshot=clean_snapshot))
+    monkeypatch.setitem(sys.modules, "functions.image_classification",
+                        SimpleNamespace(infer_image_classification=classify))
+    image = tmp_path / "image.png"
+    output = tmp_path / "output"
+    assert canonical_inference(CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID,
+                               "asset_1", image, output) == "synthetic routing test"
+    assert calls == [
+        ("snapshot", {"repo_id": CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID,
+                      "revision": revision, "local_files_only": True}),
+        ("clean", tmp_path),
+        ("classify", {"image_urls": [str(image)], "checkpoint": str(tmp_path),
+                      "batch_size": 1, "device": "cuda", "output_dir": str(output)}),
+    ]
+    weight.write_bytes(b"changed")
+    with pytest.raises(ScientificMcpDispatchError, match="weight digest drift"):
+        canonical_inference(CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID,
+                            "asset_1", image, output)
+    assert len([c for c in calls if c[0] == "classify"]) == 1
