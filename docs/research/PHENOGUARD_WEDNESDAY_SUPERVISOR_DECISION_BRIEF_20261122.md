@@ -349,6 +349,53 @@ and failure handling path before trial outcomes. Existing approvals
 remain unset; 0/12 independently reviewed fixtures and 0/108 registered
 trials executed. No change to scientific method or historical runtime.
 
+## Combined runtime and scoring update (25 November 2026)
+
+Researcher-supplied Plato output: combined environment
+`phenoassistant-phase8-qualification` installed with pip check clean;
+original GPU package list unchanged. Regression suite 122/122 passed
+(interpreter not shown for that command); method freeze unchanged.
+Seven additional scoring tests passed under explicitly identified combined
+interpreter at commit `c0fa4a4`. GPU job 64490 on dart/RTX A4000 completed
+0:0 in 3m34s; combined scientific-function imports, CUDA matrix multiply
+and torchvision CUDA NMS passed. PyTorch 2.4.1+cu121, CUDA 12.1,
+Transformers 4.45.2, OpenAI SDK 2.54.0, Pydantic 2.13.4.
+This is runtime compatibility, not actual vision inference within the
+combined environment. Albumentations update-check and optional FLAML
+AutoML warnings do not justify changing the pinned environment.
+No provider calls or scientific qualification trials.
+
+The qualification scorer is a separate prospective evaluation path;
+mechanical development/validation gold is accessed only after verified
+terminal records for all 108 planned trials. The seven tests do not
+constitute an end-to-end live ledger evaluation. Metering stop or an
+incomplete run must be reported as incomplete; no survivor-only scores.
+This is not a hidden benchmark.
+
+Pre-outcome baseline fairness correction at `217145b`:
+all C3/C4/C8 Manager messages and the generic C4 Critic now receive the
+same ordinary names/task groups from frozen model_zoo.json. Only C8
+receives scientific operating envelopes. Regression added at `bc4c637`;
+not yet executed on Plato. No registered agent outcome has been seen.
+This is a prompt-adapter correction requiring prospective runtime review,
+not a change to the frozen Phase 7 files.
+
+Remaining decision for independent review: the native capture adapter
+preserves Manager no-call decisions in C8 and prohibits creation of a
+scientific call without a captured native proposal; C4 has the same
+native-call restriction. Therefore C8 is a verifier of proposed native
+calls, not an unconditional deterministic catalogue resolver for every
+request. If reviewers require a different no-call rule, record and review
+that prospective integration choice explicitly before live execution;
+do not silently amend the method or claim equivalence to the standalone
+12-case deterministic resolver experiment.
+
+Approval pins remain unset. Reviewed fixtures 0/12; live trials 0/108.
+Next: actual supervisor/provider/fixture review evidence, final runtime
+binding (including scoring and prompt source hashes and environment
+identity), and one real approved metered qualification trial before the
+remaining matrix. No fake approval or paid diagnostic calls.
+
 ## Immediate go/no-go gates
 
 | Prerequisite | Current evidence | Needed to proceed |
