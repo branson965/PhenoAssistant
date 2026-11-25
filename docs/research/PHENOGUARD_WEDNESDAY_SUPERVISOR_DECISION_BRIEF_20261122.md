@@ -396,6 +396,44 @@ binding (including scoring and prompt source hashes and environment
 identity), and one real approved metered qualification trial before the
 remaining matrix. No fake approval or paid diagnostic calls.
 
+## Baseline fairness and checkpoint routing update (25 November 2026)
+
+Researcher-supplied Plato output at `a9d2e88`: nine-file targeted
+regression suite 159/159 passed in 14.64s using the combined Phase 8
+interpreter; 22-file Phase 7 freeze verified at unchanged digest;
+clean Git worktree after moving Slurm logs to private staging.
+The shared model-zoo inventory regression passed. These are offline
+integration results, not comparative LLM-agent outcomes.
+
+Further source inspection identified that the Case 1 dispatch previously
+resolved a mutable repository identifier, and the Case 2 dispatch did
+not verify the previously acquired SAM weight bytes at call time.
+Candidate fixes `f5f8ddb`, `6a5ceed` and routing tests `75a6ca3`:
+use cached Case 1 snapshot at the frozen provenance revision and its
+local label maps, and check Case 2's established SAM SHA-256 on dispatch.
+Historical repository-ID inference callers retain their previous path.
+Case 3 already resolves its audited full-FT revision and weight hash.
+New changes are outside the 22-file method freeze, but the local
+snapshot route and actual cache content must be verified before approval.
+Synthetic routing tests cannot establish GPU prediction equivalence.
+No additional registered live outcomes; 0/108 trials and 0/12 independently
+reviewed fixture cases.
+
+**Required human decisions (not supplied by this code):**
+- Confirm the bounded native no-call interpretation for qualification:
+  preserve the Manager's non-execution decision in C8 if no native call
+  was captured; report that limitation and do not claim equivalence to
+  unconditional resolver performance. If rejected, review a prospective
+  alternative before any live outcome.
+- Confirm the reviewed image bindings/species/acquisition/rights; replace
+  unacceptable maize fixtures or explicitly limit the shift claim.
+- Confirm institutional/provider data handling, allowed model, billing
+  and a dedicated capped credential; no key in Git or terminal output.
+- Approve the actual combined-environment lock, source/checkpoint hashes,
+  trial budget/reserve, wall-clock execution bounds, scorer and failure
+  policy in the prospective final runtime, with independent pins.
+  A code commit or passing test is not an approval.
+
 ## Immediate go/no-go gates
 
 | Prerequisite | Current evidence | Needed to proceed |
