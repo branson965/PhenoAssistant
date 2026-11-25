@@ -177,10 +177,26 @@ def canonical_inference(
             output_dir=str(output_dir),
         )
     if capability_id in CLASSIFICATION:
+        # The approved Case 3 repository also contains PEFT sidecars.
+        # Use the identical audited full-FT materialisation as the existing
+        # GPU compatibility run, not bare from_pretrained(repo_id).
+        # Local-only resolution prevents downloading a different revision.
+        from huggingface_hub import snapshot_download
+        from scripts.gpu.phase5_case3_official_sample_smoke import (
+            CHECKPOINT_REVISION, FULL_WEIGHT_SHA256,
+            _prepare_clean_fullft_snapshot,
+        )
         from functions.image_classification import infer_image_classification
+        snapshot = Path(snapshot_download(
+            repo_id=capability_id, revision=CHECKPOINT_REVISION,
+            local_files_only=True,
+        ))
+        checkpoint = _prepare_clean_fullft_snapshot(snapshot)
+        if file_sha256(checkpoint / "model.safetensors") != FULL_WEIGHT_SHA256:
+            raise ScientificMcpDispatchError("audited wheat checkpoint weight digest drift")
         return infer_image_classification(
             image_urls=[str(image_path)],
-            checkpoint=capability_id,
+            checkpoint=str(checkpoint),
             batch_size=1,
             device="cuda",
             output_dir=str(output_dir),
