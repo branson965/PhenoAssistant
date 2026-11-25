@@ -428,10 +428,19 @@ def infer_instance_segmentation(
     
     # label2id = image_processor.label2id
     # id2label = image_processor.id2label
-    api = HfApi()
-    with open(api.hf_hub_download(repo_id=checkpoint, filename="label2id.json", repo_type="model"), 'r') as f:
+    # A reviewed local checkpoint snapshot supplies the same label files
+    # without resolving a mutable remote branch. Preserve the historical
+    # repository-ID path for existing callers.
+    if os.path.isdir(checkpoint):
+        label2id_path = os.path.join(checkpoint, "label2id.json")
+        id2label_path = os.path.join(checkpoint, "id2label.json")
+    else:
+        api = HfApi()
+        label2id_path = api.hf_hub_download(repo_id=checkpoint, filename="label2id.json", repo_type="model")
+        id2label_path = api.hf_hub_download(repo_id=checkpoint, filename="id2label.json", repo_type="model")
+    with open(label2id_path, 'r') as f:
         label2id = json.load(f)
-    with open(api.hf_hub_download(repo_id=checkpoint, filename="id2label.json", repo_type="model"), 'r') as f:
+    with open(id2label_path, 'r') as f:
         id2label = json.load(f)
 
     # model
