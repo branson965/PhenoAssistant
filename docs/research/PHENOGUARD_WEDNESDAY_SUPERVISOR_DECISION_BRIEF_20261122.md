@@ -315,6 +315,40 @@ on the scientific execution gate. Outputs are private and must not be
 committed to GitHub. The researcher should bring these to the 25 Nov
 supervisor meeting with unresolved PlantDoc image comparability flagged.
 
+## Native qualification integration progress (25 November)
+
+Researcher-provided Plato terminal output from commit `f1d2fdf`:
+4/4 targeted integrated native MAF/MCP/metering tests passed; the
+seven-file regression suite passed 121/121 (includes those four);
+the 22-file method freeze was reverified at the unchanged aggregate.
+The two untracked files are retrospective Slurm logs, not method edits.
+
+The prospective runner `scripts/research/phase8_native_qualification_runner_candidate.py`
+connects native tool-call capture, C4 critique/C8 mediation, scientific
+MCP dispatch, C8 artifact validation, provider receipts and an append-only
+attempt ledger. The four integrated tests use synthetic HTTP replies and
+a fake inference delegate through real SDK/protocol interfaces; they
+do not exercise the entire production entrypoint or supply comparative
+agent outcomes. The runner remains gated by independently trusted
+runtime and reviewed fixture SHA pins.
+
+A subsequent candidate fix routes the wheat capability through the
+previously audited local-only full-FT checkpoint materialisation
+(commit `8c43a76`), with a synthetic routing regression added at
+`5a4cc93`. The new route has not yet been tested on Plato at these
+commits. Its use in a real runner requires dependency/runtime review.
+
+Before live qualification: review the native no-call rule, equivalent
+capability information exposure in C3/C4/C8 (the generic MCP capability
+ID parameter does not itself enumerate the available models), scientific
+checkpoint identities and practical timeout, and verify that the actual
+trial environment can host both MAF/MCP and the vision runtime.
+Review provider spend controls and per-call limits, not just the
+post-mediation budget check. Define and freeze the independent scoring
+and failure handling path before trial outcomes. Existing approvals
+remain unset; 0/12 independently reviewed fixtures and 0/108 registered
+trials executed. No change to scientific method or historical runtime.
+
 ## Immediate go/no-go gates
 
 | Prerequisite | Current evidence | Needed to proceed |
