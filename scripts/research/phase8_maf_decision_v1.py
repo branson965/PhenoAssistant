@@ -64,7 +64,7 @@ TOOL_PROPERTIES = frozenset(("capability_id", "image_asset_id"))
 BASE_INSTRUCTIONS = (
     "You are the PhenoAssistant scientific-capability proposal Manager. "
     "Select a registered scientific model using only the supplied scientific "
-    "request and MCP tool schema. Produce exactly one JSON object with keys "
+    "request, MCP tool schema and shared capability inventory. Produce exactly one JSON object with keys "
     "decision and capability_id. decision must be EXECUTE, RESELECT, CLARIFY, "
     "ABSTAIN, or RECOMMEND_TRAINING. For EXECUTE/RESELECT provide the exact "
     "catalogue capability_id; otherwise capability_id must be null. "
@@ -76,7 +76,7 @@ BASE_INSTRUCTIONS = (
 CRITIC_INSTRUCTIONS = (
     "You are an independent, GENERIC LLM Critic reviewing the Manager's "
     "proposed tool action. Examine general tool-schema consistency, task fit, "
-    "ambiguity and uncertainty using only the supplied request, MCP schema "
+    "ambiguity and uncertainty using only the supplied request, shared capability inventory, MCP schema "
     "and proposal. You have no scientific operating envelopes or hidden "
     "ground-truth labels; do not assume any. Produce only a JSON object "
     "with keys decision and capability_id using the same five allowed "
@@ -184,6 +184,27 @@ async def discover_real_mcp_tool(server: MCPServer) -> dict[str, Any]:
     })
 
 
+def shared_capability_inventory() -> list[dict[str, str]]:
+    """Expose ordinary model-zoo names/task groups equally in C3/C4/C8.
+
+    The existing frozen model_zoo.json supplies only registered names and
+    scientific task groups, not applicability evidence, constraints or gold.
+    The generic MCP string parameter alone cannot tell a baseline which
+    alternative IDs exist. This inventory closes that information gap.
+    """
+    zoo = json.loads((ROOT / "model_zoo.json").read_text(encoding="utf-8"))
+    inventory = [
+        {"capability_id": capability, "task_group": task}
+        for task, capabilities in sorted(zoo.items())
+        for capability in sorted(capabilities)
+    ]
+    ids = [entry["capability_id"] for entry in inventory]
+    expected = {e.capability_id for e in build_default_provenance_catalogue()}
+    if len(ids) != len(set(ids)) or set(ids) != expected:
+        raise Phase8ProposalError("model zoo and registered dispatch catalogue differ")
+    return inventory
+
+
 def manager_prompt(
     condition: str, visible_view: dict[str, Any], discovered_tool: dict[str, Any],
 ) -> tuple[str, str]:
@@ -191,7 +212,8 @@ def manager_prompt(
         raise Phase8ProposalError("unregistered condition")
     view = validate_view(visible_view)
     tool = validate_mcp_schema(discovered_tool)
-    message = {"request": view, "mcp_tool_schema": tool}
+    message = {"request": view, "mcp_tool_schema": tool,
+               "registered_capabilities": shared_capability_inventory()}
     if condition == C8:
         message["scientific_operating_envelopes"] = [
             e.model_dump(mode="json") for e in build_default_provenance_catalogue()
@@ -211,6 +233,7 @@ def critic_prompt(
     body = {
         "request": view,
         "mcp_tool_schema": tool,
+        "registered_capabilities": shared_capability_inventory(),
         "manager_proposal": {
             "decision": manager_proposal.decision.value,
             "capability_id": manager_proposal.capability_id,
