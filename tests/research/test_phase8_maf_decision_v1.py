@@ -362,3 +362,19 @@ def test_nonmock_transport_is_not_accepted_as_test_only_approval(
             seed=2026,
             upstream=httpx.AsyncHTTPTransport(),
         )
+
+
+def test_shared_capability_inventory_equal_for_all_conditions_and_critic(view, exact_tool):
+    from scripts.research.phase8_maf_decision_v1 import shared_capability_inventory
+    inventory = shared_capability_inventory()
+    assert len(inventory) == 3
+    assert len({entry["capability_id"] for entry in inventory}) == 3
+    assert all(set(entry) == {"capability_id", "task_group"} for entry in inventory)
+    for condition in (C3, C4, C8):
+        payload = json.loads(manager_prompt(condition, view, exact_tool)[1])
+        assert payload["registered_capabilities"] == inventory
+        assert ("scientific_operating_envelopes" in payload) == (condition == C8)
+    previous = Proposal(ApplicabilityDecision.EXECUTE, CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID)
+    critic = json.loads(critic_prompt(view, exact_tool, previous)[1])
+    assert critic["registered_capabilities"] == inventory
+    assert "scientific_operating_envelopes" not in critic
