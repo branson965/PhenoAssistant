@@ -34,6 +34,52 @@ POTATO = ROOT / "data/potato_metadata.csv"
 MAIZE_ROOT = ROOT / "data/_staging/PlantDoc-Dataset"
 PLANTDOC_PREFIX = "Original PlantDoc-Dataset, https://github.com/pratikkayal/PlantDoc-Dataset @ "
 
+WHOLEPLANT_ROOT = ROOT / "data/_staging/maize_wholeplant_1002675_v3"
+WHOLEPLANT_SOURCE = "Brichet and Cabrera-Bosquet (2017), Maize whole plant image dataset, doi:10.5281/zenodo.1002675; original ZIP member in acquisition_receipt.json"
+WHOLEPLANT_SELECTION = {
+    "dev-p003-species-maize": ("candidate_02_656bc5cd79267679.png", "656bc5cd79267679b6ac144765d0de49ca856934dbdd0cefa0ebc06db86b488d", "6619", "7f9f77eb"),
+    "dev-training-ready": ("candidate_03_04df2d7f96e36e92.png", "04df2d7f96e36e922af176e44aba667d1e421c1fd84edeb3627646446033a206", "6652", "ccaa0bdc"),
+    "dev-training-missing-data": ("candidate_03_04df2d7f96e36e92.png", "04df2d7f96e36e922af176e44aba667d1e421c1fd84edeb3627646446033a206", "6652", "ccaa0bdc"),
+}
+
+
+def verify_wholeplant(ident, path, digest):
+    import zlib
+    from PIL import Image
+    name, expected_sha, task, crc = WHOLEPLANT_SELECTION[ident]
+    if path != WHOLEPLANT_ROOT.resolve(strict=True) / name or digest != expected_sha:
+        raise ValueError("whole-plant selected fixture identity differs")
+    receipt = json.loads((WHOLEPLANT_ROOT / "acquisition_receipt.json").read_text())
+    record = json.loads((WHOLEPLANT_ROOT / "zenodo_record.json").read_text())
+    meta = record["metadata"]
+    license_id = meta["license"]
+    if isinstance(license_id, dict):
+        license_id = license_id["id"]
+    if (str(record["id"]) != "1002675" or meta["doi"] != "10.5281/zenodo.1002675"
+            or license_id.lower() != "cc-by-4.0"
+            or receipt["doi"] != meta["doi"] or receipt["license"].lower() != license_id.lower()
+            or receipt["full_archive_checksum_verified"] is not False
+            or receipt["independent_approval"] is not False):
+        raise ValueError("whole-plant source or receipt identity differs")
+    archive = next(f for f in record["files"] if f["key"] == "Maize whole plant image dataset.zip")
+    if receipt["archive"] != archive["key"] or receipt["archive_checksum_declared"] != archive["checksum"]:
+        raise ValueError("archive provenance differs")
+    matches = [r for r in receipt["images"] if r["candidate"] == name]
+    if len(matches) != 1:
+        raise ValueError("missing or duplicate source receipt")
+    row = matches[0]
+    member = f"article_binarisation_dataset/raw_images/plant-1_task-{task}_tv0_cabin-2.png"
+    if (row["original_archive_member"] != member or row["sha256"] != digest
+            or row["zip_member_crc32"] != crc or row["fully_opaque"] is not True
+            or row["original_bytes_preserved"] is not True
+            or f"{zlib.crc32(path.read_bytes()):08x}" != crc):
+        raise ValueError("whole-plant member receipt or CRC differs")
+    with Image.open(path) as image:
+        image.load()
+        if image.size != (2448, 2048) or image.mode != "RGBA" or image.getchannel("A").getextrema() != (255, 255):
+            raise ValueError("whole-plant original image format differs")
+
+
 EXPECTED_REUSED_IMAGE_PAIRS = (
     ("dev-p002-valid-arabidopsis", "dev-p002-missing-species"),
     ("val-p002-valid-potato", "val-p002-missing-species"),
@@ -83,6 +129,7 @@ def technical_audit(candidate: Path, trusted_root: Path) -> dict[str, object]:
         raise ValueError("expected exactly 12 entries")
     ara, potato = read_meta()
     plantdoc_commit = None
+    wholeplant_cases = 0
     assets_by_case: dict[str, str] = {}
     source_counts: Counter[str] = Counter()
     entries = {
@@ -121,6 +168,9 @@ def technical_audit(candidate: Path, trusted_root: Path) -> dict[str, object]:
         elif source_type == "potato":
             if source_tag != SOURCE_LABELS["potato"] or src_id not in potato:
                 raise ValueError(f"potato source metadata disagreement: {ident}")
+        elif source_tag == WHOLEPLANT_SOURCE:
+            verify_wholeplant(ident, path, actual_hash)
+            wholeplant_cases += 1
         else:
             if not isinstance(source_tag, str) or not source_tag.startswith(PLANTDOC_PREFIX):
                 raise ValueError(f"PlantDoc source revision not recorded: {ident}")
@@ -145,6 +195,8 @@ def technical_audit(candidate: Path, trusted_root: Path) -> dict[str, object]:
         source_counts[source_type] += 1
         assets_by_case[ident] = actual_hash
 
+    if wholeplant_cases not in (0, 3):
+        raise ValueError("mixed maize replacement is not permitted")
     for first, second in EXPECTED_REUSED_IMAGE_PAIRS:
         if assets_by_case[first] != assets_by_case[second]:
             raise ValueError(f"matched metadata-stress image differs: {first}/{second}")
@@ -157,6 +209,8 @@ def technical_audit(candidate: Path, trusted_root: Path) -> dict[str, object]:
         "image_sha256_checks_passed": True,
         "metadata_membership_checks_passed": True,
         "plantdoc_revision_checked": plantdoc_commit is not None,
+        "wholeplant_receipt_cases_checked": wholeplant_cases,
+        "full_wholeplant_archive_checksum_verified": False,
         "human_review_fields_filled": 0,
         "scientific_execution_authorized": False,
     }
