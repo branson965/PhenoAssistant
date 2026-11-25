@@ -87,6 +87,55 @@ and the candidate's technical audit passed. The next scientific decision is
 to authorise the reviewed runtime and fixtures, then execute the real
 comparative protocol without changing the frozen method.
 
+## Large-scale retrospective COCO component evaluation (25 November 2026)
+
+Researcher-supplied Plato terminal output: Slurm job 64331, CPU partition,
+commit `e3aaf9fe6e644305ef0185e259f41b3b17b68844`, completed with exit
+0:0, 01:21:07–01:21:30 UTC, 23 seconds. Private report
+`data/_staging/retrospective_64331.json`, reported SHA-256
+`0011020c14d8e602e4c8990f9dd6852a2f0ea4100a5913f99930aacf1de483d2`.
+
+All 1,248 historical image-level Arabidopsis records (11,848 predicted
+annotations) were matched to exact source metadata and adapted to the
+single-image validator by canonicalising the filename only. All 1,248
+originals passed both checkers. Zero duplicate global annotation IDs and
+zero annotation-empty images were reported. All eight predeclared fault
+types/probes were applicable to all images (9,984 variants total).
+
+| Fault type | Basic structural reference rejected | PhenoGuard rejected |
+| --- | ---: | ---: |
+| Wrong source filename | 0/1248 | 1248/1248 |
+| Negative area | 0/1248 | 1248/1248 |
+| Confidence above one | 0/1248 | 1248/1248 |
+| Unknown image reference | 1248/1248 | 1248/1248 |
+| Wrong RLE shape | 0/1248 | 1248/1248 |
+| Empty RLE counts | 0/1248 | 1248/1248 |
+| Invalid nonempty RLE probe | 0/1248 | 0/1248 |
+| Zero-area inconsistency probe | 0/1248 | 0/1248 |
+| **Total, all faults/probes** | **1248/9984 (12.5%)** | **7488/9984 (75%)** |
+| Original outputs accepted | 1248/1248 | 1248/1248 |
+
+The observed detection difference is 62.5 percentage points. The custom
+basic checker is not a standard COCO conformance suite, an LLM baseline
+or a competing published method. The test measures deliberately targeted
+synthetic faults on historical predictions, not independent segmentation
+accuracy or natural failure prevalence. Variants are correlated within
+images; no independent-sample statistical claim is made. Acceptance of
+all originals does not establish correctness or a real-world false
+positive rate. The two missed probe families remain in the denominator:
+the existing validator checks RLE shape/nonemptiness and bounded area but
+does not establish encoded-content validity or area-mask consistency.
+The nonempty invalid string was not independently decoded in this run.
+
+The freeze remained intact (22 files, aggregate
+`25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`).
+No GPU calls, provider calls, hidden gold reads or registered live-agent
+trials. Source artifact SHA-256
+`4d779ee715b9c54fe3e6e3bfc9a02275eedc9f5e9412edd34e644361005798d1`.
+Historical inputs remained byte-identical. This is component evidence
+only; the 108-trial live qualification remains 0/108 and reviewed image
+fixtures 0/12.
+
 ## Evidence available now
 
 | Tool | Actual evidence | What it does not establish |
