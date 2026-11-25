@@ -167,8 +167,33 @@ def canonical_inference(
     output_dir: Path,
 ) -> str:
     """Invoke repository inference; no paths/checkpoints come from LLM text."""
-    if capability_id in SEGMENTATION:
+    if capability_id == CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID:
+        from huggingface_hub import snapshot_download
+        from research.phenoguard.provenance import CASE1_ARABIDOPSIS_SEGMENTATION_REVISION
         from functions.instance_segmentation import infer_instance_segmentation
+        snapshot = Path(snapshot_download(
+            repo_id=capability_id,
+            revision=CASE1_ARABIDOPSIS_SEGMENTATION_REVISION,
+            local_files_only=True,
+        ))
+        if snapshot.name != CASE1_ARABIDOPSIS_SEGMENTATION_REVISION:
+            raise ScientificMcpDispatchError("Arabidopsis checkpoint revision mismatch")
+        for name in ("config.json", "preprocessor_config.json", "label2id.json", "id2label.json"):
+            if not (snapshot / name).is_file():
+                raise ScientificMcpDispatchError("pinned Arabidopsis checkpoint file missing: " + name)
+        return infer_instance_segmentation(
+            image_urls=[str(image_path)],
+            checkpoint=str(snapshot),
+            batch_size=1,
+            device="cuda",
+            output_dir=str(output_dir),
+        )
+    if capability_id == CASE2_POTATO_SEGMENTATION_MODEL_ID:
+        from functions.instance_segmentation import infer_instance_segmentation
+        sam = Path("models/sam_vit_h_4b8939.pth")
+        if (not sam.is_file() or sam.is_symlink()
+                or file_sha256(sam) != "a7bf3b02f3ebf1267aba913ff637d9a2d5c33d3173bb679e46d9f338c26f262e"):
+            raise ScientificMcpDispatchError("potato SAM checkpoint digest mismatch")
         return infer_instance_segmentation(
             image_urls=[str(image_path)],
             checkpoint=capability_id,
