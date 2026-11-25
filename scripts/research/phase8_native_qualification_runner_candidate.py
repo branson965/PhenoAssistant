@@ -166,6 +166,22 @@ async def run_next(runtime, fixture):
     try:
         fcntl.flock(lease, fcntl.LOCK_EX | fcntl.LOCK_NB)
         ledger = RUN_ROOT / "attempts.jsonl"
+        identity_path = RUN_ROOT / "run_identity.json"
+        identity = {
+            "runtime_sha256": file_sha256(runtime),
+            "fixture_sha256": file_sha256(fixture),
+            "matrix_sha256": MATRIX_SHA,
+            "runner_sha256": file_sha256(Path(__file__)),
+        }
+        if identity_path.exists():
+            if identity_path.is_symlink() or json.loads(identity_path.read_text(encoding="utf-8")) != identity:
+                raise ValueError("cannot mix execution controls in an existing qualification ledger")
+        elif ledger.exists():
+            raise ValueError("existing ledger has no immutable run identity")
+        else:
+            write_new(identity_path, identity)
+        if (RUN_ROOT / "STOP.json").exists():
+            raise ValueError("previous trial exceeded its reviewed reserve; independent review required")
         if ledger.exists():
             with ledger.open(encoding="utf-8") as stream:
                 events = read_events(stream)
@@ -212,6 +228,7 @@ async def run_next(runtime, fixture):
             def check_metering():
                 usage = summarize_trial_metering(receipts, trial_id=ident, model=matrix["model"])
                 if parse_money(usage["provider_cost_usd"]) > reserve:
+                    write_new(RUN_ROOT / "STOP.json", {"trial_id": ident, "reason": "REVIEWED_TRIAL_RESERVE_EXCEEDED"})
                     raise ValueError("observed provider cost exceeded reviewed trial reserve")
             await execute_mediated_trial(
                 client=client, condition=trial["condition_id"], view=view,
