@@ -41,27 +41,56 @@ def main():
     else:
         info=HfApi().dataset_info(REPO,files_metadata=True,token=False)
         revision=info.sha
+        import re
+        if not isinstance(revision,str) or not re.fullmatch(r"[0-9a-f]{40}",revision):
+            raise ValueError("dataset revision not a full commit SHA")
         card=info.card_data.to_dict() if info.card_data is not None else {}
-        if card.get("license")!="cc-by-4.0": raise ValueError("dataset licence differs from published card")
+        api_license=card.get("license")
+        tags=[str(t) for t in (info.tags or []) if str(t).startswith("license:")]
+        # Read original author declaration at the exact same revision.
+        readme=Path(hf_hub_download(REPO,"README.md",repo_type="dataset",
+                                    revision=revision,local_dir=OUT,token=False))
+        if readme.resolve()!=(OUT/"README.md").resolve() or not 0<readme.stat().st_size<=1024*1024:
+            raise ValueError("unexpected dataset card path or size")
+        raw=readme.read_text(encoding="utf-8")
+        normalized=" ".join(raw.replace("**","").split()).casefold()
+        statement="this dataset is released under the creative commons attribution 4.0 international license (cc by 4.0)."
+        print(json.dumps({"revision":revision,"api_license":api_license,
+                          "license_tags":tags,"readme_sha256":sha(readme),
+                          "explicit_author_license_statement":statement in normalized},default=str),flush=True)
+        # A missing parsed field is acceptable only with the pinned explicit
+        # author statement. An explicitly contradictory field is not.
+        if api_license not in (None,"","cc-by-4.0",["cc-by-4.0"]):
+            raise ValueError("contradictory/unrecognized API licence; inspect diagnostic above")
+        if any(t!="license:cc-by-4.0" for t in tags):
+            raise ValueError("contradictory licence tag")
+        if statement not in normalized:
+            raise ValueError("pinned README lacks verified author licence declaration")
         entry=next(x for x in info.siblings if x.rfilename==ARCHIVE)
         lfs=entry.lfs
         digest=lfs.get("sha256") if isinstance(lfs,dict) else getattr(lfs,"sha256",None)
         size=entry.size
         if not revision or not digest or len(digest)!=64 or not 0<size<=8_000_000_000:
             raise ValueError("unverified archive identity or size")
-        source={"repo":REPO,"revision":revision,"archive":ARCHIVE,"license":card["license"],
+        source={"repo":REPO,"revision":revision,"archive":ARCHIVE,"license":"cc-by-4.0","license_evidence":"pinned author README explicit declaration",
+                "api_license":api_license,"license_tags":tags,"readme_sha256":sha(readme),
                 "declared_sha256":digest,"size":size}
         write(pin,source)
     if source["repo"]!=REPO or source["archive"]!=ARCHIVE or source["license"]!="cc-by-4.0":
         raise ValueError("source pin differs")
+    if sha(OUT/"README.md")!=source.get("readme_sha256"):
+        raise ValueError("pinned licence evidence changed")
     print(json.dumps(source,indent=2),flush=True)
     local=OUT/ARCHIVE
     if not local.exists() and shutil.disk_usage(OUT).free<source["size"]+1_000_000_000:
         raise RuntimeError("insufficient filesystem free space; check quota separately")
     p=Path(hf_hub_download(REPO,ARCHIVE,repo_type="dataset",revision=revision,
                            local_dir=OUT,token=False))
-    if p.resolve()!=local.resolve() or p.stat().st_size!=source["size"] or sha(p)!=source["declared_sha256"]:
-        raise ValueError("downloaded archive identity mismatch")
+    if p.resolve()!=local.resolve() or p.stat().st_size!=source["size"]:
+        raise ValueError("downloaded archive path or size mismatch")
+    archive_digest=sha(p)
+    if archive_digest!=source["declared_sha256"]:
+        raise ValueError("downloaded archive SHA-256 mismatch")
     examples=defaultdict(list)
     counts=Counter(); prefixes=Counter(); total=0; seen=set()
     with zipfile.ZipFile(p) as z:
@@ -79,7 +108,7 @@ def main():
             if len(examples[suffix])<12:
                 examples[suffix].append({"path":member.filename,"size":member.file_size,"crc32":f"{member.CRC:08x}"})
         listing=[{"path":m.filename,"size":m.file_size,"crc32":f"{m.CRC:08x}"} for m in z.infolist() if not m.is_dir()]
-    report={"source":source,"archive_sha256":sha(p),"member_count":len(listing),
+    report={"source":source,"archive_sha256":archive_digest,"member_count":len(listing),
             "uncompressed_bytes":total,"extensions":dict(counts),
             "top_prefix_counts":dict(prefixes.most_common(40)),"examples":dict(examples),
             "members":listing,"full_archive_sha256_verified":True,"extracted":False,
