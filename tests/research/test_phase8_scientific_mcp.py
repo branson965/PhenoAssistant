@@ -375,3 +375,99 @@ def test_canonical_delegate_explicitly_injected_cannot_bypass_trust(
             output_root=tmp_path / "blocked-real-output",
             inference_delegate=canonical_inference,
         )
+
+
+def test_canonical_wheat_route_uses_local_pinned_fullft_snapshot(tmp_path, monkeypatch):
+    """Routing regression only; no real checkpoint load or GPU inference."""
+    import sys
+    from types import SimpleNamespace
+
+    weight = tmp_path / "model.safetensors"
+    weight.write_bytes(b"synthetic-routing-test-only")
+    digest = file_sha256(weight)
+    revision = "89d6b3ca17dba118d7d25c7b8a87ff205dc6235e"
+    calls = []
+    def snapshot_download(**kwargs):
+        calls.append(("snapshot", kwargs))
+        return str(tmp_path)
+    def clean_snapshot(path):
+        calls.append(("clean", path))
+        return tmp_path
+    def classify(**kwargs):
+        calls.append(("classify", kwargs))
+        return "synthetic routing test"
+    monkeypatch.setitem(sys.modules, "huggingface_hub",
+                        SimpleNamespace(snapshot_download=snapshot_download))
+    monkeypatch.setitem(sys.modules, "scripts.gpu.phase5_case3_official_sample_smoke",
+                        SimpleNamespace(CHECKPOINT_REVISION=revision, FULL_WEIGHT_SHA256=digest,
+                                        _prepare_clean_fullft_snapshot=clean_snapshot))
+    monkeypatch.setitem(sys.modules, "functions.image_classification",
+                        SimpleNamespace(infer_image_classification=classify))
+    image = tmp_path / "image.png"
+    output = tmp_path / "output"
+    assert canonical_inference(CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID,
+                               "asset_1", image, output) == "synthetic routing test"
+    assert calls == [
+        ("snapshot", {"repo_id": CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID,
+                      "revision": revision, "local_files_only": True}),
+        ("clean", tmp_path),
+        ("classify", {"image_urls": [str(image)], "checkpoint": str(tmp_path),
+                      "batch_size": 1, "device": "cuda", "output_dir": str(output)}),
+    ]
+    weight.write_bytes(b"changed")
+    with pytest.raises(ScientificMcpDispatchError, match="weight digest drift"):
+        canonical_inference(CASE3_WINTER_WHEAT_CLASSIFICATION_MODEL_ID,
+                            "asset_1", image, output)
+    assert len([c for c in calls if c[0] == "classify"]) == 1
+
+
+def test_canonical_arabidopsis_route_uses_pinned_local_snapshot(tmp_path, monkeypatch):
+    import sys
+    from types import SimpleNamespace
+    from research.phenoguard.provenance import CASE1_ARABIDOPSIS_SEGMENTATION_REVISION
+    revision = CASE1_ARABIDOPSIS_SEGMENTATION_REVISION
+    snapshot = tmp_path / revision
+    snapshot.mkdir()
+    for name in ("config.json", "preprocessor_config.json", "label2id.json", "id2label.json"):
+        (snapshot / name).write_text("{}", encoding="utf-8")
+    seen = []
+    def download(**kwargs):
+        seen.append(kwargs)
+        return str(snapshot)
+    def infer(**kwargs):
+        seen.append(kwargs)
+        return "synthetic routing test"
+    monkeypatch.setitem(sys.modules, "huggingface_hub", SimpleNamespace(snapshot_download=download))
+    monkeypatch.setitem(sys.modules, "functions.instance_segmentation", SimpleNamespace(infer_instance_segmentation=infer))
+    image = tmp_path / "image.png"
+    out = tmp_path / "out"
+    assert canonical_inference(CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID, "asset", image, out) == "synthetic routing test"
+    assert seen == [
+        {"repo_id": CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID, "revision": revision, "local_files_only": True},
+        {"checkpoint": str(snapshot), "image_urls": [str(image)], "batch_size": 1, "device": "cuda", "output_dir": str(out)},
+    ]
+    (snapshot / "label2id.json").unlink()
+    with pytest.raises(ScientificMcpDispatchError, match="checkpoint file missing"):
+        canonical_inference(CASE1_ARABIDOPSIS_SEGMENTATION_MODEL_ID, "asset", image, out)
+
+
+def test_canonical_potato_route_rejects_unverified_checkpoint(tmp_path, monkeypatch):
+    import sys
+    from types import SimpleNamespace
+    import phenoassistant_mcp.scientific_inference_v1 as module
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "models").mkdir()
+    weight = tmp_path / "models" / "sam_vit_h_4b8939.pth"
+    weight.write_bytes(b"untrusted synthetic weights")
+    seen = []
+    def infer(**kwargs):
+        seen.append(kwargs)
+        return "synthetic routing test"
+    monkeypatch.setitem(sys.modules, "functions.instance_segmentation", SimpleNamespace(infer_instance_segmentation=infer))
+    with pytest.raises(ScientificMcpDispatchError, match="SAM checkpoint digest mismatch"):
+        canonical_inference(CASE2_POTATO_SEGMENTATION_MODEL_ID, "asset", tmp_path / "image.png", tmp_path / "out")
+    assert seen == []
+    monkeypatch.setattr(module, "file_sha256", lambda _: "a7bf3b02f3ebf1267aba913ff637d9a2d5c33d3173bb679e46d9f338c26f262e")
+    assert canonical_inference(CASE2_POTATO_SEGMENTATION_MODEL_ID, "asset", tmp_path / "image.png", tmp_path / "out") == "synthetic routing test"
+    assert len(seen) == 1
+    assert seen[0]["checkpoint"] == CASE2_POTATO_SEGMENTATION_MODEL_ID

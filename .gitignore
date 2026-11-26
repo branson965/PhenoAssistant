@@ -33,3 +33,11 @@ results/maf_mcp_v2/
 # Phase 5 Case 3 generated evidence
 results/maf_gpu_case3_fullft_official_sample/
 results/maf_gpu_case3_checkpoint_audit/
+
+# Locally acquired SAM ViT-H weights (2.56 GB), never commit checkpoint binaries
+/models/sam_vit_h_4b8939.pth
+/models/sam_vit_h_4b8939.pth.download
+
+/pg-potato-*.out
+/pg-potato-*.err
+/results/phase8_gpu_engineering_smoke/

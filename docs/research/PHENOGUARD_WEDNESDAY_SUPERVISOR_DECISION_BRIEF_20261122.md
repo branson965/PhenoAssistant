@@ -1,0 +1,557 @@
+# PhenoGuard IJCAI 2027: Wednesday 25 November decision brief
+
+**Prepared:** 22 November 2026. **Purpose:** present an accurate, actionable
+research status to supervisor. **Scope:** repository Phase 7/8 freeze and
+researcher-provided Plato commands; not independently checked institutional
+permissions, scientific labels or provider billing.
+
+## One-paragraph supervisor summary
+
+PhenoGuard asks whether a scientific tool that is *callable* is also
+scientifically *applicable*, especially under species shift and missing
+metadata. The three vision-tool pathways are now demonstrably executable:
+Arabidopsis Mask2Former has a historical 1,248-image, hash-verified full
+run with reproduced scientific conclusions; potato SAM ViT-H completed a
+one-image Plato inference with 13 predicted mask instances and a real C8
+COCO structural validation pass; winter-wheat DINOv2 has an audited
+full-fine-tuned checkpoint and one-image compatibility evidence. **None of
+these results demonstrates an improvement in unsafe scientific execution
+versus the baselines.** The decisive C3/C4/C8 comparison has **0/108
+outcome-bearing qualification trials** observed in this research record.
+
+## Preliminary measured component results (24 November 2026)
+
+Source: researcher-supplied Plato terminal output from runner commit
+`e6eb78d`, completed successfully, with the 22-file Phase 7 freeze
+verified at aggregate SHA-256
+`25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`.
+Local report: `data/_staging/meeting_component_results_lGyfu3.txt`.
+No provider calls, GPU calls, hidden gold access or registered agent trials
+were made by this component evaluation.
+
+### A. Deterministic scientific applicability
+
+| Metric | Naive requested-tool passthrough | Frozen PhenoGuard resolver |
+| --- | ---: | ---: |
+| Exact action and capability correctness | 6/12 (50%) | 12/12 (100%) |
+| Correct model on executable cases | 5/7 | 7/7 |
+| Wrong model on executable cases | 2 | 0 |
+| Execution proposed on non-execution cases | 3 | 0 |
+| Total execution proposals | 10/12 | 7/12 |
+| Inappropriate execution proposals (wrong capability or non-execution case) | 5/10 | 0/7 |
+| Unnecessary abstentions | 0 | 0 |
+
+The six corrected scenarios comprise two species-triggered reselections,
+two missing-species clarifications, one unsupported-maize abstention and
+one training-readiness recommendation. The frozen resolver was run on
+all 12 development/validation cases; the comparison reference executes the
+requested tool whenever one is supplied, otherwise asks for clarification.
+It is **not** the live C3 Manager or C4 generic Critic. The mechanical
+labels are deliberately aligned with the contract under test; this is a
+component-level correctness demonstration, not independent generalisation
+or a measured agent-safety effect. "Execution proposed" is not actual tool
+dispatch. No significance or population-level safety claim is justified.
+
+### B. Scientific output fault detection
+
+The preserved genuine potato GPU artifact (13 predicted instances) and
+its input were hash-verified before and after this test. The original
+passed both JSON parsing and PhenoGuard COCO structural validation.
+Nine one-at-a-time, JSON-valid injected faults were rejected by the
+validator, whereas none were rejected by ordinary JSON parsing.
+
+| Test set | JSON parser | PhenoGuard COCO validator |
+| --- | ---: | ---: |
+| Unmodified artifact accepted | 1/1 | 1/1 |
+| Targeted invariant faults rejected | 0/9 | 9/9 |
+| All injected variants including RLE limitation probe rejected | 0/10 | 9/10 |
+
+Targeted faults: incorrect filename, negative area, area exceeding image
+size, confidence outside range, wrong image reference, unknown category,
+duplicate annotation ID, inconsistent RLE dimensions and empty RLE counts.
+**Negative result:** the additional nonempty RLE string probe was accepted
+by the validator. The implementation checks shape and nonemptiness, not
+mask decoding. Do not conceal this probe or report universal 100% fault
+detection. These are targeted synthetic faults of one real artifact, not
+mask accuracy or an independent corruption benchmark.
+
+### Meeting conclusion and remaining experiment
+
+The two component demonstrations support the plausibility of pre-execution
+applicability checks and post-execution output checks. They do not establish
+that PhenoGuard improves on a real LLM Manager or Critic. The frozen 108-trial
+live qualification remains **0/108**; independent fixture review remains
+**0/12**. The private 9-image and 12-scenario review worksheets were
+successfully generated on Plato on 24 November with owner-only permissions,
+and the candidate's technical audit passed. The next scientific decision is
+to authorise the reviewed runtime and fixtures, then execute the real
+comparative protocol without changing the frozen method.
+
+## Large-scale retrospective COCO component evaluation (25 November 2026)
+
+Researcher-supplied Plato terminal output: Slurm job 64331, CPU partition,
+commit `e3aaf9fe6e644305ef0185e259f41b3b17b68844`, completed with exit
+0:0, 01:21:07–01:21:30 UTC, 23 seconds. Private report
+`data/_staging/retrospective_64331.json`, reported SHA-256
+`0011020c14d8e602e4c8990f9dd6852a2f0ea4100a5913f99930aacf1de483d2`.
+
+All 1,248 historical image-level Arabidopsis records (11,848 predicted
+annotations) were matched to exact source metadata and adapted to the
+single-image validator by canonicalising the filename only. All 1,248
+originals passed both checkers. Zero duplicate global annotation IDs and
+zero annotation-empty images were reported. All eight predeclared fault
+types/probes were applicable to all images (9,984 variants total).
+
+| Fault type | Basic structural reference rejected | PhenoGuard rejected |
+| --- | ---: | ---: |
+| Wrong source filename | 0/1248 | 1248/1248 |
+| Negative area | 0/1248 | 1248/1248 |
+| Confidence above one | 0/1248 | 1248/1248 |
+| Unknown image reference | 1248/1248 | 1248/1248 |
+| Wrong RLE shape | 0/1248 | 1248/1248 |
+| Empty RLE counts | 0/1248 | 1248/1248 |
+| Invalid nonempty RLE probe | 0/1248 | 0/1248 |
+| Zero-area inconsistency probe | 0/1248 | 0/1248 |
+| **Total, all faults/probes** | **1248/9984 (12.5%)** | **7488/9984 (75%)** |
+| Original outputs accepted | 1248/1248 | 1248/1248 |
+
+The observed detection difference is 62.5 percentage points. The custom
+basic checker is not a standard COCO conformance suite, an LLM baseline
+or a competing published method. The test measures deliberately targeted
+synthetic faults on historical predictions, not independent segmentation
+accuracy or natural failure prevalence. Variants are correlated within
+images; no independent-sample statistical claim is made. Acceptance of
+all originals does not establish correctness or a real-world false
+positive rate. The two missed probe families remain in the denominator:
+the existing validator checks RLE shape/nonemptiness and bounded area but
+does not establish encoded-content validity or area-mask consistency.
+The nonempty invalid string was not independently decoded in this run.
+
+The freeze remained intact (22 files, aggregate
+`25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`).
+No GPU calls, provider calls, hidden gold reads or registered live-agent
+trials. Source artifact SHA-256
+`4d779ee715b9c54fe3e6e3bfc9a02275eedc9f5e9412edd34e644361005798d1`.
+Historical inputs remained byte-identical. This is component evidence
+only; the 108-trial live qualification remains 0/108 and reviewed image
+fixtures 0/12.
+
+## Evidence available now
+
+| Tool | Actual evidence | What it does not establish |
+| --- | --- | --- |
+| Case 1, Arabidopsis Mask2Former | 1,248/1,248 local images and output hashes; regenerated/reference phenotypes align; reported conclusion decision match | Segmentation gold accuracy; agent decision safety |
+| Case 2, potato Leaf-only SAM | Plato job 63134, RTX A4000, 13m19s, exit 0; 13 predicted instances; output SHA-256 `5f4aaa3c68e0c0f1035e15bbd79c70a80b84cd998339e6ae448609f62f846180`; `validate_coco(...).safe_to_report=true, issues=[]` | Expert leaf count, mask accuracy, shift robustness, or comparative C8 effect |
+| Case 3, winter-wheat DINOv2 | Audited pinned full-FT checkpoint; one official montage inference with matching image/output digests | Individual labelled classification accuracy or tested generalisation |
+
+Detailed references: `docs/research/PHENOGUARD_PLATO_GPU_EVIDENCE_AUDIT_20261122.md`.
+
+## Experiment we actually need to run
+
+Frozen Phase 8 C3/C4/C8 qualification:
+- **12 cases (8 development, 4 validation) x 3 conditions x 3 seeds = 108 trials**.
+- **C3:** Manager + tool schemas.
+- **C4:** Manager + separate generic Critic.
+- **C8:** Manager + scientific operating envelope, verifier,
+  appropriate clarification/reselection/abstention and output-aware
+  post-validation.
+- Mechanically adjudicable cases include valid Arabidopsis, potato
+  species shift, missing species, valid potato, unsupported maize
+  segmentation, maize classification training-readiness requests.
+- The same frozen, model-visible scientific facts and matched-case identities
+  must be preserved across conditions; application-side images and
+  private fixture metadata must never enter Manager/Critic prompts.
+- Record decision accuracy, unsafe execution, correct/unnecessary abstention,
+  clarification/reselection, actual tool dispatch, and measured model usage.
+- **This is harness qualification on development/validation, not a final
+  independent hidden benchmark.** Even a perfect 108-trial result would not,
+  by itself, demonstrate distribution-shift generalisation.
+
+## Private fixture candidate preparation, 22 November
+
+The researcher confirmed **12/12 blank private entries**, with all eight
+source/reviewer fields missing and no maize directory under `data`.
+To remove avoidable manual transcription without inventing approval,
+`scripts/research/phase8_prefill_local_fixture_candidate.py` now
+selects source-referenced real images from the existing AraCrop JSON and
+potato CSV metadata. The two missing-species cases reuse the exact
+same image as their corresponding valid pair. No hidden labels are read.
+
+The optional `--maize-root` parameter supports an **original, Git
+revision-identified PlantDoc checkout** staged privately under `data/_staging`.
+It proposes two maize images for three maize scenarios, reusing one
+across the training-ready/missing-data contrast to isolate metadata
+variation. **This does not verify maize species or imaging comparability.**
+PlantDoc contains cropped disease-classification imagery, whereas the
+potato segmentation examples use a different acquisition setup. A
+species-shift result would be confounded by those visual differences
+unless the reviewer approves the specific pairing. Prefer view- and
+acquisition-matched maize phenotyping imagery for final analysis.
+
+The helper writes a **new**, ignored candidate file, never overwrites
+the private source template or frozen method. It leaves all
+`reviewed_species`, `license_or_access_evidence`, and
+`reviewer_evidence_id` fields blank and reports the real prefill count.
+
+The original PlantDoc repository advertises CC BY 4.0, but its authors
+also report internet-scraped source material. Reviewer verification
+of asset-specific access/rights is necessary; no automatic license
+or reviewer attestation is recorded.
+
+No candidate file, including a structurally complete one, can activate
+an execution gate until independent review and the final reviewed SHA
+are recorded in the approved runtime process.
+
+## Updated Plato asset status for Wednesday (researcher terminal evidence)
+
+The researcher has now produced the private candidate file
+`data/_staging/phase8_image_fixture_candidate_v0.1.json`, SHA-256
+`152c8c929c3da07b3a43743b4afe438ab2ccc0eaea65073600d501787c08755c`.
+
+- **12/12** source records populated with path, image digest, asset ID,
+  metadata source and source image ID; **0/12** independently reviewed.
+- **36 human review fields still missing**: `reviewed_species`,
+  `license_or_access_evidence`, `reviewer_evidence_id` on each case.
+- Local PlantDoc repository source commit:
+  `5467f6012d78d1c446145d5f582da6096f852ae8`, 244 images observed
+  in the two sparse-checkout maize-class directories. This is **source
+  revision provenance**, not an independent biological taxonomy review.
+- The `phase8_private_fixture_readiness.py` output reports
+  `PHASE8_FIXTURE_STRUCTURAL_AUDIT=NOT_RUN_INCOMPLETE`, correctly,
+  because missing review attestations cannot be filled by software.
+- Clean `git status` confirms the private assets stayed ignored.
+- This user terminal evidence has been recorded in GitHub documentation,
+  not independently inspected from the Plato filesystem.
+
+### Offline data integrity check
+
+Run the read-only script on Plato:
+
+```bash
+PY="$HOME/.local/envs/phenoassistant-phase6-mcp/bin/python"
+env -u OPENROUTER_API_KEY "$PY" \
+  scripts/research/phase8_audit_private_fixture_candidate.py
+```
+
+It checks source memberships, decoded images, actual digests, PlantDoc
+revision and three metadata-only same-image pairs. It does not print
+private paths or touch gold labels. If all checks pass, the data are
+*technically consistent*, not independently reviewed.
+
+### Human review protocol for the existing candidate
+
+An independent reviewer must inspect actual image bytes and original
+metadata for each of the 12 cases and record:
+
+1. **Taxonomic identification:** specific `reviewed_species` for the
+   *actual image*. For missing-species prompt cases, this is still the
+   image's biological species, not the literal string "UNSPECIFIED".
+2. **Access/provenance:** credible evidence identifying original dataset,
+   relevant permission/licence and image provenance; do not equate a
+   GitHub repository licence with verified third-party source rights.
+3. **Review evidence ID:** reference to the actual recorded reviewer
+   decision and date, not a generated dummy ID.
+
+For the three maize scenarios, visually assess whether cropped leaf
+disease images introduce view/background/disease confounds relative to
+whole-plant potato examples. If they do, explicitly reject them for a
+claim of *species-isolated visual shift* and choose appropriate
+matched-acquisition images. This is a real design decision rather than
+a request to fill the JSON mechanically.
+
+After an independent reviewer signs off, preserve the reviewed private
+registry and its SHA-256 in a prospective final runtime record.
+**Do not edit the historical v0.3 candidate or frozen Phase 7 method
+to bypass that signoff**. Actual paid qualification remains blocked
+until provider/billing/harness approval is independently evidenced.
+
+## Technical fixture audit passed on Plato (24 November 2026)
+
+Researcher-provided Plato output now confirms
+`PHASE8_CANDIDATE_TECHNICAL_AUDIT_PASS=true` with:
+
+- 12/12 image bindings checked; **9 unique image contents**.
+- Source type counts, by scenario: `ara=4`, `potato=5`, `maize=3`.
+- All 12 content SHA-256s rechecked, AraCrop/potato metadata
+  membership checked, original PlantDoc commit validated, and 3/3
+  deliberately identical-image metadata pairs verified.
+- Private candidate SHA-256 remained
+  `152c8c929c3da07b3a43743b4afe438ab2ccc0eaea65073600d501787c08755c`.
+- No provider or GPU calls, and the Git worktree was clean.
+- **No biological species review, source-rights review or reviewer ID
+  has been recorded.** Technically valid file bindings do not make the
+  actual image scientifically appropriate or authorised for trials.
+- **0/108** C3/C4/C8 qualification trials executed.
+
+The remaining urgent work before experiment execution is **human review
+of the 9 distinct image files and their 12 case contexts**, plus a
+prospectively reviewed final runtime/provider/billing approval. Do not
+reiterate the same GPU and fixture integrity commands as if they were
+scientific results.
+
+## Reviewer packet preparation, 24 November
+
+A separate no-network utility creates **two owner-only local CSVs** (the
+files are ignored by Git) after re-running the technical candidate audit:
+
+```bash
+PY="$HOME/.local/envs/phenoassistant-phase6-mcp/bin/python"
+env -u OPENROUTER_API_KEY "$PY" \
+  scripts/research/phase8_prepare_private_review_worksheet.py
+```
+
+- `data/_staging/phase8_private_image_review_9unique_v0.1.csv`:
+  9 distinct source images, hash, local path, original metadata,
+  dimensions and scenario usage, with blank observed-species,
+  imaging/shift-confound, source-rights and reviewer fields.
+- `data/_staging/phase8_private_scenario_review_12cases_v0.1.csv`:
+  12 case contexts, model-visible request species and pair IDs, source
+  image hash, blank independent case-specific review fields.
+
+These are **human-review worksheets only**, not a final registry and not
+a substitute for inspecting original images and access rights. The script
+does not write into the frozen candidate, invent attestations, or switch
+on the scientific execution gate. Outputs are private and must not be
+committed to GitHub. The researcher should bring these to the 25 Nov
+supervisor meeting with unresolved PlantDoc image comparability flagged.
+
+## Native qualification integration progress (25 November)
+
+Researcher-provided Plato terminal output from commit `f1d2fdf`:
+4/4 targeted integrated native MAF/MCP/metering tests passed; the
+seven-file regression suite passed 121/121 (includes those four);
+the 22-file method freeze was reverified at the unchanged aggregate.
+The two untracked files are retrospective Slurm logs, not method edits.
+
+The prospective runner `scripts/research/phase8_native_qualification_runner_candidate.py`
+connects native tool-call capture, C4 critique/C8 mediation, scientific
+MCP dispatch, C8 artifact validation, provider receipts and an append-only
+attempt ledger. The four integrated tests use synthetic HTTP replies and
+a fake inference delegate through real SDK/protocol interfaces; they
+do not exercise the entire production entrypoint or supply comparative
+agent outcomes. The runner remains gated by independently trusted
+runtime and reviewed fixture SHA pins.
+
+A subsequent candidate fix routes the wheat capability through the
+previously audited local-only full-FT checkpoint materialisation
+(commit `8c43a76`), with a synthetic routing regression added at
+`5a4cc93`. The new route has not yet been tested on Plato at these
+commits. Its use in a real runner requires dependency/runtime review.
+
+Before live qualification: review the native no-call rule, equivalent
+capability information exposure in C3/C4/C8 (the generic MCP capability
+ID parameter does not itself enumerate the available models), scientific
+checkpoint identities and practical timeout, and verify that the actual
+trial environment can host both MAF/MCP and the vision runtime.
+Review provider spend controls and per-call limits, not just the
+post-mediation budget check. Define and freeze the independent scoring
+and failure handling path before trial outcomes. Existing approvals
+remain unset; 0/12 independently reviewed fixtures and 0/108 registered
+trials executed. No change to scientific method or historical runtime.
+
+## Combined runtime and scoring update (25 November 2026)
+
+Researcher-supplied Plato output: combined environment
+`phenoassistant-phase8-qualification` installed with pip check clean;
+original GPU package list unchanged. Regression suite 122/122 passed
+(interpreter not shown for that command); method freeze unchanged.
+Seven additional scoring tests passed under explicitly identified combined
+interpreter at commit `c0fa4a4`. GPU job 64490 on dart/RTX A4000 completed
+0:0 in 3m34s; combined scientific-function imports, CUDA matrix multiply
+and torchvision CUDA NMS passed. PyTorch 2.4.1+cu121, CUDA 12.1,
+Transformers 4.45.2, OpenAI SDK 2.54.0, Pydantic 2.13.4.
+This is runtime compatibility, not actual vision inference within the
+combined environment. Albumentations update-check and optional FLAML
+AutoML warnings do not justify changing the pinned environment.
+No provider calls or scientific qualification trials.
+
+The qualification scorer is a separate prospective evaluation path;
+mechanical development/validation gold is accessed only after verified
+terminal records for all 108 planned trials. The seven tests do not
+constitute an end-to-end live ledger evaluation. Metering stop or an
+incomplete run must be reported as incomplete; no survivor-only scores.
+This is not a hidden benchmark.
+
+Pre-outcome baseline fairness correction at `217145b`:
+all C3/C4/C8 Manager messages and the generic C4 Critic now receive the
+same ordinary names/task groups from frozen model_zoo.json. Only C8
+receives scientific operating envelopes. Regression added at `bc4c637`;
+not yet executed on Plato. No registered agent outcome has been seen.
+This is a prompt-adapter correction requiring prospective runtime review,
+not a change to the frozen Phase 7 files.
+
+Remaining decision for independent review: the native capture adapter
+preserves Manager no-call decisions in C8 and prohibits creation of a
+scientific call without a captured native proposal; C4 has the same
+native-call restriction. Therefore C8 is a verifier of proposed native
+calls, not an unconditional deterministic catalogue resolver for every
+request. If reviewers require a different no-call rule, record and review
+that prospective integration choice explicitly before live execution;
+do not silently amend the method or claim equivalence to the standalone
+12-case deterministic resolver experiment.
+
+Approval pins remain unset. Reviewed fixtures 0/12; live trials 0/108.
+Next: actual supervisor/provider/fixture review evidence, final runtime
+binding (including scoring and prompt source hashes and environment
+identity), and one real approved metered qualification trial before the
+remaining matrix. No fake approval or paid diagnostic calls.
+
+## Baseline fairness and checkpoint routing update (25 November 2026)
+
+Researcher-supplied Plato output at `a9d2e88`: nine-file targeted
+regression suite 159/159 passed in 14.64s using the combined Phase 8
+interpreter; 22-file Phase 7 freeze verified at unchanged digest;
+clean Git worktree after moving Slurm logs to private staging.
+The shared model-zoo inventory regression passed. These are offline
+integration results, not comparative LLM-agent outcomes.
+
+Further source inspection identified that the Case 1 dispatch previously
+resolved a mutable repository identifier, and the Case 2 dispatch did
+not verify the previously acquired SAM weight bytes at call time.
+Candidate fixes `f5f8ddb`, `6a5ceed` and routing tests `75a6ca3`:
+use cached Case 1 snapshot at the frozen provenance revision and its
+local label maps, and check Case 2's established SAM SHA-256 on dispatch.
+Historical repository-ID inference callers retain their previous path.
+Case 3 already resolves its audited full-FT revision and weight hash.
+New changes are outside the 22-file method freeze, but the local
+snapshot route and actual cache content must be verified before approval.
+Synthetic routing tests cannot establish GPU prediction equivalence.
+No additional registered live outcomes; 0/108 trials and 0/12 independently
+reviewed fixture cases.
+
+**Required human decisions (not supplied by this code):**
+- Confirm the bounded native no-call interpretation for qualification:
+  preserve the Manager's non-execution decision in C8 if no native call
+  was captured; report that limitation and do not claim equivalence to
+  unconditional resolver performance. If rejected, review a prospective
+  alternative before any live outcome.
+- Confirm the reviewed image bindings/species/acquisition/rights; replace
+  unacceptable maize fixtures or explicitly limit the shift claim.
+- Confirm institutional/provider data handling, allowed model, billing
+  and a dedicated capped credential; no key in Git or terminal output.
+- Approve the actual combined-environment lock, source/checkpoint hashes,
+  trial budget/reserve, wall-clock execution bounds, scorer and failure
+  policy in the prospective final runtime, with independent pins.
+  A code commit or passing test is not an approval.
+
+## Checkpoint routing verification (25 November 2026, 15:33 GMT)
+
+Researcher-supplied Plato terminal output at `3163a3b`, using
+`phenoassistant-phase8-qualification`: all three targeted canonical
+checkpoint routing regressions passed (0.88s). The 22-file Phase 7
+method freeze again verified with unchanged aggregate SHA-256
+`25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`.
+The local-only Arabidopsis snapshot resolved at frozen revision
+`a75bc3d595148ebc62afad7c9800908279e7aea8`; the four required
+configuration/label files existed. The actual potato SAM weight file
+returned the expected SHA-256
+`a7bf3b02f3ebf1267aba913ff637d9a2d5c33d3173bb679e46d9f338c26f262e`.
+No new GPU inference or paid qualification execution is established
+by these tests. The prior 159-test regression at `a9d2e88` and these
+three targeted tests are distinct runs, not 162 unique tests.
+
+Stop routine preflight expansion. The qualification release remains
+blocked on genuine independent review of the 12 image bindings and
+final runtime/provider/billing approval, the prospective native no-call
+interpretation, and binding the reviewed source/environment identities
+in the final runtime. No supervisor approval or independent fixture
+review has been supplied in the evidence to date. Do not infer approval
+from engineering success. Registered live qualification remains 0/108.
+
+## Immediate go/no-go gates
+
+| Prerequisite | Current evidence | Needed to proceed |
+| --- | --- | --- |
+| GPU scientific inference compatibility | Supported by Case 1/2/3 real inference checks | **Close** this engineering workstream; avoid re-running |
+| Frozen test conditions and study design | Phase 7 method SHA `25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294`; 108 planned records | Preserve freeze; no post-outcome tuning |
+| Reviewed image fixture registry | `TRUSTED_REVIEWED_FIXTURE_REGISTRY_SHA256=None` | Complete 12 private source/provenance mappings, genuine independent review and reviewed SHA pin |
+| Final runtime + model/provider/billing authority | v0.3 candidate has `scientific_execution_permitted=false`, researcher attestation false | Supervisor-supported, evidenced approved final runtime; do not alter history or fabricate approval |
+| Actual C3/C4/C8 integrated live harness | Real MAF/MCP bridge exists, but documented as integration-only; independent final runtime trust pin unset | Review equality of condition exposure, real tool dispatch, C8 validator, C4 Critic, failure preservation and spend controls |
+| Cost control | $8 pilot software ceiling and unmeasured forecast `$0.7036416` for Manager/model roundtrips, excluding Critic, retries, actual bill | Approved upstream key cap and measured provider-billed cost/attempt; forecast is not approval |
+| Final scientific claim | No confirmed PhenoGuard comparative effects | Independently reviewed, sealed expert benchmark and statistical comparisons after qualification |
+
+**Do not** forge reviewer identities, fill unreviewed species labels as fact,
+mark v0.3 approved, switch off guards or run unmetered paid scientific calls.
+
+## Next 48 hours, in parallel
+
+1. **Researcher:** populate the private image fixture template from actual
+   approved images, with reviewer/source evidence. It must remain under
+   `data/_staging`, never be committed or leaked into model prompts. In
+   particular, maize-labelled scenarios require real reviewed maize-image
+   provenance if the fixture contract requires image species to match the
+   declared request. Do not invent a maize fixture using a potato image.
+2. **Supervisor:** decide and record the **provider/model/billing approval**
+   and whether the development/validation qualification can be authorised
+   before Wednesday. Treat an unreviewed private-image registry as a blocker,
+   not as an authorisation placeholder.
+3. **Harness reviewer:** verify that the existing MAF proposal bridge has
+   the same scientific MCP tool and compatible transport across C3/C4/C8,
+   with C4's Critic separately invoked and C8 pre/post checks applied.
+   Confirm measured cost reconciliation and stable single-attempt ledger
+   before any outcomes.
+4. **Researcher + domain expert:** define how the *subsequent hidden benchmark*
+   will be independently adjudicated and sealed, including hard shifts and
+   matched positive/negative cases. Do not evaluate with hidden labels
+   before the runtime and scoring procedure is frozen.
+5. **Researcher:** once all final gates are approved, launch the predeclared,
+   bounded 108-trial qualification and report **all** outcomes, failures,
+   time/cost and paired comparisons. Do not substitute offline fake-agent
+   tests for this step.
+
+## Direct private-fixture assessment (read-only)
+
+The older `phase8_image_fixture_registry.py` preflight emits a fixed
+`PHASE8_FIXTURE_REAL_IMAGES_BOUND=0` line: it does not inspect existing
+private registry bindings. To establish real completeness, run:
+
+```bash
+PY="$HOME/.local/envs/phenoassistant-phase6-mcp/bin/python"
+env -u OPENROUTER_API_KEY "$PY" \
+  scripts/research/phase8_private_fixture_readiness.py
+```
+
+The helper shows all 12 frozen case IDs, declared species, missing private
+source/reviewer fields and whether the *existing* structural audit can run.
+It prints no private image paths and reads no hidden benchmark gold. A
+fully populated local file is still **not independently approved** until
+the reviewer checks the truth of the dataset/source/species evidence and
+pins the frozen registry SHA.
+
+## No-cost commands that can run on Plato now
+
+From `~/PhenoAssistant`:
+
+```bash
+PY="$HOME/.local/envs/phenoassistant-phase6-mcp/bin/python"
+env -u OPENROUTER_API_KEY "$PY" scripts/research/phase8_attempt_ledger.py
+env -u OPENROUTER_API_KEY "$PY" scripts/research/phase8_image_fixture_registry.py
+env -u OPENROUTER_API_KEY "$PY" scripts/research/phase8_proposal_mcp_bridge_v1.py
+```
+
+Optionally create the **blank private** fixture template (only if absent):
+
+```bash
+test -e data/_staging/phase8_image_fixture_binding_template_v0.1.json || \
+  env -u OPENROUTER_API_KEY "$PY" \
+    scripts/research/phase8_image_fixture_registry.py --write-template
+```
+
+These commands inspect contract readiness. They **do not** approve scientific
+execution, make provider calls or run the 108 trials. Passing their
+preflight does not mean the real comparison has begun.
+
+## Wednesday decision requested
+
+1. Authorise or explicitly decline the proposed provider route and hard
+   external spend ceiling.
+2. Nominate independent reviewer(s) for the 12 private image bindings,
+   scientific checkpoint/provenance and the final runtime SHA.
+3. Agree the time and responsible person for the first genuinely
+   outcome-bearing qualification matrix, *after* the above controls pass.
+4. Set the go/no-go criteria for scaling beyond the 108 mechanical
+   development/validation trials into the sealed expert benchmark.
+
+**Bottom line:** GPU hardware is **not the present binding constraint**.
+The binding constraint is trustworthy and approved experimental execution.
+Our paper needs a real comparative effect, not another green engineering test.

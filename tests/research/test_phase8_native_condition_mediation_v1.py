@@ -435,3 +435,103 @@ def test_c8_original_model_accepted_without_unnecessary_reselection(
     assert observation.final_selected_capability_id == CASE1
     assert observation.c8_precheck_applied is True
     assert observation.reviewer_changed_selection is False
+
+
+@pytest.mark.parametrize("condition,case_index,manager_model,critic_decision,expected_model,expected_dispatch", [
+    (C3, 0, CASE1, None, CASE1, True),
+    (C4, 0, CASE1, {"decision": "ABSTAIN", "capability_id": None}, None, False),
+    (C8, 1, CASE1, None, CASE2, True),
+    (C8, 5, CASE2, None, None, False),
+])
+def test_integrated_native_mcp_metered_candidate(
+    tmp_path, runtime, condition, case_index, manager_model, critic_decision,
+    expected_model, expected_dispatch,
+):
+    # Real MAF SDK, MCP protocol and validator, synthetic HTTP and vision
+    # outputs. This is an integration test, never a scientific trial.
+    from scripts.research.phase8_native_qualification_runner_candidate import execute_mediated_trial
+    from scripts.research.phase8_provider_metering_v1 import summarize_trial_metering
+    from scripts.research.phase8_trial_metering_reconciliation_v1 import reconcile_metered_terminal
+    from scripts.research.phase8_attempt_ledger import load_verified_controls, event_template
+
+    path, digest = runtime
+    matrix, _ = load_verified_controls()
+    scenario = build_development_validation_manifest()[case_index]
+    trial = next(t for t in matrix["trials"] if t["scenario_id_internal_only"] == scenario.scenario_id
+                 and t["condition_id"] == condition and t["seed"] == 2026)
+    ident = trial["trial_id"]
+    image = tmp_path / "test_only.png"
+    image.write_bytes(b"SYNTHETIC_NOT_SCIENTIFIC")
+    asset = ImageAsset(image, file_sha256(image))
+    asset_id = "test_image_001"
+    output_root = tmp_path / "outputs"
+    calls = []
+
+    def fake_inference(capability_id, supplied_id, image_path, directory):
+        calls.append((capability_id, supplied_id))
+        name = "leaf_only_sam_results.json" if capability_id == CASE2 else "ins_seg_results.json"
+        (directory / name).write_text(json.dumps({
+            "images": [{"id": 0, "file_name": str(image_path), "width": 8, "height": 8}],
+            "annotations": [{"id": 0, "image_id": 0, "category_id": 0,
+                             "area": 4, "score": 0.9, "iscrowd": 0,
+                             "segmentation": {"size": [8, 8], "counts": "synthetic"}}],
+            "categories": [{"id": 0, "name": "leaf"}],
+        }), encoding="utf-8")
+        return "offline synthetic inference"
+
+    server = build_phase8_scientific_mcp_server(
+        approved_runtime_file=path, approved_runtime_sha256=digest,
+        frozen_trial_id=ident, trusted_images={asset_id: asset},
+        output_root=output_root, inference_delegate=fake_inference,
+    )
+    replies = [fake_reply(tool=manager_model), fake_reply()]
+    if critic_decision is not None:
+        replies.append(fake_reply(decision=critic_decision))
+    sent = []
+    async def fake_http(request):
+        sent.append(json.loads(request.content))
+        body = replies[len(sent)-1].json()
+        body["id"] = "chatcmpl-synthetic-" + str(len(sent))
+        body["usage"]["cost"] = 0.001
+        return httpx.Response(200, json=body)
+
+    receipts = tmp_path / "receipts.jsonl"
+    trace = {}
+    async def run():
+        client = Phase8MafDecisionClient.create(
+            approved_runtime_path=path, approved_runtime_sha256=digest,
+            api_key="TEST_ONLY_NO_NETWORK", seed=2026,
+            upstream=httpx.MockTransport(fake_http),
+            metering_ledger_path=receipts, metering_trial_id=ident,
+        )
+        try:
+            await execute_mediated_trial(
+                client=client, condition=condition, view=model_visible_view(scenario),
+                server=server, asset_id=asset_id, asset=asset,
+                output_root=output_root, timeout_seconds=10, trace=trace,
+                after_mediation=lambda: summarize_trial_metering(receipts, trial_id=ident, model=MODEL),
+            )
+        finally:
+            await client.close()
+    asyncio.run(run())
+    assert trace["stage"] == "COMPLETE"
+    assert trace["mediation"]["final_selected_capability_id"] == expected_model
+    assert trace["scientific_dispatch_attempted"] is expected_dispatch
+    assert trace["scientific_dispatch_completed"] is expected_dispatch
+    assert calls == ([(expected_model, asset_id)] if expected_dispatch else [])
+    if condition == C8 and expected_dispatch:
+        assert trace["post_validation"]["safe_to_report"] is True
+    else:
+        assert trace["post_validation"] is None
+    assert len(sent) == (3 if condition == C4 else 2)
+    summary = summarize_trial_metering(receipts, trial_id=ident, model=MODEL)
+    terminal = event_template(trial, model=MODEL, kind="SUCCEEDED")
+    terminal.update(usage=summary["usage"], provider_cost_usd=summary["provider_cost_usd"],
+                    attempt_trace_sha256="a" * 64)
+    result = reconcile_metered_terminal(matrix=matrix, terminal_event=terminal,
+                                         provider_ledger_path=receipts)
+    assert result["locally_reconciled"] is True
+    assert result["provider_call_count"] == len(sent)
+    assert str(image) not in json.dumps(sent)
+    assert asset_id not in json.dumps(sent)
+    assert scenario.scenario_id not in json.dumps(sent)
