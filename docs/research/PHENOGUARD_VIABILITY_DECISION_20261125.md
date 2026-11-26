@@ -129,3 +129,56 @@ data-handling, dedicated key cap and actual runtime freeze. Request feedback
 on whether the proposed independent benchmark and information-matched
 comparison justify a paper. This is a request to test a plausible idea,
 not endorse the conclusion in advance.
+
+
+## Measured stronger-reference results (26 November 2026)
+
+Researcher supplied successful Plato execution at 59dd0c3. Private report
+`data/_staging/phase8_viability_challenge_v0.1.json`, reported SHA-256
+`b3a5cd4d9be75d575c74db30958e6a797a4ff333d3f623018e894c0b36ee13eb`.
+
+- Lexical name/task/species reference and frozen resolver both 12/12 exact,
+  7/7 correct executable cases, 0 inappropriate proposals. Naive passthrough
+  6/12, 5/7 correct executable cases, 5 inappropriate proposals. The
+  reference was designed after exposure to the 12 mechanical cases.
+- All four artifact references accept 1,248/1,248 historical originals;
+  all 11,848 masks have valid run extents and stored areas matching runs.
+- All 12,480 constructed variants/probes: basic reference 1,248/12,480
+  (10%); frozen validator 8,736/12,480 (70%); mask consistency reference
+  8,736/12,480 (70%); source-bound mask reference 11,232/12,480 (90%).
+  The two 70% methods detect different faults. Source-bound reference
+  outperforms the frozen validator by 20 pp.
+- Intact wrong-image predictions: frozen and source-bound validators
+  reject 1,248/1,248; basic and mask-only references reject 0.
+  After relabelling only the filename, all four accept 1,248/1,248.
+  This is an explicit provenance counterexample, not a demonstrated
+  natural pipeline error or a biological accuracy failure.
+- 22 frozen files unchanged. Zero provider calls, GPU calls, hidden gold
+  access or live qualification trials.
+
+**Decision:** no evidence of distinctive superiority over stronger
+deterministic references. Do not pitch the existing resolver or artifact
+checks as competitive methodological novelty on these results. A narrower
+hypothesis concerns scientific consequences of context/provenance errors
+and whether verified execution binding plus applicability enforcement
+can prevent them when ordinary validation and information-matched agents
+cannot. Existing runner checks application-bound identity and hashes;
+the artifact-only probe does not establish a vulnerability of that full
+runner. No method change without prospective review.
+
+At b62f4d2, a separate retrospective consequence replay is implemented
+(not run): reproduce the prior image-ID rotation of complete historical
+phenotype vectors and a predeclared, metadata-only, disjoint cross-ecotype
+whole-trajectory exchange matching observation schedules. Report changes
+in leaf count, projected leaf area, ecotype rankings, mixed ANOVA and
+Tukey significance decisions relative to the original prediction-derived
+analysis. This measures sensitivity to constructed misassociation, not
+biological truth, observed failure rates or agent-level prevention.
+The historical source files and method are preserved.
+
+Recommendation to Valerio: conditional investment in a small real-agent
+qualification and independent biological consequence study, not a go
+decision for the present IJCAI method claim. If the information-matched
+baseline ties and no scientific consequence advantage can be shown,
+narrow further or stop. Independent fixture approval 0/12; live
+qualification 0/108. No additional synthetic fault-volume expansion.
