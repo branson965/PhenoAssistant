@@ -86,3 +86,47 @@ Branch feature/phase8-wednesday-gpu-smokes, pilot runner 1da8dd9, annotation eva
 - Prior scientific consequence report: 5f9de32d6722be43fca2d40410471dc0a8b395ff6cb873c656bb63bc18203821
 
 Reported hashes, not independent rehashing of remote files. See PHENOGUARD_VIABILITY_DECISION_20261125.md for full earlier history. No changes to frozen scientific method or experiment outcomes.
+
+
+## 7. Additional 24-plant replication (26 November 2026)
+
+Slurm array 64607, 24/24 tasks completed, 48/48 direct model executions
+successful, scorable and structurally accepted. Original eight pilot
+plants excluded. Same-dataset replication, seven represented trays.
+Reported manifest SHA ba98804c64a040b8fbc164fd40e66319b6696a52c811c78febb197a77eb13d71;
+report SHA fbca7856f8281977a5d204a2becf5b93c22993097ad4fe62dc9b93317bbce77d.
+Private staging data/_staging/potato_harvest_replication_v0.1.
+
+| Metric | SAM | Mask2Former |
+| --- | ---: | ---: |
+| Mean foreground IoU | .879546 | .416834 |
+| Dice | .924842 | .522206 |
+| Instance F1 at .5 | .805821 | .259145 |
+| Count MAE | 4.0833 | 7.0000 |
+| Mean union-area relative error | 22.18% | 54.03% |
+| Median union-area relative error | 5.16% | 44.57% |
+| Empty predictions | 0/24 | 3/24 |
+
+Paired mean IoU delta +.462712, 24/24 positive, all seven tray means
+positive (range .298813 to .674360). Combined descriptively across
+pilot and replication, 32 plants and 64/64 successful accepted outputs;
+macro IoU .859848 vs .342433, 32/32 pairs favor SAM, 8/32 empty
+Mask2Former predictions. Keep cohorts separate for primary reporting.
+The observed advantage is smaller in replication than pilot. Same dataset,
+possible original development overlap and tray clustering preclude claims
+of independent population generalisation.
+
+Replication physical associations (n=24 each, Pearson/Spearman):
+- SAM union vs manual area .880868/.885217, vs dry weight .918979/.949565.
+- SAM XOR vs manual area .681813/.627826, vs dry weight .756856/.772174.
+- Mask2Former union vs manual area .837179/.734552, vs dry weight .885377/.838991.
+- Mask2Former XOR vs manual area .835309/.734552, vs dry weight .884485/.838991.
+
+The union-vs-XOR contrast is a measured effect of measurement semantics
+on these predictions; no assertion about the original publication's
+conclusions without reviewing its intended semantics. Retain all pilot
+outliers. The reciprocal Arabidopsis evaluation is now the most useful
+direct-model test: the 2026 PhenoLeaf-TS dataset (CC BY 4.0) is a candidate,
+subject to source revision, archive inventory, plant-level selection,
+annotation semantics and training-overlap audit. No live agent evidence
+or intervention superiority. Independent approval remains outstanding.
