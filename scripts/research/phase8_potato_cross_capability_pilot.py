@@ -52,8 +52,38 @@ def prepare():
     meta=record["metadata"]
     lic=meta.get("license")
     if isinstance(lic,dict): lic=lic.get("id")
-    if str(record["id"])!="7938231" or meta.get("doi")!="10.5281/zenodo.7938231" or str(lic).lower() not in {"cc-by-4.0","cc0-1.0","cc-by-3.0"}:
-        raise ValueError("source licence/identity not confirmed; review original record before local pilot")
+    if str(record["id"])!="7938231" or meta.get("doi")!="10.5281/zenodo.7938231":
+        raise ValueError("source record identity differs")
+    if str(lic).lower() != "cc-by" or meta.get("access_right") != "open":
+        raise ValueError("source rights differ from observed open CC BY record")
+    # Legacy Zenodo identifier is cc-by. Preserve it verbatim; do not infer version.
+    entries = {f["key"]: f for f in record["files"]}
+    import hashlib
+    import io
+
+    def acquire(key):
+        entry = entries[key]
+        size = int(entry["size"])
+        if not 0 < size <= 16*1024*1024:
+            raise ValueError("unexpected annotation or table size")
+        url = entry["links"]["self"]
+        from urllib.parse import urlparse
+        parsed = urlparse(url)
+        if parsed.scheme != "https" or parsed.hostname != "zenodo.org":
+            raise ValueError("unexpected source download host")
+        with requests.get(url, timeout=(15,90), stream=True) as response:
+            response.raise_for_status()
+            chunks = []
+            received = 0
+            for block in response.iter_content(65536):
+                received += len(block)
+                if received > size:
+                    raise ValueError("source response exceeds declared size")
+                chunks.append(block)
+        raw = b"".join(chunks)
+        if len(raw) != size or "md5:"+hashlib.md5(raw).hexdigest() != entry["checksum"]:
+            raise ValueError("original source checksum mismatch: "+key)
+        return raw
     # Outcome-blind ordering: one earliest filename per published tray.
     table=pd.read_csv(META,usecols=["file_name","Tray","Variety"])
     if len(table)!=32 or table.file_name.duplicated().any() or set(table.Tray)!=set(range(1,9)):
@@ -69,6 +99,45 @@ def prepare():
             dims=list(im.size)
         cases.append({"case":int(row.Tray),"file_name":str(row.file_name),
             "variety":str(row.Variety),"sha256":file_sha256(image),"dimensions":dims})
+    annotation_bytes = {}
+    annotations = []
+    for row in cases:
+        image = (ROOT/row["file_name"]).resolve(strict=True)
+        key = image.name
+        md5 = "md5:"+hashlib.md5(image.read_bytes()).hexdigest()
+        if entries[key]["checksum"] != md5 or int(entries[key]["size"]) != image.stat().st_size:
+            raise ValueError("local image does not match original record: "+key)
+        row["source_image_md5"] = md5
+        annotation_name = image.with_suffix(".json").name
+        raw = acquire(annotation_name)
+        doc = json.loads(raw)
+        if not isinstance(doc,dict):
+            raise ValueError("annotation JSON not an object")
+        shapes = doc.get("shapes")
+        summary = {
+            "case":row["case"],"file":annotation_name,
+            "sha256":hashlib.sha256(raw).hexdigest(),
+            "source_md5":entries[annotation_name]["checksum"],
+            "top_level_keys":sorted(doc),
+            "imagePath":doc.get("imagePath"),
+            "imageWidth":doc.get("imageWidth"),"imageHeight":doc.get("imageHeight"),
+            "shape_count":len(shapes) if isinstance(shapes,list) else None,
+        }
+        if isinstance(shapes,list) and all(isinstance(x,dict) for x in shapes):
+            from collections import Counter
+            summary["labels"]=dict(Counter(str(x.get("label")) for x in shapes))
+            summary["shape_types"]=dict(Counter(str(x.get("shape_type")) for x in shapes))
+            summary["group_ids_nonnull"]=sum(x.get("group_id") is not None for x in shapes)
+            summary["flags_nonempty"]=sum(bool(x.get("flags")) for x in shapes)
+            summary["first_shape_keys"]=sorted(shapes[0]) if shapes else []
+        annotation_bytes[annotation_name]=raw
+        annotations.append(summary)
+    table_name="pot_data_withimgnames_fullset.csv"
+    table_raw=acquire(table_name)
+    original_table=pd.read_csv(io.BytesIO(table_raw))
+    table_info={"file":table_name,"sha256":hashlib.sha256(table_raw).hexdigest(),
+                "source_md5":entries[table_name]["checksum"],
+                "columns":list(original_table.columns),"rows":len(original_table)}
     snapshot=Path(snapshot_download(repo_id=ARA,revision=REV,local_files_only=True))
     if snapshot.name!=REV: raise ValueError("checkpoint revision drift")
     # Pin all actual cached checkpoint files, not merely directory name.
@@ -79,22 +148,39 @@ def prepare():
     if file_sha256(SAM)!=SAM_SHA: raise ValueError("SAM SHA mismatch")
     STAGING.mkdir(mode=0o700,parents=True)
     write(STAGING/"source_record.json",record)
+    refdir=STAGING/"original_references"
+    refdir.mkdir(mode=0o700)
+    for name,raw in {**annotation_bytes,table_name:table_raw}.items():
+        with (refdir/name).open("xb") as stream:
+            stream.write(raw)
+    write(STAGING/"reference_inventory.json",{"annotations":annotations,"original_table":table_info,
+        "scope":"SCHEMA_INSPECTION_ONLY_NOT_REVIEWED_GOLD"})
     manifest={"scope":"DIRECT_LOCAL_EXPLORATORY_PILOT_NOT_AGENT_QUALIFICATION",
         "source_doi":meta["doi"],"source_license":lic,"source_record_sha256":file_sha256(STAGING/"source_record.json"),
         "method_freeze":{"count":count,"sha256":freeze},"metadata_sha256":file_sha256(META),
         "runner_sha256":file_sha256(Path(__file__)),"models":MODELS,"ara_revision":REV,
         "ara_snapshot_files":files,"sam_sha256":SAM_SHA,"cases":cases,
         "selection":"first lexicographic filename per tray, independent of measurements",
-        "note":"source record licence checked; existing repository image membership not independently compared to original archive; in-domain development pilot"}
+        "reference_inventory_sha256":file_sha256(STAGING/"reference_inventory.json"),
+        "source_license_version":"unspecified in legacy record",
+        "note":"original source file sizes and MD5 matched; annotation semantics pending inspection; in-domain development pilot"}
     write(STAGING/"manifest.json",manifest)
     print(json.dumps({"cases":cases,"license":lic,"manifest_sha256":file_sha256(STAGING/"manifest.json")},indent=2))
+    print(json.dumps({"annotations":annotations,"original_table":table_info},indent=2))
     print("PILOT_PLANNED_CELLS=16 REGISTERED_AGENT_TRIALS=0")
+    print("ANNOTATION_SEMANTICS_APPROVED=false")
 
 def manifest():
     m=json.loads((STAGING/"manifest.json").read_text())
     count,freeze=verify_manifest()
     if m["method_freeze"]!={"count":count,"sha256":freeze} or m["metadata_sha256"]!=file_sha256(META) or m["runner_sha256"]!=file_sha256(Path(__file__)) or m["source_record_sha256"]!=file_sha256(STAGING/"source_record.json"):
         raise ValueError("pilot identity drift")
+    if m["reference_inventory_sha256"]!=file_sha256(STAGING/"reference_inventory.json"):
+        raise ValueError("reference inventory drift")
+    refs=json.loads((STAGING/"reference_inventory.json").read_text())
+    for item in refs["annotations"]+[refs["original_table"]]:
+        if file_sha256(STAGING/"original_references"/item["file"])!=item["sha256"]:
+            raise ValueError("original reference bytes drift")
     return m
 
 def run_case(case):
@@ -224,7 +310,7 @@ def score():
               "No biological mask/count accuracy or intervention superiority claim.",
               "Native model preprocessing differs; entire capability comparison, not isolated species effect.",
               "Historical XOR area differs from union when masks overlap; both are reported.",
-              "Source licence checked, repository bytes not compared against original archive; labels may have transcription issues.",
+              "Source open CC BY record and original file checksums checked; exact licence version and original measurement-table reconciliation pending.",
               "Descriptive correlation on jointly successful cases only; report failures separately."]}
     write(STAGING/"report.json",report)
     print(json.dumps({k:v for k,v in report.items() if k not in {"terminal_records","paired_details"}},indent=2,sort_keys=True))
