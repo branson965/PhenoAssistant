@@ -182,3 +182,89 @@ decision for the present IJCAI method claim. If the information-matched
 baseline ties and no scientific consequence advantage can be shown,
 narrow further or stop. Independent fixture approval 0/12; live
 qualification 0/108. No additional synthetic fault-volume expansion.
+
+
+## Measured scientific consequence replay (26 November 2026)
+
+Researcher-supplied successful Plato execution at 6cfacc2. Private report
+`data/_staging/phase8_scientific_consequence_v0.1.json`, reported SHA-256
+`5f9de32d6722be43fca2d40410471dc0a8b395ff6cb873c656bb63bc18203821`.
+Historical inputs verified and unchanged, 22-file method freeze unchanged.
+24 plants, 5 ecotypes, 1,248 observations, 12 disjoint matched trajectory
+pairs. No provider calls, GPU calls or registered qualification outcomes.
+
+| Metric | Image-ID rotation | Same-day cross-ecotype trajectory exchange |
+| --- | ---: | ---: |
+| Misassociated observations | 1248 | 1248 |
+| Cross-ecotype misassociations | 24 | 1248 |
+| Same-day misassociations | 0 | 1248 |
+| Mean absolute leaf-count difference | 0.98077 | 2.74038 |
+| Mean absolute projected leaf-area difference (cm2) | 0.54337 | 5.07664 |
+| Leaf-count and area ranks changed | neither | both |
+| Tukey pairwise decisions changed | 0/10 | 7/10 |
+| Mixed ANOVA interaction significance changed | no | no |
+
+Original area ranking ein2 > col0 > adh1 > pgm > ctr;
+trajectory-exchange ranking ctr > adh1 > pgm > col0 > ein2.
+Original means (cm2): ein2 8.94816, col0 7.56367, adh1 4.40308,
+pgm 2.86986, ctr 0.38613. Exchanged means: ein2 1.65926,
+col0 3.24844, adh1 6.70943, pgm 5.35296, ctr 7.66207.
+Eight originally significant Tukey comparisons became one; seven
+significant-to-nonsignificant changes. Interaction F: 22.66698 original,
+22.70014 rotation, 2.93664 exchange; all significant at the original
+alpha 0.01. Report actual pairwise decisions, not the historical
+connected-component grouping as a statistically valid compact-letter
+display (nonsignificance is not transitive).
+
+**Interpretation:** two deliberately constructed permutations of genuine
+historical prediction-derived measurements have markedly different
+downstream consequences. The rotation retains aggregate rankings and
+pairwise decisions, while the severe cross-ecotype trajectory exchange
+changes them. No claim about actual biological truth, natural error
+frequency, independent mask accuracy, or prevention by PhenoGuard.
+The previous artifact validation experiment tested the rotation's donor
+artifacts, not the trajectory exchange; do not conflate those probes.
+A full 100% cross-ecotype exchange is a severity stress test, not a
+realistic estimate of operational error incidence.
+
+## Supervisor investment decision: revised
+
+The evidence supports a bounded investigation of consequential scientific
+agent errors, not a demonstrated improvement by the present method.
+Ordinary lexical matching tied the existing resolver and ordinary
+source-bound mask checks outperformed the frozen validator. The current
+paper must not be marketed as a proven novel solution.
+
+Next outcome-bearing work, subject to actual review and permission:
+1. Release the 108 registered dev/val C3/C4/C8 trials as a harness
+   qualification only, retaining the strong diagnostic baseline results.
+2. Prospectively design a small independently adjudicated paired
+   scientific workflow pilot: use independently annotated plant images,
+   including valid and mismatched capabilities with the same output
+   semantics; measure real predicted leaf count/area against reference
+   measurements, separately from decision correctness. Source rights,
+   independence from checkpoint training data (or explicit in-domain
+   calibration designation), acquisition and measurement units must be
+   reviewed. Do not assume local images have gold masks.
+3. Compare identical-information conventional routing, generic critique,
+   deterministic applicability and ordinary content-addressed provenance
+   binding against the proposed agent intervention. Keep trusted binding
+   external to model-generated artifact fields, and distinguish wrong
+   source, wrong model, wrong metadata and wrong scientific inference.
+   If ordinary deterministic binding suffices, treat it as infrastructure,
+   not novel AI. Evaluate agent-produced failures separately from injected
+   faults; compare valid coverage and report refusal/failed-execution rates.
+4. Agree prospective success criteria with Valerio: at least one genuine
+   agent-level scientific failure mechanism on independently justified
+   cases, measurable scientific consequence, and a benefit beyond the
+   information-matched and deterministic references without hiding
+   coverage loss. If those conditions fail, stop or reframe the method
+   paper; a benchmark/diagnostic direction would require a separate
+   novelty and independent evaluation decision.
+
+No additional synthetic volume experiment is recommended. Independent
+review 0/12; approved final runtime and credential not supplied; live
+registered trials 0/108. The existing release review packet records
+ce58e9c, not the subsequently added diagnostic files. Rebind the final
+reviewed execution-source identity before any live run; do not mistake
+a documentation commit for scientific approval.
