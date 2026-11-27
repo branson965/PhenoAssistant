@@ -191,3 +191,62 @@ and structural checks on saved artifacts, paired complete-trajectory
 temporal contrasts, then establish genuinely nontrivial agent tasks
 and prospectively evaluate intervention vs strong information-matched
 baselines. Do not reopen the frozen method without prospective approval.
+
+
+## 9. Saved-prediction credibility analysis (27 November 2026)
+
+Post-hoc diagnostic complete, no new GPU or provider calls. Report
+data/_staging/phase8_saved_prediction_credibility_v0.1.json
+SHA cbad6b8514cc18b6472d66d52aa86a6c5d1da958189be4eed84043379b77bda4,
+script SHA 9bc0b88cd575ad190e97b897a531184b9d43cbdd3edcf610e546e6062926e3dc.
+Reported hashes, not independently rehashed remotely. Source report and
+manifest checks passed in the executed script.
+
+Species lookup matches the retrospective best-of-two oracle on all
+221 observations, including failures scored as zero utility. This is
+a negative result for additional routing complexity on these data.
+
+Among correctly routed, structurally accepted outputs:
+
+| Descriptive error threshold | Potato SAM (32) | Arabidopsis Mask2Former (189) |
+| --- | ---: | ---: |
+| IoU below .50 | 2 | 0 |
+| IoU below .75 | 3 | 4 |
+| IoU below .90 | 9 | 102 |
+| Relative projected area error >10% | 7 | 29 |
+| Relative projected area error >25% | 3 | 2 |
+| Relative projected area error >50% | 3 | 0 |
+| Absolute instance count error >2 | 17 | 4 |
+| XOR loss >50% of union | 10 | 0 |
+
+These are overlapping descriptive diagnostics, not approved biological
+tolerances or independent prevalence estimates. Counts refer to visible
+annotated instances, not necessarily total biological leaves.
+
+At 100% vs top ~25% mean-score coverage, mean IoU risk (1-IoU):
+- Potato pilot SAM: .199245 -> .540782 (8 -> 2; severe case retained).
+- Potato replication SAM: .120454 -> .069128 (24 -> 6; severe case absent).
+- Arabidopsis Mask2Former: .116446 -> .129803 (189 -> 48).
+- Out-of-scope SAM on Arabidopsis: .807601 -> .999995 (178 -> 51;
+  ties included, actual coverage 51/189, all 51 have IoU below .5).
+Confidence ranking is inconsistent; SAM stability and Mask2Former
+confidence are not interchangeable or calibrated correctness scores.
+Do not generalize from the eight-image pilot or claim confidence never
+works: the potato replication shows improvement.
+
+55 complete paired trajectories: mean Mask2Former-minus-SAM gaps
+.734900/.666739/.645273 early/middle/late, paired late-minus-early
+-.089627. Only 15/55 individual gaps decreased. All 63 plants with
+zero-utility failure handling: -.082910 mean late-minus-early, only
+16/63 decreased. No observed winner switches in either analysis.
+Mean reduction is not a typical plant-level pattern.
+
+The earlier section 7 licence description was superseded: the acquired
+PhenoLeaf-TS revision uses La Trobe University's custom non-commercial
+academic-use terms, not CC BY 4.0.
+
+Decision: conditional go on task-conditioned scientific reporting and
+validity investigation, not on a novel species router. No further bulk
+segmentation on development data. Review the proposed study separately;
+22-file Phase 7 freeze stays unchanged. 0/108 live agent trials and
+0/12 independent fixture approvals remain outstanding.
