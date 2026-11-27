@@ -130,3 +130,64 @@ direct-model test: the 2026 PhenoLeaf-TS dataset (CC BY 4.0) is a candidate,
 subject to source revision, archive inventory, plant-level selection,
 annotation semantics and training-overlap audit. No live agent evidence
 or intervention superiority. Independent approval remains outstanding.
+
+
+## 8. Reciprocal Arabidopsis evaluation (27 November 2026)
+
+Slurm 64946, all 12 groups completed 0:0; all 378 planned terminal
+records present, no duplicates or missing cells. PhenoLeaf-TS: 63
+plants, 21 genotypes, 189 frames, 3 temporal quantiles per plant.
+Original archive SHA 608c7b07125281fb92517182c0873d1a9c87d696e2adedcb11c002173887de2f;
+source revision ee4c8dac44593a69c8a72e1ca09d686133161d92;
+linked custom academic-use licence SHA 16bc70a60ffe68cb657ef85f2edde966bae510a8c1634b6edced8785a82a43f2.
+Mandatory citation: Saric et al., PhenoLeaf-TS, ECCV 2026.
+No dataset redistribution or commercial use authorized. Private staging only.
+
+Manifest SHA b3461d3eb709987adac3e3126d6f5fc8970dcba50c3d0808bc02c45023fb4d93;
+report SHA 9be2b13316325f0959db50e5361b0d06ad39fd2469101615006c4a87ca78be5d.
+Checksums reported by Plato, not independently recomputed here.
+
+| Metric | Mask2Former | Leaf-only SAM |
+| --- | ---: | ---: |
+| Successful/scorable | 189/189 | 178/189 |
+| Structurally accepted among scorable | 189/189 | 178/178 |
+| Joint macro foreground IoU | .883675 | .192399 |
+| Joint Dice | .937563 | .210302 |
+| Joint instance F1 at .5 | .900201 | .149926 |
+| Joint count MAE | .786517 | 8.573034 |
+| Joint relative union-area error | .050824 | .847739 |
+| Zero-utility IoU sensitivity, all 189 | .883554 | .181201 |
+
+Primary equal-plant-weighted paired difference (Mask2Former minus SAM)
++.690031 over 62 jointly scorable plants; frame difference +.691276,
+178/178 paired wins, all 21 genotype mean differences positive.
+Early/middle/late frame mean differences +.741337/+ .681703/+ .651464
+(n=59/59/60). These are sequence positions, not verified biological
+growth stages; varying complete-case composition means the marginal
+trend does not establish within-plant temporal effect or routing switches.
+
+All 11 SAM failures reported list index out of range (case IDs 28,46,47,
+48,58,59,71,79,99,101,186). Source contains mask-list indexing in
+checkfullplant and istoobig; empty intermediate list is a plausible
+explanation, not a confirmed stack trace. Preserve failures; do not
+silently repair/retry the frozen evaluation.
+
+Together with the 32 potato plants: 95 distinct plants, 221 images,
+442 registered direct model executions, 431 successful/scorable
+and structurally accepted, 11 failed. On the 210 jointly scorable
+pairs, the model matching declared species wins every pair. Combined
+potato cohort descriptively SAM .859848 vs Mask2Former .342433;
+Arabidopsis Mask2Former .883675 vs SAM .192399. Strong reciprocal
+dataset-level crossover, not causal proof of species alone. No
+independently confirmed training-data separation, no expert
+re-adjudication and no live agent efficacy. A simple species lookup
+selects the observed paired winner on every scorable pair, so these
+results strengthen the motivation but NOT the case for a sophisticated
+species router. The temporal magnitude changes do not reverse the
+winner on any observed jointly scorable frame.
+
+Next: quantify residual in-scope risk, compare ordinary confidence
+and structural checks on saved artifacts, paired complete-trajectory
+temporal contrasts, then establish genuinely nontrivial agent tasks
+and prospectively evaluate intervention vs strong information-matched
+baselines. Do not reopen the frozen method without prospective approval.
