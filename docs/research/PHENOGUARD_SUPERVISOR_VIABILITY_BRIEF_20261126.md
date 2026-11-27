@@ -250,3 +250,70 @@ validity investigation, not on a novel species router. No further bulk
 segmentation on development data. Review the proposed study separately;
 22-file Phase 7 freeze stays unchanged. 0/108 live agent trials and
 0/12 independent fixture approvals remain outstanding.
+
+
+## 10. Task-conditioned and longitudinal diagnostics (27 November 2026)
+
+Completed on Plato with no new GPU/provider calls. Report:
+data/_staging/phase8_task_conditioned_diagnostics_v0.1.json
+SHA e2015e2f72b76cdfe977aef5e54cf2cc890c4974486b2f5e8e0530f6194c55c1;
+script SHA e99d7232fcdeaf09dee32e34c3e1338c16a1f5bd9d7cdf1e4ff6294aa08e467f.
+Hashes reported by researcher; source reports and credibility report verified
+by executed script.
+
+At illustrative area error <=10% and absolute instance count error <=2:
+| Cohort | Both within | Area only | Count only | Neither | Discordant |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Potato pilot | 3 | 2 | 2 | 1 | 4/8 |
+| Potato replication | 7 | 13 | 3 | 1 | 16/24 |
+| Arabidopsis | 156 | 4 | 29 | 0 | 33/189 |
+| Pooled descriptive | 166 | 19 | 34 | 2 | 53/221 |
+
+Across the four (area 10%/25%, count 1/2) illustrative tolerance
+combinations, pooled discordance is 72, 53, 57, 24 of 221 respectively.
+No thresholds are domain-approved and no test of an agent's ability
+to identify discordance has occurred. At approximately 25% highest mean
+score coverage, potato replication area error rate >10% is 0/6 but count
+error >2 remains 2/6; Arabidopsis area error >10% is 12/48 vs 29/189 at
+full coverage, while count error >2 is 0/48 vs 4/189. Do not claim a
+single confidence ranking works uniformly across tasks or cohorts.
+
+All 63 Arabidopsis trajectories have applicable-model outputs.
+For early-middle, middle-late, early-late respectively:
+- Mean absolute error of area change divided by initial reference area:
+  .089762, .055291, .330019; medians .043093, .039612, .137087.
+- Exact area-change sign correct 63/63 in all intervals.
+- Exact count-change sign correct 58/63, 51/63, 62/63.
+- Area-change error >10% initial reference area: 17, 7, 43.
+- Both endpoint area errors <=10% but change error >10% initial reference
+  area: 2, 5, 26 (counts out of all 63, not conditional rates).
+These are errors of projected pixel quantities, NOT calibrated physical
+growth errors. Different denominators explain part of the apparent
+endpoint/change contrast: if |e_i| <= .1 A_i then |e_2-e_1|/A_1 <=
+.1(1+A_2/A_1). This is ordinary deterministic error propagation, a strong
+baseline not a new agent method. Exact sign includes zero and is not a
+biological significance threshold. Preserve positive and negative findings.
+
+## 11. Qualification review refresh and decision gate
+
+Refreshed packet v0.2 SHA
+3bf6c26e35324cf48a5ee7f6a76fbbbbd37f794549eead4fbc23e9a7995d710a;
+checkpoint receipt v0.2 SHA
+4346a52badeb67aa6ee41ea15cea455231dc17b70d5be4437a608b293e94fed3.
+Source commit cce19ec22b25519123e5522db873909696dc3937.
+Package inventory SHA unchanged 500958915a8373cba64dfd446625b22bb1ab02bd1e58cb0cb34489b9cedb3911.
+22-file method freeze verified with aggregate
+25a6865458f29d5a91000de0cbca3dea8c1773cca8701af5f50f155205a6a294.
+Tracked checkout clean at verification. Packet and receipt explicitly
+scientific_execution_permitted=false; no independent approval granted.
+
+Decision requested: approve bounded continuation on task-conditioned
+scientific reporting rather than species routing as novelty; nominate
+independent fixture/domain reviewer; review provider and billing controls,
+native no-call policy, data-handling and checkpoint routing. Existing 108
+C3/C4/C8 trials are qualification, not an independent test of task-conditioned
+validity. No paid trials until approved and pinned. New protocol separately
+requires prospectively chosen plants/tasks, expert tolerances, competitive
+task-aware deterministic and conventional calibrated baselines, information-
+matched agent comparator, matched coverage/cost and grouped inference.
+No more bulk development segmentation before this gate.
